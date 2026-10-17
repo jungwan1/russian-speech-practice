@@ -1,0 +1,720 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>러시아어 연설 따라읽기 — Иего́ва — пра́ведный и милосе́рдный судья́</title>
+<style>
+*{box-sizing:border-box} body{margin:0;font-family:system-ui,-apple-system,'Noto Sans KR',sans-serif;background:#f6f7f9;color:#17202a}
+header{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid #ddd;padding:14px 16px}
+h1{font-size:20px;margin:0 0 6px} .sub{font-size:14px;color:#555;line-height:1.5}
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+button{font-size:16px;padding:10px 14px;border:1px solid #b9c2cc;border-radius:10px;background:#fff;cursor:pointer}
+button.active,button:active{background:#dceaff;border-color:#5b8def}
+button.practice{background:#fff4d6}
+main{max-width:900px;margin:0 auto;padding:14px}
+.line{background:#fff;border:1px solid #dde2e8;border-radius:14px;padding:14px 16px;margin:12px 0}
+.line.playing{outline:3px solid #5b8def;background:#eef5ff}
+.line.pausing{outline:3px solid #f0ad00;background:#fff8dd}
+.meta{display:flex;gap:10px;align-items:center;color:#667;font-size:13px}
+.num{font-weight:700;background:#17202a;color:#fff;border-radius:999px;min-width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center}
+.ru{font-size:23px;line-height:1.55;margin:10px 0}
+.btns{display:flex;flex-wrap:wrap;gap:8px}
+.status{min-height:22px;margin-top:8px;color:#8a5a00;font-weight:600}
+.note{font-size:13px;color:#666;line-height:1.6;background:#fff;border:1px dashed #bbb;border-radius:10px;padding:10px 12px}
+@media(max-width:600px){.ru{font-size:21px} button{flex:1 1 auto}}
+</style></head><body>
+<header>
+<h1>러시아어 연설 따라읽기</h1>
+<div class="sub"><b>Иего́ва — пра́ведный и милосе́рдный судья́</b> (여호와는 의롭고 자비로운 재판관)<br>
+사용법: <b>▶ 듣기</b>로 한 줄만 듣고, <b>🎤 듣고 따라하기</b>를 누르면 재생 후 그 줄 길이+2초 동안 따라 말할 시간이 주어집니다. <b>🔁 반복 3회</b>는 같은 줄을 3번 반복합니다.</div>
+<div class="controls">
+<button onclick="playAll()">⏯ 처음부터 듣기</button>
+<button onclick="stopPlay()">⏹ 정지</button>
+<span>속도:</span>
+<button data-rate="0.75" onclick="setRate(0.75,this)">0.75x</button>
+<button data-rate="1" class="active" onclick="setRate(1,this)">1x</button>
+<button data-rate="1.25" onclick="setRate(1.25,this)">1.25x</button>
+</div>
+<audio id="player" controls preload="metadata" style="width:100%;margin-top:10px">
+<source src="audio.m4a" type="audio/mp4">
+<source src="audio.mp3" type="audio/mpeg">
+브라우저가 오디오를 재생하지 못합니다.
+</audio>
+</header>
+<main>
+<div class="note">총 64줄 · 음성 길이 약 5분 51초. 실제 녹음에서 말한 문장 순서대로 나눴습니다. 수정본에 새로 추가된 2번·3번 문단은 이 녹음에는 들어 있지 않아 제외했습니다. 시간은 음성 전사(faster-whisper large-v3-turbo)의 단어 시간 기준으로 맞췄으며, 앞뒤로 약 0.1~0.3초 여유를 뒀습니다.</div>
+<section class="line" id="line-0" data-index="0">
+<div class="meta"><span class="num">1</span><span class="time">0:01.2 – 0:06.0</span></div>
+<p class="ru">Те́ма: Иего́ва — пра́ведный и милосе́рдный судья́.</p>
+<div class="btns">
+<button onclick="playLine(0,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(0,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(0)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-0"></div>
+</section>
+<section class="line" id="line-1" data-index="1">
+<div class="meta"><span class="num">2</span><span class="time">0:05.8 – 0:13.1</span></div>
+<p class="ru">Когда́ мы слы́шим сло́во «судья́», мы представля́ем себе́ стро́гого и твёрдого челове́ка.</p>
+<div class="btns">
+<button onclick="playLine(1,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(1,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(1)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-1"></div>
+</section>
+<section class="line" id="line-2" data-index="2">
+<div class="meta"><span class="num">3</span><span class="time">0:12.9 – 0:19.2</span></div>
+<p class="ru">Вы когда́-нибудь представля́ли себе́ судью́, кото́рый нака́зывает люде́й и при э́том пла́чет?</p>
+<div class="btns">
+<button onclick="playLine(2,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(2,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(2)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-2"></div>
+</section>
+<section class="line" id="line-3" data-index="3">
+<div class="meta"><span class="num">4</span><span class="time">0:19.1 – 0:24.8</span></div>
+<p class="ru">В сорок восьмо́й главе́ кни́ги Иереми́и мы мо́жем найти́ тако́го судью́.</p>
+<div class="btns">
+<button onclick="playLine(3,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(3,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(3)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-3"></div>
+</section>
+<section class="line" id="line-4" data-index="4">
+<div class="meta"><span class="num">5</span><span class="time">0:24.6 – 0:26.9</span></div>
+<p class="ru">Э́то Иего́ва.</p>
+<div class="btns">
+<button onclick="playLine(4,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(4,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(4)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-4"></div>
+</section>
+<section class="line" id="line-5" data-index="5">
+<div class="meta"><span class="num">6</span><span class="time">0:26.8 – 0:32.4</span></div>
+<p class="ru">Сего́дня мы рассмо́трим, почему́ Иего́ва — пра́ведный и милосе́рдный судья́.</p>
+<div class="btns">
+<button onclick="playLine(5,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(5,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(5)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-5"></div>
+</section>
+<section class="line" id="line-6" data-index="6">
+<div class="meta"><span class="num">7</span><span class="time">0:33.0 – 0:37.9</span></div>
+<p class="ru">Снача́ла дава́йте прочита́ем Иереми́ю 48:27.</p>
+<div class="btns">
+<button onclick="playLine(6,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(6,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(6)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-6"></div>
+</section>
+<section class="line" id="line-7" data-index="7">
+<div class="meta"><span class="num">8</span><span class="time">0:37.8 – 0:42.0</span></div>
+<p class="ru">А ведь ра́ньше ты сам смея́лся над Изра́илем!</p>
+<div class="btns">
+<button onclick="playLine(7,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(7,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(7)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-7"></div>
+</section>
+<section class="line" id="line-8" data-index="8">
+<div class="meta"><span class="num">9</span><span class="time">0:42.0 – 0:48.4</span></div>
+<p class="ru">Ра́зве его́ уличи́ли в воровстве́, что ты кача́л голово́й и говори́л о нём плохо́е?</p>
+<div class="btns">
+<button onclick="playLine(8,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(8,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(8)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-8"></div>
+</section>
+<section class="line" id="line-9" data-index="9">
+<div class="meta"><span class="num">10</span><span class="time">0:48.2 – 0:51.1</span></div>
+<p class="ru">За что был нака́зан Моа́в?</p>
+<div class="btns">
+<button onclick="playLine(9,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(9,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(9)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-9"></div>
+</section>
+<section class="line" id="line-10" data-index="10">
+<div class="meta"><span class="num">11</span><span class="time">0:51.0 – 0:57.1</span></div>
+<p class="ru">Иего́ва наказа́л моави́тян за то, как они́ обраща́лись с иуде́ями.</p>
+<div class="btns">
+<button onclick="playLine(10,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(10,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(10)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-10"></div>
+</section>
+<section class="line" id="line-11" data-index="11">
+<div class="meta"><span class="num">12</span><span class="time">0:57.0 – 1:01.8</span></div>
+<p class="ru">Моави́тяне бы́ли пото́мками Ло́та и ро́дственниками израильтя́н.</p>
+<div class="btns">
+<button onclick="playLine(11,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(11,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(11)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-11"></div>
+</section>
+<section class="line" id="line-12" data-index="12">
+<div class="meta"><span class="num">13</span><span class="time">1:01.6 – 1:06.0</span></div>
+<p class="ru">Но когда́ Изра́илю бы́ло тру́дно, они́ насмеха́лись над ним.</p>
+<div class="btns">
+<button onclick="playLine(12,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(12,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(12)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-12"></div>
+</section>
+<section class="line" id="line-13" data-index="13">
+<div class="meta"><span class="num">14</span><span class="time">1:06.0 – 1:08.2</span></div>
+<p class="ru">Почему́ они́ так поступа́ли?</p>
+<div class="btns">
+<button onclick="playLine(13,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(13,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(13)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-13"></div>
+</section>
+<section class="line" id="line-14" data-index="14">
+<div class="meta"><span class="num">15</span><span class="time">1:08.2 – 1:14.3</span></div>
+<p class="ru">В двадца́ть девя́том и со́рок второ́м стиха́х говори́тся, что причи́на — их го́рдость.</p>
+<div class="btns">
+<button onclick="playLine(14,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(14,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(14)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-14"></div>
+</section>
+<section class="line" id="line-15" data-index="15">
+<div class="meta"><span class="num">16</span><span class="time">1:14.3 – 1:26.7</span></div>
+<p class="ru">(29) Мы слы́шали о го́рдости Моа́ва (как он надме́нен!), о его́ заносчи́вости, го́рдости, надме́нности и высокоме́рии его́ се́рдца.</p>
+<div class="btns">
+<button onclick="playLine(15,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(15,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(15)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-15"></div>
+</section>
+<section class="line" id="line-16" data-index="16">
+<div class="meta"><span class="num">17</span><span class="time">1:27.0 – 1:38.8</span></div>
+<p class="ru">(42) Моа́в истребя́т, он уже́ не бу́дет наро́дом, потому́ что он превознёсся, вы́ступил про́тив Иего́вы.</p>
+<div class="btns">
+<button onclick="playLine(16,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(16,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(16)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-16"></div>
+</section>
+<section class="line" id="line-17" data-index="17">
+<div class="meta"><span class="num">18</span><span class="time">1:38.8 – 1:44.2</span></div>
+<p class="ru">Они́ не уважа́ли наро́д Бо́га, и поэ́тому бы́ли нака́заны.</p>
+<div class="btns">
+<button onclick="playLine(17,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(17,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(17)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-17"></div>
+</section>
+<section class="line" id="line-18" data-index="18">
+<div class="meta"><span class="num">19</span><span class="time">1:44.3 – 1:47.7</span></div>
+<p class="ru">Чему́ мы мо́жем здесь научи́ться?</p>
+<div class="btns">
+<button onclick="playLine(18,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(18,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(18)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-18"></div>
+</section>
+<section class="line" id="line-19" data-index="19">
+<div class="meta"><span class="num">20</span><span class="time">1:47.7 – 1:51.3</span></div>
+<p class="ru">Иего́ва ви́дит, как лю́ди отно́сятся к его́ наро́ду.</p>
+<div class="btns">
+<button onclick="playLine(19,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(19,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(19)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-19"></div>
+</section>
+<section class="line" id="line-20" data-index="20">
+<div class="meta"><span class="num">21</span><span class="time">1:51.3 – 1:57.5</span></div>
+<p class="ru">Е́сли в служе́нии над на́ми смею́тся и́ли нам проти́вятся, Иего́ва всё э́то зна́ет.</p>
+<div class="btns">
+<button onclick="playLine(20,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(20,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(20)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-20"></div>
+</section>
+<section class="line" id="line-21" data-index="21">
+<div class="meta"><span class="num">22</span><span class="time">1:57.5 – 1:60.0</span></div>
+<p class="ru">И в своё вре́мя он всё испра́вит.</p>
+<div class="btns">
+<button onclick="playLine(21,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(21,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(21)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-21"></div>
+</section>
+<section class="line" id="line-22" data-index="22">
+<div class="meta"><span class="num">23</span><span class="time">2:00.5 – 2:04.5</span></div>
+<p class="ru">Но ра́довался ли Иего́ва, когда́ нака́зывал Моа́в?</p>
+<div class="btns">
+<button onclick="playLine(22,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(22,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(22)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-22"></div>
+</section>
+<section class="line" id="line-23" data-index="23">
+<div class="meta"><span class="num">24</span><span class="time">2:04.5 – 2:09.7</span></div>
+<p class="ru">Дава́йте вме́сте прочита́ем Иереми́ю 48:31, 36.</p>
+<div class="btns">
+<button onclick="playLine(23,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(23,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(23)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-23"></div>
+</section>
+<section class="line" id="line-24" data-index="24">
+<div class="meta"><span class="num">25</span><span class="time">2:09.6 – 2:21.1</span></div>
+<p class="ru">(31) Вот почему́ я бу́ду опла́кивать Моа́в, бу́ду рыда́ть обо всём Моа́ве и скорбе́ть о жи́телях Кир-Хере́са.</p>
+<div class="btns">
+<button onclick="playLine(24,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(24,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(24)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-24"></div>
+</section>
+<section class="line" id="line-25" data-index="25">
+<div class="meta"><span class="num">26</span><span class="time">2:21.1 – 2:32.4</span></div>
+<p class="ru">(36) Вот почему́ моё се́рдце бу́дет пла́кать о Моа́ве, как фле́йта, и, как фле́йта, моё се́рдце бу́дет рыда́ть о жи́телях Кир-Хере́са.</p>
+<div class="btns">
+<button onclick="playLine(25,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(25,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(25)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-25"></div>
+</section>
+<section class="line" id="line-26" data-index="26">
+<div class="meta"><span class="num">27</span><span class="time">2:32.4 – 2:36.6</span></div>
+<p class="ru">Ведь бога́тство, кото́рое он накопи́л, исче́знет.</p>
+<div class="btns">
+<button onclick="playLine(26,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(26,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(26)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-26"></div>
+</section>
+<section class="line" id="line-27" data-index="27">
+<div class="meta"><span class="num">28</span><span class="time">2:37.5 – 2:41.3</span></div>
+<p class="ru">Иего́ва сожале́л о том, что Моа́в придётся уничто́жить.</p>
+<div class="btns">
+<button onclick="playLine(27,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(27,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(27)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-27"></div>
+</section>
+<section class="line" id="line-28" data-index="28">
+<div class="meta"><span class="num">29</span><span class="time">2:41.7 – 2:47.2</span></div>
+<p class="ru">Иего́ва говори́т, что его́ се́рдце подо́бно фле́йте пла́чет о Моа́ве.</p>
+<div class="btns">
+<button onclick="playLine(28,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(28,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(28)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-28"></div>
+</section>
+<section class="line" id="line-29" data-index="29">
+<div class="meta"><span class="num">30</span><span class="time">2:47.4 – 2:53.2</span></div>
+<p class="ru">В то вре́мя фле́йта была́ инструме́нтом, на кото́ром на похорона́х игра́ли гру́стную му́зыку.</p>
+<div class="btns">
+<button onclick="playLine(29,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(29,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(29)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-29"></div>
+</section>
+<section class="line" id="line-30" data-index="30">
+<div class="meta"><span class="num">31</span><span class="time">2:53.2 – 2:57.7</span></div>
+<p class="ru">Как лю́ди грустя́т на похорона́х, так Иего́ва грусти́л о Моа́ве.</p>
+<div class="btns">
+<button onclick="playLine(30,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(30,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(30)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-30"></div>
+</section>
+<section class="line" id="line-31" data-index="31">
+<div class="meta"><span class="num">32</span><span class="time">2:57.7 – 3:12.6</span></div>
+<p class="ru">В Иезекии́ля 33:11 Иего́ва говори́т, что ему́ не доставля́ет ра́дости смерть зло́го челове́ка, но он хо́чет, что́бы тот измени́л свой путь и жил.</p>
+<div class="btns">
+<button onclick="playLine(31,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(31,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(31)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-31"></div>
+</section>
+<section class="line" id="line-32" data-index="32">
+<div class="meta"><span class="num">33</span><span class="time">3:12.6 – 3:18.2</span></div>
+<p class="ru">Иего́ва нака́зывает, потому́ что э́то ну́жно, а не потому́, что он э́того хо́чет.</p>
+<div class="btns">
+<button onclick="playLine(32,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(32,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(32)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-32"></div>
+</section>
+<section class="line" id="line-33" data-index="33">
+<div class="meta"><span class="num">34</span><span class="time">3:18.2 – 3:21.8</span></div>
+<p class="ru">Дава́йте прочита́ем со́рок седьмо́й стих.</p>
+<div class="btns">
+<button onclick="playLine(33,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(33,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(33)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-33"></div>
+</section>
+<section class="line" id="line-34" data-index="34">
+<div class="meta"><span class="num">35</span><span class="time">3:22.8 – 3:27.4</span></div>
+<p class="ru">(47) Но в после́дние дни я верну́ Моа́в из пле́на, — говори́т Иего́ва.</p>
+<div class="btns">
+<button onclick="playLine(34,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(34,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(34)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-34"></div>
+</section>
+<section class="line" id="line-35" data-index="35">
+<div class="meta"><span class="num">36</span><span class="time">3:27.3 – 3:31.4</span></div>
+<p class="ru">На э́том конча́ется пригово́р Моа́ву.</p>
+<div class="btns">
+<button onclick="playLine(35,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(35,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(35)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-35"></div>
+</section>
+<section class="line" id="line-36" data-index="36">
+<div class="meta"><span class="num">37</span><span class="time">3:31.4 – 3:35.3</span></div>
+<p class="ru">Здесь Иего́ва обеща́ет верну́ть пле́нных моави́тян.</p>
+<div class="btns">
+<button onclick="playLine(36,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(36,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(36)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-36"></div>
+</section>
+<section class="line" id="line-37" data-index="37">
+<div class="meta"><span class="num">38</span><span class="time">3:35.3 – 3:42.3</span></div>
+<p class="ru">Весь наро́д был нака́зан, но к не́которым моави́тянам Иего́ва прояви́л милосе́рдие.</p>
+<div class="btns">
+<button onclick="playLine(37,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(37,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(37)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-37"></div>
+</section>
+<section class="line" id="line-38" data-index="38">
+<div class="meta"><span class="num">39</span><span class="time">3:42.3 – 3:49.3</span></div>
+<p class="ru">Вероя́тно, царь Кир, кото́рый завоева́л Вавило́н, разреши́л пле́нным моави́тянам верну́ться домо́й.</p>
+<div class="btns">
+<button onclick="playLine(38,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(38,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(38)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-38"></div>
+</section>
+<section class="line" id="line-39" data-index="39">
+<div class="meta"><span class="num">40</span><span class="time">3:49.6 – 3:55.6</span></div>
+<p class="ru">На са́мом де́ле Иего́ва не впервы́е прояви́л милосе́рдие к моави́тянам.</p>
+<div class="btns">
+<button onclick="playLine(39,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(39,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(39)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-39"></div>
+</section>
+<section class="line" id="line-40" data-index="40">
+<div class="meta"><span class="num">41</span><span class="time">3:55.6 – 4:01.2</span></div>
+<p class="ru">Задо́лго до Иереми́и моавитя́нка Руфь реши́ла служи́ть Иего́ве.</p>
+<div class="btns">
+<button onclick="playLine(40,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(40,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(40)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-40"></div>
+</section>
+<section class="line" id="line-41" data-index="41">
+<div class="meta"><span class="num">42</span><span class="time">4:01.2 – 4:05.3</span></div>
+<p class="ru">Иего́ва при́нял её и ще́дро благослови́л.</p>
+<div class="btns">
+<button onclick="playLine(41,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(41,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(41)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-41"></div>
+</section>
+<section class="line" id="line-42" data-index="42">
+<div class="meta"><span class="num">43</span><span class="time">4:05.3 – 4:09.3</span></div>
+<p class="ru">Руфь ста́ла пре́дком царя́ Дави́да и Иису́са.</p>
+<div class="btns">
+<button onclick="playLine(42,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(42,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(42)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-42"></div>
+</section>
+<section class="line" id="line-43" data-index="43">
+<div class="meta"><span class="num">44</span><span class="time">4:09.3 – 4:17.4</span></div>
+<p class="ru">Так Иего́ва всегда́ оставля́ет дверь откры́той для ка́ждого челове́ка, да́же для моави́тян.</p>
+<div class="btns">
+<button onclick="playLine(43,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(43,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(43)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-43"></div>
+</section>
+<section class="line" id="line-44" data-index="44">
+<div class="meta"><span class="num">45</span><span class="time">4:17.4 – 4:21.1</span></div>
+<p class="ru">Дава́йте посмо́трим на иллюстра́цию.</p>
+<div class="btns">
+<button onclick="playLine(44,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(44,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(44)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-44"></div>
+</section>
+<section class="line" id="line-45" data-index="45">
+<div class="meta"><span class="num">46</span><span class="time">4:21.1 – 4:26.1</span></div>
+<p class="ru">Молода́я же́нщина, кото́рая ра́ньше посеща́ла собра́ние, смо́трит но́вости.</p>
+<div class="btns">
+<button onclick="playLine(45,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(45,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(45)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-45"></div>
+</section>
+<section class="line" id="line-46" data-index="46">
+<div class="meta"><span class="num">47</span><span class="time">4:26.1 – 4:32.1</span></div>
+<p class="ru">На экра́не напи́сано: «Прави́тельства запреща́ют религио́зную де́ятельность».</p>
+<div class="btns">
+<button onclick="playLine(46,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(46,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(46)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-46"></div>
+</section>
+<section class="line" id="line-47" data-index="47">
+<div class="meta"><span class="num">48</span><span class="time">4:32.1 – 4:34.6</span></div>
+<p class="ru">Вели́кое бе́дствие пришло́.</p>
+<div class="btns">
+<button onclick="playLine(47,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(47,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(47)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-47"></div>
+</section>
+<section class="line" id="line-48" data-index="48">
+<div class="meta"><span class="num">49</span><span class="time">4:34.6 – 4:40.6</span></div>
+<p class="ru">Как вы ду́маете, что вспомина́ет э́та же́нщина, когда́ смо́трит на фотогра́фию?</p>
+<div class="btns">
+<button onclick="playLine(48,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(48,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(48)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-48"></div>
+</section>
+<section class="line" id="line-49" data-index="49">
+<div class="meta"><span class="num">50</span><span class="time">4:40.6 – 4:45.1</span></div>
+<p class="ru">Она́ вспомина́ет, как ра́ньше служи́ла Иего́ве вме́сте с роди́телями.</p>
+<div class="btns">
+<button onclick="playLine(49,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(49,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(49)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-49"></div>
+</section>
+<section class="line" id="line-50" data-index="50">
+<div class="meta"><span class="num">51</span><span class="time">4:45.1 – 4:50.9</span></div>
+<p class="ru">Она́ ду́мает: «То, о чём меня́ предупрежда́ли, действи́тельно пришло́!»</p>
+<div class="btns">
+<button onclick="playLine(50,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(50,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(50)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-50"></div>
+</section>
+<section class="line" id="line-51" data-index="51">
+<div class="meta"><span class="num">52</span><span class="time">4:50.9 – 4:54.4</span></div>
+<p class="ru">Наве́рное, по́сле э́того она́ реши́ла верну́ться к Иего́ве.</p>
+<div class="btns">
+<button onclick="playLine(51,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(51,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(51)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-51"></div>
+</section>
+<section class="line" id="line-52" data-index="52">
+<div class="meta"><span class="num">53</span><span class="time">4:54.4 – 4:57.4</span></div>
+<p class="ru">Чему́ мы научи́лись сего́дня?</p>
+<div class="btns">
+<button onclick="playLine(52,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(52,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(52)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-52"></div>
+</section>
+<section class="line" id="line-53" data-index="53">
+<div class="meta"><span class="num">54</span><span class="time">4:57.4 – 5:01.1</span></div>
+<p class="ru">Иего́ва — пра́ведный и в то же вре́мя милосе́рдный судья́.</p>
+<div class="btns">
+<button onclick="playLine(53,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(53,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(53)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-53"></div>
+</section>
+<section class="line" id="line-54" data-index="54">
+<div class="meta"><span class="num">55</span><span class="time">5:01.1 – 5:03.8</span></div>
+<p class="ru">Иего́ва и сего́дня тако́й же.</p>
+<div class="btns">
+<button onclick="playLine(54,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(54,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(54)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-54"></div>
+</section>
+<section class="line" id="line-55" data-index="55">
+<div class="meta"><span class="num">56</span><span class="time">5:03.8 – 5:07.1</span></div>
+<p class="ru">Он и сейча́с хо́чет прояви́ть к лю́дям милосе́рдие.</p>
+<div class="btns">
+<button onclick="playLine(55,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(55,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(55)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-55"></div>
+</section>
+<section class="line" id="line-56" data-index="56">
+<div class="meta"><span class="num">57</span><span class="time">5:07.1 – 5:11.4</span></div>
+<p class="ru">Что же нам ну́жно де́лать сейча́с?</p>
+<div class="btns">
+<button onclick="playLine(56,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(56,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(56)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-56"></div>
+</section>
+<section class="line" id="line-57" data-index="57">
+<div class="meta"><span class="num">58</span><span class="time">5:11.4 – 5:16.9</span></div>
+<p class="ru">Нам ну́жно ду́мать, как Иего́ва, и усе́рдно пропове́довать уже́ сейча́с.</p>
+<div class="btns">
+<button onclick="playLine(57,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(57,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(57)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-57"></div>
+</section>
+<section class="line" id="line-58" data-index="58">
+<div class="meta"><span class="num">59</span><span class="time">5:16.8 – 5:22.9</span></div>
+<p class="ru">То, что мы говори́м лю́дям в служе́нии, они́ мо́гут вспо́мнить пото́м.</p>
+<div class="btns">
+<button onclick="playLine(58,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(58,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(58)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-58"></div>
+</section>
+<section class="line" id="line-59" data-index="59">
+<div class="meta"><span class="num">60</span><span class="time">5:23.1 – 5:31.2</span></div>
+<p class="ru">Возмо́жно, как же́нщина на иллюстра́ции, не́которые лю́ди вспо́мнят на́ши слова́, когда́ начнётся вели́кое бе́дствие.</p>
+<div class="btns">
+<button onclick="playLine(59,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(59,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(59)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-59"></div>
+</section>
+<section class="line" id="line-60" data-index="60">
+<div class="meta"><span class="num">61</span><span class="time">5:31.2 – 5:39.4</span></div>
+<p class="ru">Поэ́тому дава́йте не бу́дем огорча́ться, е́сли лю́ди сейча́с не слу́шают, а бу́дем усе́рдно свиде́тельствовать.</p>
+<div class="btns">
+<button onclick="playLine(60,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(60,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(60)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-60"></div>
+</section>
+<section class="line" id="line-61" data-index="61">
+<div class="meta"><span class="num">62</span><span class="time">5:39.4 – 5:42.1</span></div>
+<p class="ru">Ведь Иего́ва всё ещё ждёт.</p>
+<div class="btns">
+<button onclick="playLine(61,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(61,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(61)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-61"></div>
+</section>
+<section class="line" id="line-62" data-index="62">
+<div class="meta"><span class="num">63</span><span class="time">5:42.1 – 5:45.4</span></div>
+<p class="ru">Вы уже́ хорошо́ пропове́дуете.</p>
+<div class="btns">
+<button onclick="playLine(62,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(62,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(62)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-62"></div>
+</section>
+<section class="line" id="line-63" data-index="63">
+<div class="meta"><span class="num">64</span><span class="time">5:45.4 – 5:49.9</span></div>
+<p class="ru">Дава́йте и да́льше не сдава́ться и пропове́довать до конца́!</p>
+<div class="btns">
+<button onclick="playLine(63,1,'once')">▶ 듣기</button>
+<button onclick="toggleRepeat(63,this)">🔁 반복 3회</button>
+<button class="practice" onclick="practiceLine(63)">🎤 듣고 따라하기</button>
+</div>
+<div class="status" id="status-63"></div>
+</section>
+
+</main>
+<script>
+const SEGMENTS=[{"start": 1.25, "end": 5.95, "text": "Те́ма: Иего́ва — пра́ведный и милосе́рдный судья́."}, {"start": 5.85, "end": 13.05, "text": "Когда́ мы слы́шим сло́во «судья́», мы представля́ем себе́ стро́гого и твёрдого челове́ка."}, {"start": 12.95, "end": 19.2, "text": "Вы когда́-нибудь представля́ли себе́ судью́, кото́рый нака́зывает люде́й и при э́том пла́чет?"}, {"start": 19.05, "end": 24.75, "text": "В сорок восьмо́й главе́ кни́ги Иереми́и мы мо́жем найти́ тако́го судью́."}, {"start": 24.55, "end": 26.85, "text": "Э́то Иего́ва."}, {"start": 26.75, "end": 32.35, "text": "Сего́дня мы рассмо́трим, почему́ Иего́ва — пра́ведный и милосе́рдный судья́."}, {"start": 33.0, "end": 37.85, "text": "Снача́ла дава́йте прочита́ем Иереми́ю 48:27."}, {"start": 37.75, "end": 42.05, "text": "А ведь ра́ньше ты сам смея́лся над Изра́илем!"}, {"start": 41.95, "end": 48.35, "text": "Ра́зве его́ уличи́ли в воровстве́, что ты кача́л голово́й и говори́л о нём плохо́е?"}, {"start": 48.25, "end": 51.15, "text": "За что был нака́зан Моа́в?"}, {"start": 51.05, "end": 57.15, "text": "Иего́ва наказа́л моави́тян за то, как они́ обраща́лись с иуде́ями."}, {"start": 57.05, "end": 61.75, "text": "Моави́тяне бы́ли пото́мками Ло́та и ро́дственниками израильтя́н."}, {"start": 61.65, "end": 66.05, "text": "Но когда́ Изра́илю бы́ло тру́дно, они́ насмеха́лись над ним."}, {"start": 66.05, "end": 68.15, "text": "Почему́ они́ так поступа́ли?"}, {"start": 68.15, "end": 74.35, "text": "В двадца́ть девя́том и со́рок второ́м стиха́х говори́тся, что причи́на — их го́рдость."}, {"start": 74.35, "end": 86.65, "text": "(29) Мы слы́шали о го́рдости Моа́ва (как он надме́нен!), о его́ заносчи́вости, го́рдости, надме́нности и высокоме́рии его́ се́рдца."}, {"start": 87.05, "end": 98.75, "text": "(42) Моа́в истребя́т, он уже́ не бу́дет наро́дом, потому́ что он превознёсся, вы́ступил про́тив Иего́вы."}, {"start": 98.75, "end": 104.15, "text": "Они́ не уважа́ли наро́д Бо́га, и поэ́тому бы́ли нака́заны."}, {"start": 104.3, "end": 107.65, "text": "Чему́ мы мо́жем здесь научи́ться?"}, {"start": 107.65, "end": 111.35, "text": "Иего́ва ви́дит, как лю́ди отно́сятся к его́ наро́ду."}, {"start": 111.35, "end": 117.55, "text": "Е́сли в служе́нии над на́ми смею́тся и́ли нам проти́вятся, Иего́ва всё э́то зна́ет."}, {"start": 117.55, "end": 119.95, "text": "И в своё вре́мя он всё испра́вит."}, {"start": 120.5, "end": 124.55, "text": "Но ра́довался ли Иего́ва, когда́ нака́зывал Моа́в?"}, {"start": 124.55, "end": 129.65, "text": "Дава́йте вме́сте прочита́ем Иереми́ю 48:31, 36."}, {"start": 129.6, "end": 141.05, "text": "(31) Вот почему́ я бу́ду опла́кивать Моа́в, бу́ду рыда́ть обо всём Моа́ве и скорбе́ть о жи́телях Кир-Хере́са."}, {"start": 141.05, "end": 152.45, "text": "(36) Вот почему́ моё се́рдце бу́дет пла́кать о Моа́ве, как фле́йта, и, как фле́йта, моё се́рдце бу́дет рыда́ть о жи́телях Кир-Хере́са."}, {"start": 152.45, "end": 156.55, "text": "Ведь бога́тство, кото́рое он накопи́л, исче́знет."}, {"start": 157.5, "end": 161.3, "text": "Иего́ва сожале́л о том, что Моа́в придётся уничто́жить."}, {"start": 161.65, "end": 167.15, "text": "Иего́ва говори́т, что его́ се́рдце подо́бно фле́йте пла́чет о Моа́ве."}, {"start": 167.45, "end": 173.25, "text": "В то вре́мя фле́йта была́ инструме́нтом, на кото́ром на похорона́х игра́ли гру́стную му́зыку."}, {"start": 173.25, "end": 177.65, "text": "Как лю́ди грустя́т на похорона́х, так Иего́ва грусти́л о Моа́ве."}, {"start": 177.65, "end": 192.6, "text": "В Иезекии́ля 33:11 Иего́ва говори́т, что ему́ не доставля́ет ра́дости смерть зло́го челове́ка, но он хо́чет, что́бы тот измени́л свой путь и жил."}, {"start": 192.6, "end": 198.15, "text": "Иего́ва нака́зывает, потому́ что э́то ну́жно, а не потому́, что он э́того хо́чет."}, {"start": 198.15, "end": 201.85, "text": "Дава́йте прочита́ем со́рок седьмо́й стих."}, {"start": 202.85, "end": 207.4, "text": "(47) Но в после́дние дни я верну́ Моа́в из пле́на, — говори́т Иего́ва."}, {"start": 207.35, "end": 211.4, "text": "На э́том конча́ется пригово́р Моа́ву."}, {"start": 211.4, "end": 215.3, "text": "Здесь Иего́ва обеща́ет верну́ть пле́нных моави́тян."}, {"start": 215.35, "end": 222.3, "text": "Весь наро́д был нака́зан, но к не́которым моави́тянам Иего́ва прояви́л милосе́рдие."}, {"start": 222.3, "end": 229.35, "text": "Вероя́тно, царь Кир, кото́рый завоева́л Вавило́н, разреши́л пле́нным моави́тянам верну́ться домо́й."}, {"start": 229.55, "end": 235.6, "text": "На са́мом де́ле Иего́ва не впервы́е прояви́л милосе́рдие к моави́тянам."}, {"start": 235.6, "end": 241.25, "text": "Задо́лго до Иереми́и моавитя́нка Руфь реши́ла служи́ть Иего́ве."}, {"start": 241.25, "end": 245.35, "text": "Иего́ва при́нял её и ще́дро благослови́л."}, {"start": 245.35, "end": 249.35, "text": "Руфь ста́ла пре́дком царя́ Дави́да и Иису́са."}, {"start": 249.35, "end": 257.35, "text": "Так Иего́ва всегда́ оставля́ет дверь откры́той для ка́ждого челове́ка, да́же для моави́тян."}, {"start": 257.35, "end": 261.1, "text": "Дава́йте посмо́трим на иллюстра́цию."}, {"start": 261.1, "end": 266.15, "text": "Молода́я же́нщина, кото́рая ра́ньше посеща́ла собра́ние, смо́трит но́вости."}, {"start": 266.15, "end": 272.15, "text": "На экра́не напи́сано: «Прави́тельства запреща́ют религио́зную де́ятельность»."}, {"start": 272.15, "end": 274.65, "text": "Вели́кое бе́дствие пришло́."}, {"start": 274.65, "end": 280.65, "text": "Как вы ду́маете, что вспомина́ет э́та же́нщина, когда́ смо́трит на фотогра́фию?"}, {"start": 280.65, "end": 285.15, "text": "Она́ вспомина́ет, как ра́ньше служи́ла Иего́ве вме́сте с роди́телями."}, {"start": 285.15, "end": 290.85, "text": "Она́ ду́мает: «То, о чём меня́ предупрежда́ли, действи́тельно пришло́!»"}, {"start": 290.85, "end": 294.35, "text": "Наве́рное, по́сле э́того она́ реши́ла верну́ться к Иего́ве."}, {"start": 294.35, "end": 297.45, "text": "Чему́ мы научи́лись сего́дня?"}, {"start": 297.45, "end": 301.1, "text": "Иего́ва — пра́ведный и в то же вре́мя милосе́рдный судья́."}, {"start": 301.1, "end": 303.75, "text": "Иего́ва и сего́дня тако́й же."}, {"start": 303.75, "end": 307.05, "text": "Он и сейча́с хо́чет прояви́ть к лю́дям милосе́рдие."}, {"start": 307.05, "end": 311.35, "text": "Что же нам ну́жно де́лать сейча́с?"}, {"start": 311.35, "end": 316.85, "text": "Нам ну́жно ду́мать, как Иего́ва, и усе́рдно пропове́довать уже́ сейча́с."}, {"start": 316.8, "end": 322.9, "text": "То, что мы говори́м лю́дям в служе́нии, они́ мо́гут вспо́мнить пото́м."}, {"start": 323.05, "end": 331.25, "text": "Возмо́жно, как же́нщина на иллюстра́ции, не́которые лю́ди вспо́мнят на́ши слова́, когда́ начнётся вели́кое бе́дствие."}, {"start": 331.25, "end": 339.35, "text": "Поэ́тому дава́йте не бу́дем огорча́ться, е́сли лю́ди сейча́с не слу́шают, а бу́дем усе́рдно свиде́тельствовать."}, {"start": 339.35, "end": 342.15, "text": "Ведь Иего́ва всё ещё ждёт."}, {"start": 342.15, "end": 345.45, "text": "Вы уже́ хорошо́ пропове́дуете."}, {"start": 345.45, "end": 349.85, "text": "Дава́йте и да́льше не сдава́ться и пропове́довать до конца́!"}];
+const player=document.getElementById('player');
+let mode=null, current=-1, repeatLeft=0, timer=null, raf=null, practiceTimer=null;
+function clearTimers(){if(timer)clearTimeout(timer); if(practiceTimer)clearTimeout(practiceTimer); if(raf)cancelAnimationFrame(raf); timer=practiceTimer=raf=null;}
+function setStatus(i,txt){document.querySelectorAll('.status').forEach((e,j)=>e.textContent=(j===i?txt:''));}
+function highlight(i,cls){document.querySelectorAll('.line').forEach(e=>e.classList.remove('playing','pausing')); if(i>=0){const el=document.getElementById('line-'+i); el.classList.add(cls||'playing'); el.scrollIntoView({block:'center',behavior:'smooth'});}}
+function stopPlay(){clearTimers(); player.pause(); mode=null; current=-1; repeatLeft=0; highlight(-1); setStatus(-1,'');}
+function playLine(i,times,kind){
+ stopPlay(); current=i; mode=kind||'once'; repeatLeft=times||1;
+ const seg=SEGMENTS[i]; highlight(i,'playing'); setStatus(i,'재생 중…');
+ player.currentTime=Math.max(0,seg.start); player.play();
+ const tick=()=>{ if(mode===null)return; if(player.currentTime>=seg.end){ onSegmentEnd(i); return;} raf=requestAnimationFrame(tick); };
+ raf=requestAnimationFrame(tick);
+}
+function onSegmentEnd(i){
+ const seg=SEGMENTS[i];
+ if(mode==='repeat' && repeatLeft>1){ repeatLeft--; setStatus(i,'반복 재생 '+repeatLeft+'회 남음'); player.currentTime=seg.start; player.play(); const tick=()=>{if(mode===null)return; if(player.currentTime>=seg.end){onSegmentEnd(i);return;} raf=requestAnimationFrame(tick);}; raf=requestAnimationFrame(tick); return;}
+ if(mode==='practice'){
+   player.pause(); const dur=seg.end-seg.start; const wait=Math.round((dur+2)*1000/player.playbackRate);
+   highlight(i,'pausing'); let left=Math.ceil(wait/1000); setStatus(i,'🎤 지금 따라 말해 보세요 — '+left+'초');
+   practiceTimer=setInterval(()=>{left--; if(left>0){setStatus(i,'🎤 지금 따라 말해 보세요 — '+left+'초');} else {clearInterval(practiceTimer); practiceTimer=null; setStatus(i,'연습 끝. 다음 줄로 이동합니다.'); highlight(Math.min(i+1,SEGMENTS.length-1),'playing'); mode=null;}},1000);
+   return;
+ }
+ if(mode==='all'){ if(i+1<SEGMENTS.length){ playLine(i+1,1,'all'); } else { stopPlay(); } return; }
+ player.pause(); mode=null; setStatus(i,'완료'); 
+}
+function toggleRepeat(i,btn){ playLine(i,3,'repeat'); setStatus(i,'반복 재생 중 (3회)'); }
+function practiceLine(i){ playLine(i,1,'practice'); }
+function playAll(){ playLine(0,1,'all'); }
+function setRate(r,btn){ player.playbackRate=r; document.querySelectorAll('[data-rate]').forEach(b=>b.classList.toggle('active',+b.dataset.rate===r)); }
+player.addEventListener('pause',()=>{ /* segment control handles highlight */ });
+</script>
+</body></html>
