@@ -121,6 +121,7 @@ function showView(name){
 function headerHtml(title){
  const cards=cardsOf(), i=idx();
  return `<header><div class="headRow"><button class="backBtn" onclick="showView('home')">← 뒤로 가기</button><div><div class="headLabel">${title}</div><div style="font-size:12px;color:#7a8699">(강세는 러시안그램을 통해서 확인했습니다)</div></div></div>
+ <div class="controls" style="margin:6px 0"><button onclick="window.open('https://wol.jw.org/ko/wol/d/r8/lp-ko/2026521','_blank')">📖 파수대 원문 보기 (한국어)</button><button onclick="window.open('https://wol.jw.org/ru/wol/d/r2/lp-u/2026521','_blank')">📖 파수대 원문 보기 (러시아어)</button></div>
  <div class="headRow"><nav class="topnav">${cards.map((c,j)=>`<button data-nav="${j}" class="${j===i?'on':''}" onclick="go(${j})">${c.tag}</button>`).join('')}</nav></div>
  <div class="voiceBox"><span class="voiceTitle">목소리 선택</span><div class="voiceNav" id="voiceNav-${person}"></div></div>
  <div class="controls"><span>${i+1} / ${cards.length}</span>
@@ -185,6 +186,27 @@ let dramaFilter='all';
 function dramaHeader(title,mode){
  return `<header><div class="headRow"><button class="backBtn" onclick="showView('home')">← 뒤로 가기</button><div><div class="headLabel">${title}</div><div style="font-size:12px;color:#7a8699">10분 실연 대본</div></div></div>
  <div style="font-family:'PT Serif',serif;font-size:16px;line-height:1.5;margin:8px 0">${DRAMA_TITLE}</div>
+ <div class="controls" style="margin:6px 0"><button onclick="toggleTaskPanel('task',event)">임명받은 과제 내용</button><button onclick="toggleTaskPanel('check',event)">살필 점</button></div>
+ <div id="panel-task" style="display:none;background:#fffbeb;border:1px solid #f59e0b;border-radius:10px;padding:12px 14px;margin:8px 0;font-size:15px;line-height:1.7">
+   <b>임명받은 과제 내용</b><br>
+   6. 대화 시작하기 (2분) — 집호 방문 전파<br>
+   슬픈 사람이 문을 엶<br>
+   lmd 2과 4항<br>
+   <span style="font-family:'PT Serif',serif">원문: 6. Начинайте разговор (2 мин.) ПРОПОВЕДЬ ПО ДОМАМ. Дверь открыл грустный человек (lmd урок 2, пункт 4)</span>
+ </div>
+ <div id="panel-check" style="display:none;background:#f0fdf4;border:1px solid #22c55e;border-radius:10px;padding:12px 14px;margin:8px 0;font-size:15px;line-height:1.7">
+   <b>살필 점</b> <span style="color:#666;font-size:13px">(이 대본 기준 살필 점 — 공식 살필 점 목록이 아니라 이 대본 내용에서 뽑은 점입니다)</span>
+   <ul style="margin:6px 0;padding-left:20px">
+     <li>첫인사와 자기소개: 짧고 자연스럽게 인사하고, 이름과 사는 동네를 밝혀 안심시키기</li>
+     <li>상대의 상황을 살피는 태도: 표정과 반응을 보고 “안 좋은 때에 온 것 같다”고 먼저 알아차리기</li>
+     <li>공감: 15년 다닌 직장을 잃은 사정을 가볍게 넘기지 않고, 그 마음이 당연하다고 공감하기</li>
+     <li>경청: 상대가 아내에게 아직 말 못 한 사정까지 스스로 이야기할 수 있도록 끊지 않고 듣기</li>
+     <li>따뜻한 어조: 아내가 이해할 것이라는 위로를 따뜻하고 차분한 어조로 전하기</li>
+     <li>오래 붙잡지 않기: 힘든 상황인 것을 고려해 오늘은 짧게 마무리하기</li>
+     <li>재방문 약속: 힘든 시기를 견디는 데 도움이 되는 생각을 나누겠다고 제안하고, 다시 와도 되는지 동의를 구하기</li>
+     <li>마무리 인사: 아내와의 대화가 잘 되길 바란다는 말로 따뜻하게 끝내기</li>
+   </ul>
+ </div>
  <div class="voiceBox"><span class="voiceTitle">목소리 선택</span><div class="voiceNav" id="voiceNav-drama"></div></div>
  <div class="controls"><button data-repeat="1" onclick="setRepeat(1)">1번</button><button data-repeat="3" onclick="setRepeat(3)">3번</button><button data-repeat="5" onclick="setRepeat(5)">5번</button><button onclick="speakDrama('${mode}')">▶ 전체 듣기</button><button onclick="stopSpeak()">⏹ 멈춤</button><span>속도:</span><button data-rate="0.5" onclick="setRate(0.5)">0.5x</button><button data-rate="0.75" onclick="setRate(0.75)">0.75x</button><button data-rate="1" onclick="setRate(1)">1x</button><button data-rate="1.25" onclick="setRate(1.25)">1.25x</button></div></header>`;
 }
@@ -201,6 +223,7 @@ function dramaLineHtml(d,i,mode){
  const name=d.role==='gleb'?'글렙':'비올레타';
  return `<div class="dramaLine"><span class="role ${d.role}">${name}</span><div class="sentLine"><span class="ruSent" onclick="speakDramaLine(${i},this)">${d.ru}</span> <button class="gbtn inline" onclick="toggleKoLine(${i},event)">한국어 보기</button><div class="koLine" id="ko-${mode}-${i}">${d.ko}</div></div></div>`;
 }
+function toggleTaskPanel(which,ev){const hdr=ev&&ev.currentTarget?ev.currentTarget.closest('header'):null;const el=hdr?hdr.querySelector('#panel-'+which):document.getElementById('panel-'+which);if(!el)return;el.style.display=el.style.display==='block'?'none':'block';}
 function toggleKoLine(i,ev){const mode=document.getElementById('view-pro10').classList.contains('show')?'pro':'drama';const el=document.getElementById('ko-'+mode+'-'+i);if(!el)return;const open=el.style.display==='block';el.style.display=open?'none':'block';if(ev&&ev.currentTarget)ev.currentTarget.textContent=open?'한국어 보기':'한국어 숨기기';}
 function renderDrama(){
  const el=document.getElementById('view-drama'); if(!el)return;
