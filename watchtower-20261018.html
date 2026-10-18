@@ -41,6 +41,7 @@ main{max-width:900px;margin:0 auto;padding:14px}
 .voiceNav button.on small{color:#dceaff}
 .voiceNav button:disabled{opacity:.45;cursor:not-allowed;background:#f1f3f6}
 .ruFlow{font-family:'PT Serif','Charis SIL','Times New Roman',Georgia,serif;font-size:26px;line-height:1.55;font-weight:600;color:#111827;margin:8px 0;letter-spacing:.01em}
+.sentLine{display:block;margin:0 0 7px}
 .gbtn.inline{font-size:11px;padding:2px 6px;min-height:24px;vertical-align:middle;margin:0 2px;color:#2456a6;font-weight:700}
 .ruSent{cursor:pointer;border-radius:6px;padding:2px 1px}
 .ruSent:hover{background:#eef5ff}
@@ -128,7 +129,7 @@ function selectVoice(i){
 const clean=s=>s.replace(/\u0301/g,'');
 function disp(s){return s}
 function ruFlowHtml(c){
- return `<div class="ruFlow">${c.ru.map((sent,i)=>`<span class="ruSent" onclick="speakSentence(${i},this)" title="눌러서 듣기">${disp(sent)}</span> <button class="gbtn inline" onclick="toggleGrammar(${i},event)">문법해설 ▾</button><div class="grammarOne" id="grammar-${i}" style="display:none"><ul>${GRAMMAR[idx][i].map(b=>`<li>${b}</li>`).join('')}${ADD[idx][i].map(b=>`<li>${b}</li>`).join('')}<li><b>원형·대체 가능 단어:</b> ${EXTRA[idx][i]}</li></ul></div>`).join(' ')}</div>`;
+ return `<div class="ruFlow">${c.ru.map((sent,i)=>`<div class="sentLine"><span class="ruSent" onclick="speakSentence(${i},this)" title="눌러서 듣기">${disp(sent)}</span> <button class="gbtn inline" onclick="toggleGrammar(${i},event)">문법해설 ▾</button><div class="grammarOne" id="grammar-${i}" style="display:none"><ul>${GRAMMAR[idx][i].map(b=>`<li>${b}</li>`).join('')}${ADD[idx][i].map(b=>`<li>${b}</li>`).join('')}<li><b>원형·대체 가능 단어:</b> ${EXTRA[idx][i]}</li></ul></div></div>`).join('')}</div>`;
 }
 function koreanHtml(c){
  return c.ru.map((_,i)=>`<div class="kSent"><p class="kosent">${KO_SENT[idx][i]}</p></div>`).join('');
