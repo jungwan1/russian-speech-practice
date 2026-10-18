@@ -32,15 +32,19 @@ main{max-width:900px;margin:0 auto;padding:14px}
 .topnav button{flex:0 0 auto}
 .topnav button{font-size:15px;font-weight:700;padding:7px 11px}
 .topnav button.on{background:#2456a6;color:#fff;border-color:#2456a6}
-.voiceBox{margin-top:12px;background:#eef5ff;border:1px solid #c7d7f5;border-radius:12px;padding:10px 12px}
-.voiceTitle{font-size:15px;font-weight:800;color:#173a75;margin-bottom:4px}
-.voiceNote{font-size:12.5px;color:#4b5b74;line-height:1.5;margin-bottom:8px}
+.voiceBox{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:2px}
+.voiceTitle{font-size:14px;font-weight:800;color:#173a75;white-space:nowrap}
 .voiceNav{display:flex;flex-wrap:wrap;gap:8px}
 .voiceNav button{font-size:14px;line-height:1.25;padding:8px 10px;max-width:170px}
 .voiceNav button small{display:block;font-size:11px;font-weight:400;color:#667;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:150px}
 .voiceNav button.on{background:#2456a6;color:#fff;border-color:#2456a6}
 .voiceNav button.on small{color:#dceaff}
 .voiceNav button:disabled{opacity:.45;cursor:not-allowed;background:#f1f3f6}
+.sent{border-bottom:1px solid #eef1f5;padding-bottom:6px}
+.gbtn{font-size:13px;padding:5px 9px;min-height:32px;color:#2456a6;font-weight:700}
+.grammarOne{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:8px 12px;margin:6px 0 10px}
+.grammarOne ul{margin:4px 0;padding-left:19px;font-size:14.5px;line-height:1.65;color:#333}
+.grammarOne li{margin:3px 0}
 details.grammar{margin-top:14px;border-top:1px dashed #cbd5e1;padding-top:10px}
 details.grammar summary{cursor:pointer;font-size:15px;font-weight:800;color:#2456a6;padding:6px 0}
 .gru{font-family:'PT Serif','Charis SIL','Times New Roman',Georgia,serif;font-size:19px;line-height:1.6;font-weight:700;margin:12px 0 4px;color:#17202a}
@@ -58,11 +62,7 @@ details.grammar summary{cursor:pointer;font-size:15px;font-weight:800;color:#245
 <button data-nav="4" onclick="go(4)">복습 2</button>
 <button data-nav="5" onclick="go(5)">복습 3</button>
 </nav></div>
-<div class="voiceBox">
-<div class="voiceTitle">🔊 러시아어 목소리 선택 (5가지)</div>
-<div class="voiceNote">기기에서 제공되는 러시아어 목소리가 표시됩니다. 이 기기에 러시아어 음성이 5개보다 적으면, 없는 목소리는 '제공되지 않음'으로 표시됩니다.</div>
-<div class="voiceNav" id="voiceNav"></div>
-</div>
+<div class="voiceBox"><span class="voiceTitle">러시아어 목소리 선택</span><div class="voiceNav" id="voiceNav"></div></div>
 <div class="controls">
 <span id="progressText">1 / 6</span>
 <button onclick="speakAll(1)">▶ 전체 듣기</button>
@@ -89,12 +89,13 @@ const CARDS=[
 {tag:"복습 3",q:"악한 영의 세력들을 상대로 승리할 수 있다고 당신이 확신하는 이유는 무엇입니까?",ko:"여호와와 예수에 대한 강한 믿음을 유지하고, 형제자매들과 연합을 유지하면 여호와와 예수의 지원을 받아 승리할 수 있기 때문입니다.",ru:["Би́блия заверя́ет нас, что мы мо́жем одержа́ть побе́ду в борьбе́ со злы́ми ду́хами.","Для э́того нам нужна́ си́льная ве́ра в Иего́ву и Иису́са.","Иего́ва и Иису́с обеща́ют помо́чь нам, а бра́тья и сёстры подде́рживают нас в борьбе́ с гла́вным враго́м — Сатано́й."]}
 ];
 const GRAMMAR=[[["не зави́довал Дави́ду: зави́довать(시기하다)는 목적어를 여격으로 취해요. Дави́ду = 다윗(여격).", "а счита́л его́ дру́гом: счита́ть + 대격(его́=그를) + 조격(дру́гом=친구로) = '~를 ~로 여기다'.", "потому́ что = '왜냐하면'. 뒤 절이 사랑한 이유를 설명해요."], ["был смире́нным: 과거 '~였다'의 보어는 조격(смире́нным=겸손한)으로 써요.", "хотя́ = '비록 ~지만(양보)'. 알고도 시기하지 않았다는 대조예요.", "вы́брал его́ сле́дующим царём: сле́дующим царём(다음 왕으로)도 조격 보어예요."], ["Если́ + бу́дем люби́ть: бу́дем + 부정법 = 불완료체 미래 '계속 사랑할 것이다'.", "не оста́нется ме́ста: '자리가 남지 않을 것이다'라는 부정 존재 표현이라 ме́ста는 생격이에요.", "для + 생격: для за́висти = '질투를 위한(자리)'."]], [["не позво́лил, что́бы + 과거형: '~하지 못하게 했다'. что́бы 뒤 과거형은 실제 과거가 아니라 목적·가정이에요.", "переро́с в + 대격: перерасти́ в ~ = '~로 커지다/번지다'. в 뒤 대격 серьёзный конфли́кт.", "ме́жду + 조격: ме́жду пастуха́ми и филистимля́нами(목자들과 블레셋 사람들 사이)."], ["стреми́лся к ми́ру: стреми́ться к + 여격 = '~를 향해 노력하다'. ми́ру는 мир의 여격이에요.", "поэ́тому = '그래서'. сно́ва уступи́л и перешёл — 완료체 과거가 잇달아 일어난 동작을 보여줘요.", "в друго́е ме́сто: 이동 목적지라 в + 대격이에요."], ["Так проявля́л: '그렇게 나타냈다'. проявля́ть(불완료체 과거)는 한 번이 아닌 성품을 말해요.", "목적어는 대격: кро́тость и терпе́ние(온화와 참을성)가 목적어예요."]], [["не должны́ + 부정법: должны́(해야 한다, 복수형) 뒤에 ненави́деть 같은 부정법이 와요.", "ненави́деть тех: ненави́деть + 대격. тех = '그 사람들(대격)'.", "отпла́чивать злом за зло́: злом(악으로, 조격) за зло́(악에 대해, 대격) — '악을 악으로 갚다'는 관용 표현이에요."], ["Сле́дуя призы́ву: сле́дуя는 부동사(불완료체) '~를 따르면서/따라'. 따르는 대상은 여격 призы́ву예요.", "стара́емся проявля́ть: стара́ться + 부정법 = '노력하다'. доброту́, терпе́ние, уваже́ние은 모두 대격 목적어예요.", "да́же = '심지어'. к + 여격: ко всем, к тем(~한 사람들에게도)."]], [["пыта́ется + 부정법: пыта́ться(시도하다) 뒤에 부정법이 와요.", "разру́шить는 완료체: '완전히 깨뜨리다'라는 결과에 초점이 있어요(불완료체 разруша́ть=깨뜨리는 과정).", "еди́нство с + 조격: бра́тьями и сёстрами와(과)의 연합이에요."], ["наде́ется, что ... ста́нем: наде́яться(희망하다) + что 절. ста́нем은 완료체 미래 '~가 될 것이다'예요.", "ста́нем + 부정법들: зави́довать, критикова́ть, ненави́деть가 나란히 이어져요.", "друг дру́гу = '서로에게(여격)'. 서로 시기한다는 뜻이에요."], ["Его́ цель — заста́вить: 대시(—)로 잇는 명사문. цель(목표) 뒤 부정법 구문이 내용을 풀이해요.", "заста́вить нас + 부정법: '~에게 억지로 ~하게 만들다'. 시키는 대상 нас는 대격이에요.", "боро́ться не с ним, а друг с дру́гом: не A, а B = 'A가 아니라 B와'. с + 조격이에요."]], [["испо́льзует пресле́дования: испо́льзовать(이용하다) + 대격 пресле́дования(박해)를 써요.", "что́бы запуга́ть / отвле́чь: что́бы + 완료체 부정법 = '~하도록(목적)'. 겁주다·주의를 돌리다예요.", "кото́рое ... поручи́л: 관계대명사 кото́рое가 зада́ние(과제, 중성)를 받아요."], ["Столкну́вшись: 완료체 부동사 '~에 맞닥뜨리고 나서'. 뒤 주절보다 먼저 일어난 일이에요.", "сосредото́читься на том, что́бы доби́ться: на + 전치격에 집중하고, доби́ться(달성하다)는 생격 справедли́вости를 취해요.", "не оста́нется сил и вре́мени: 부정 존재라 сил, вре́мени가 생격이에요. '힘과 시간이 남지 않다'."]], [["заверя́ет нас, что мо́жем одержа́ть: заверя́ть(확언하다) + что 절. мо́жем + 완료체 부정법 одержа́ть예요.", "одержа́ть побе́ду = '승리를 거두다'라는 고정 표현이에요.", "в борьбе́ со злы́ми ду́хами: борьбе́는 в + 전치격, злы́ми ду́хами는 с + 조격이에요."], ["Для э́того нужна́ си́льная ве́ра: '~가 필요하다' 구문. 주어 ве́ра(여성)에 맞춰 нужна́가 여성형이에요.", "남에게 필요하다는 대상은 여격: '우리에게'는 (нам)으로, ве́ра가 주어예요.", "ве́ра в Иего́ву и Иису́са: в + 대격 = '~에 대한 믿음'이에요."], ["обеща́ют помо́чь: обеща́ть + 부정법 помо́чь(완료체) = '도와주겠다고 약속하다'.", "подде́рживают: 불완료체 현재 '계속 지원하고 있다'예요.", "с гла́вным враго́м: с + 조격. '주된 적과의 싸움에서'라는 뜻이에요."]]];
+const EXTRA=[["원형 зави́довать(시기하다)·счита́ть(여기다)·люби́ть(사랑하다) · 대체: дру́гом → това́рищем(동료로)", "원형 быть(이다)·подде́рживать(지지하다)·вы́брать(선택하다) · 대체: смире́нным → кро́тким(온화한)", "원형 люби́ть·оста́ться(남다) · 대체: не оста́нется ме́ста → не бу́дет ме́ста(자리가 없을 것이다)"], ["원형 позво́лить(허락하다)·перерасти́(번지다) · 대체: спор → конфли́кт(분쟁)", "원형 стреми́ться(추구하다)·уступи́ть(양보하다)·перейти́(옮기다) · 대체: стреми́лся к ми́ру → добива́лся ми́ра(평화를 추구했다)", "원형 проявля́ть(나타내다) · 대체: проявля́л → пока́зывал(보여 주었다)"], ["원형 ненави́деть(미워하다)·отпла́чивать(갚다) · 대체: отпла́чивать злом → отвеча́ть тем же(똑같이 대응하다)", "원형 сле́довать(따르다)·проявля́ть · 대체: проявля́ть доброту́ → быть до́брым(친절하게 대하다)"], ["원형 пыта́ться(시도하다)·разру́шить(깨뜨리다, 완료체) · 대체: пыта́ется → стара́ется(애쓰다)", "원형 наде́яться(희망하다)·стать(되다) · 대체: ста́нем зави́довать → начнём зави́довать(시기하기 시작할 것이다)", "원형 заста́вить(억지로 시키다)·боро́ться(싸우다) · 대체: заста́вить → выну́дить(강요하다), цель → зада́ча(과제)"], ["원형 испо́льзовать(이용하다)·запуга́ть(겁주다, 완료체)·отвле́чь(주의를 돌리다, 완료체) · 대체: испо́льзует → применя́ет(사용한다)", "원형 столкну́ться(맞닥뜨리다)·сосредото́читься(집중하다)·доби́ться(달성하다) · 대체: сосредото́читься → ду́мать то́лько о…(…만 생각하다)"], ["원형 заверя́ть(확언하다)·одержа́ть(거두다) · 대체: одержа́ть побе́ду → победи́ть(이기다)", "원형 ну́жен(필요하다)·ве́ра(믿음) · 대체: ве́ра → дове́рие(신뢰)", "원형 обеща́ть(약속하다)·помо́чь(돕다, 완료체)·подде́рживать(지원하다) · 대체: подде́рживают → помога́ют(돕고 있다)"]];
 let idx=0, rate=1;
 let ruVoices=[], selectedVoice=-1;
 function loadVoices(){
  if(!('speechSynthesis' in window))return;
  const all=speechSynthesis.getVoices();
- ruVoices=all.filter(v=>v.lang&&v.lang.toLowerCase().replace('_','-').startsWith('ru')).slice(0,5);
+ ruVoices=all.filter(v=>v.lang&&v.lang.toLowerCase().replace('_','-').startsWith('ru')).slice(0,2);
  const saved=localStorage.getItem('wtRuVoiceURI');
  selectedVoice=ruVoices.findIndex(v=>v.voiceURI===saved);
  if(selectedVoice<0) selectedVoice=ruVoices.length?0:-1;
@@ -102,11 +103,7 @@ function loadVoices(){
 }
 function renderVoices(){
  const box=document.getElementById('voiceNav'); if(!box)return;
- box.innerHTML=[0,1,2,3,4].map(i=>{
-  const v=ruVoices[i];
-  if(!v) return `<button disabled>목소리 ${i+1}<small>이 기기에서는 제공되지 않음</small></button>`;
-  return `<button class="${i===selectedVoice?'on':''}" onclick="selectVoice(${i})">목소리 ${i+1}<small>${v.name} (${v.lang})</small></button>`;
- }).join('');
+ box.innerHTML=ruVoices.map((v,i)=>`<button class="${i===selectedVoice?'on':''}" onclick="selectVoice(${i})">목소리 ${i+1}<small>${v.name}</small></button>`).join('');
 }
 function selectVoice(i){
  selectedVoice=i;
@@ -124,14 +121,11 @@ function render(){
   <div class="meta"><span class="num">${idx+1}</span><span class="tag">${c.tag}</span><span>${idx+1} / ${CARDS.length} 카드</span></div>
   ${c.q?`<div class="q">❓ ${c.q}</div>`:''}
   <p class="ko">${c.ko}</p>
-  <div id="ruBox">${c.ru.map((s,i)=>`<p class="ru" onclick="speakSentence(${i},this)" title="눌러서 듣기">${disp(s)}</p>`).join('')}</div>
+  <div id="ruBox">${c.ru.map((sent,i)=>`<div class="sent"><p class="ru" onclick="speakSentence(${i},this)" title="눌러서 듣기">${disp(sent)}</p><button class="gbtn" onclick="toggleGrammar(${i},event)">문법해설 ▾</button><div class="grammarOne" id="grammar-${i}" style="display:none"><ul>${GRAMMAR[idx][i].map(b=>`<li>${b}</li>`).join('')}<li><b>원형·대체 가능 단어:</b> ${EXTRA[idx][i]}</li></ul></div></div>`).join('')}</div>
   <div class="btns">
     <button onclick="speakAll(1)">▶ 전체 듣기</button>
     <button onclick="stopSpeak()">⏹ 멈춤</button>
-  </div>
-  <details class="grammar"><summary>📘 문법 해설 보기</summary>
-  ${c.ru.map((sent,i)=>`<p class="gru">${disp(sent)}</p><ul>${GRAMMAR[idx][i].map(b=>`<li>${b}</li>`).join('')}</ul>`).join('')}
-  </details>`;
+  </div>`;
  setStatus('');
 }
 function setStatus(t){document.getElementById('status').textContent=t}
@@ -150,6 +144,13 @@ function speakAll(times=1){
  const text=CARDS[idx].ru.join(' ');
  let n=0; const play=()=>{ if(n>=times)return; n++; const u=speakText(text); u.onend=()=>setTimeout(play,400); }; play();
  setStatus('▶ 듣는 중... ('+times+'회)');
+}
+function toggleGrammar(i,ev){
+ if(ev) ev.stopPropagation();
+ const el=document.getElementById('grammar-'+i); if(!el)return;
+ const open=el.style.display!=='none';
+ el.style.display=open?'none':'block';
+ if(ev&&ev.currentTarget) ev.currentTarget.textContent=open?'문법해설 ▾':'문법해설 ▴';
 }
 function stopSpeak(){speechSynthesis.cancel();setStatus('⏹ 정지')}
 document.addEventListener('keydown',e=>{
