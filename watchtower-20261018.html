@@ -40,7 +40,13 @@ main{max-width:900px;margin:0 auto;padding:14px}
 .voiceNav button.on{background:#2456a6;color:#fff;border-color:#2456a6}
 .voiceNav button.on small{color:#dceaff}
 .voiceNav button:disabled{opacity:.45;cursor:not-allowed;background:#f1f3f6}
-.sent{border-bottom:1px solid #eef1f5;padding-bottom:6px}
+.ruFlow{font-family:'PT Serif','Charis SIL','Times New Roman',Georgia,serif;font-size:26px;line-height:1.55;font-weight:600;color:#111827;margin:8px 0;letter-spacing:.01em}
+.gbtn.inline{font-size:11px;padding:2px 6px;min-height:24px;vertical-align:middle;margin:0 2px;color:#2456a6;font-weight:700}
+.ruSent{cursor:pointer;border-radius:6px;padding:2px 1px}
+.ruSent:hover{background:#eef5ff}
+.ruSent.playing{outline:3px solid #5b8def;background:#eef5ff}
+.koreanBox{margin-top:12px;border-top:1px dashed #cbd5e1;padding-top:10px}
+.kSent{border-bottom:1px solid #eef1f5;padding:8px 0}
 .kosent{font-size:15.5px;line-height:1.6;font-weight:700;margin:4px 0 2px;color:#243447}
 .gbtn{font-size:13px;padding:5px 9px;min-height:32px;color:#2456a6;font-weight:700}
 .grammarOne{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:8px 12px;margin:6px 0 10px}
@@ -121,9 +127,17 @@ function selectVoice(i){
 }
 const clean=s=>s.replace(/\u0301/g,'');
 function disp(s){return s}
-function sentHtml(c,i){
- const sent=c.ru[i];
- return `<div class="sent"><p class="kosent">${KO_SENT[idx][i]}</p><p class="ru" onclick="speakSentence(${i},this)" title="눌러서 듣기">${disp(sent)}</p><button class="gbtn" onclick="toggleGrammar(${i},event)">문법해설 ▾</button><div class="grammarOne" id="grammar-${i}" style="display:none"><ul>${GRAMMAR[idx][i].map(b=>`<li>${b}</li>`).join('')}${ADD[idx][i].map(b=>`<li>${b}</li>`).join('')}<li><b>원형·대체 가능 단어:</b> ${EXTRA[idx][i]}</li></ul></div></div>`;
+function ruFlowHtml(c){
+ return `<div class="ruFlow">${c.ru.map((sent,i)=>`<span class="ruSent" onclick="speakSentence(${i},this)" title="눌러서 듣기">${disp(sent)}</span> <button class="gbtn inline" onclick="toggleGrammar(${i},event)">문법해설 ▾</button><div class="grammarOne" id="grammar-${i}" style="display:none"><ul>${GRAMMAR[idx][i].map(b=>`<li>${b}</li>`).join('')}${ADD[idx][i].map(b=>`<li>${b}</li>`).join('')}<li><b>원형·대체 가능 단어:</b> ${EXTRA[idx][i]}</li></ul></div>`).join(' ')}</div>`;
+}
+function koreanHtml(c){
+ return c.ru.map((_,i)=>`<div class="kSent"><p class="kosent">${KO_SENT[idx][i]}</p></div>`).join('');
+}
+function toggleKorean(ev){
+ const el=document.getElementById('koreanBox'); if(!el)return;
+ const open=el.style.display!=='none';
+ el.style.display=open?'none':'block';
+ if(ev&&ev.currentTarget) ev.currentTarget.textContent=open?'한국어 해설 보기':'한국어 해설 숨기기';
 }
 function render(){
  const c=CARDS[idx];
@@ -133,14 +147,16 @@ function render(){
  document.getElementById('card').innerHTML=`
   <div class="meta"><span class="num">${idx+1}</span><span class="tag">${c.tag}</span><span>${idx+1} / ${CARDS.length} 카드</span></div>
   ${c.q?`<div class="q">❓ ${c.q}</div>`:''}
-  <div id="ruBox">${c.ru.map((_,i)=>sentHtml(c,i)).join('')}</div>
+  <div id="ruBox">${ruFlowHtml(c)}</div>
   <div class="btns">
     <button data-repeat="1" onclick="setRepeat(1)">1번</button>
     <button data-repeat="3" onclick="setRepeat(3)">3번</button>
     <button data-repeat="5" onclick="setRepeat(5)">5번</button>
     <button onclick="speakAll()">▶ 전체 듣기</button>
     <button onclick="stopSpeak()">⏹ 멈춤</button>
-  </div>`;
+    <button onclick="toggleKorean(event)">한국어 해설 보기</button>
+  </div>
+  <div class="koreanBox" id="koreanBox" style="display:none">${koreanHtml(c)}</div>`;
  syncRepeat(); setStatus('');
 }
 function setStatus(t){document.getElementById('status').textContent=t}
