@@ -26,7 +26,7 @@ main{max-width:900px;margin:0 auto;padding:14px}
 .koreanBox{margin-top:12px;border-top:1px dashed #cbd5e1;padding-top:10px} .kosent{font-size:15.5px;line-height:1.6;font-weight:700;margin:4px 0 2px;color:#243447} .kSent{border-bottom:1px solid #eef1f5;padding:8px 0}
 .status{min-height:22px;margin-top:8px;color:#8a5a00;font-weight:600} .progress{height:8px;background:#e5e7eb;border-radius:99px;overflow:hidden;margin-top:10px} .bar{height:100%;background:#5b8def;transition:width .3s}
 .note{font-size:13px;color:#666;line-height:1.6;background:#fff;border:1px dashed #bbb;border-radius:10px;padding:10px 12px}
-.backBtn{font-size:14px;font-weight:700} .personTitle{font-size:16px;font-weight:800}
+.backBtn{font-size:14px;font-weight:700} .homeBtn{font-size:15px;font-weight:800;background:#17202a;color:#fff;border-color:#17202a;border-radius:9px;padding:7px 14px;min-height:36px;white-space:nowrap} .personTitle{font-size:16px;font-weight:800}
 /* main home */
 .home{min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:28px 20px;background:linear-gradient(180deg,#eef2ff,#f6f7f9)}
 .wtLogo{width:170px;max-width:62vw;height:auto;border-radius:10px;box-shadow:0 8px 24px rgba(23,32,42,.18);background:#fff;display:block} .home h1{font-size:52px;letter-spacing:.08em;margin:14px 0 4px} .home .subtitle{font-size:18px;color:#2456a6;font-weight:700;margin:0 0 8px} .home .date{font-size:14px;color:#667;margin:0 0 28px}
@@ -121,7 +121,7 @@ const clean=s=>s.replace(/\u0301/g,'');
 function esc(s){return s}
 function renderReference(){
  const el=document.getElementById('view-reference'); if(!el)return;
- el.innerHTML=`<header><div class="headRow"><button class="backBtn" onclick="showView('home')">← 뒤로 가기</button><div class="headLabel">참고해설</div></div></header><main>${GLEB_CARDS.map(c=>`<section class="card"><div class="meta"><span class="tag">${c.tag}</span></div>${c.q?`<div style="font-size:15px;color:#2456a6;font-weight:700;margin-top:10px">❓ ${c.q}</div>`:''}<div class="ruFlow" style="font-size:21px">${c.ru.map(t=>`<div class="sentLine">${t}</div>`).join('')}</div>${c.ko?`<p style="font-size:15px;line-height:1.6;color:#333">${c.ko}</p>`:''}</section>`).join('')}</main>`;
+ el.innerHTML=`<header><div class="headRow"><button class="backBtn" onclick="showView('home')">← 뒤로 가기</button><button class="homeBtn" onclick="showView('home')">🏠 홈</button><div class="headLabel">참고해설</div></div></header><main>${GLEB_CARDS.map(c=>`<section class="card"><div class="meta"><span class="tag">${c.tag}</span></div>${c.q?`<div style="font-size:15px;color:#2456a6;font-weight:700;margin-top:10px">❓ ${c.q}</div>`:''}<div class="ruFlow" style="font-size:21px">${c.ru.map(t=>`<div class="sentLine">${t}</div>`).join('')}</div>${c.ko?`<p style="font-size:15px;line-height:1.6;color:#333">${c.ko}</p>`:''}</section>`).join('')}</main>`;
 }
 function showView(name){
  document.querySelectorAll('.view').forEach(v=>v.classList.remove('show'));
@@ -134,7 +134,7 @@ function showView(name){
 }
 function headerHtml(title){
  const cards=cardsOf(), i=idx();
- return `<header><div class="headRow"><button class="backBtn" onclick="showView('home')">← 뒤로 가기</button><div><div class="headLabel">${title}</div><div style="font-size:12px;color:#7a8699">(강세는 러시안그램을 통해서 확인했습니다)</div></div></div>
+ return `<header><div class="headRow"><button class="backBtn" onclick="showView('home')">← 뒤로 가기</button><button class="homeBtn" onclick="showView('home')">🏠 홈</button><div><div class="headLabel">${title}</div><div style="font-size:12px;color:#7a8699">(강세는 러시안그램을 통해서 확인했습니다)</div></div></div>
  <div class="controls" style="margin:6px 0"><button onclick="window.open('https://wol.jw.org/ko/wol/d/r8/lp-ko/2026521','_blank')">📖 파수대 원문 보기 (한국어)</button><button onclick="window.open('https://wol.jw.org/ru/wol/d/r2/lp-u/2026521','_blank')">📖 파수대 원문 보기 (러시아어)</button></div>
  <div class="headRow"><nav class="topnav">${cards.map((c,j)=>`<button data-nav="${j}" class="${j===i?'on':''}" onclick="go(${j})">${c.tag}</button>`).join('')}</nav></div>
  <div class="voiceBox"><span class="voiceTitle">목소리 선택</span><div class="voiceNav" id="voiceNav-${person}"></div></div>
@@ -209,7 +209,7 @@ const DRAMA=[
 ];
 let dramaFilter='all';
 function dramaHeader(title,mode){
- return `<header><div class="headRow"><button class="backBtn" onclick="showView('home')">← 뒤로 가기</button><div><div class="headLabel">${title}</div><div style="font-size:12px;color:#7a8699">10분 실연 대본</div></div></div>
+ return `<header><div class="headRow"><button class="backBtn" onclick="showView('home')">← 뒤로 가기</button><button class="homeBtn" onclick="showView('home')">🏠 홈</button><div><div class="headLabel">${title}</div><div style="font-size:12px;color:#7a8699">10분 실연 대본</div></div></div>
  <div style="font-family:'PT Serif',serif;font-size:16px;line-height:1.5;margin:8px 0">${DRAMA_TITLE}</div>
  <div class="controls" style="margin:6px 0"><button onclick="toggleTaskPanel('task',event)">임명받은 과제 내용</button><button onclick="toggleTaskPanel('check',event)">살필 점</button></div>
  <div id="panel-task" style="display:none;background:#fffbeb;border:1px solid #f59e0b;border-radius:10px;padding:12px 14px;margin:8px 0;font-size:15px;line-height:1.7">
