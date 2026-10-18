@@ -126,7 +126,7 @@ function renderReference(){
 function showView(name){
  document.querySelectorAll('.view').forEach(v=>v.classList.remove('show'));
  stopSpeakQuiet();
- if(name==='home'){document.getElementById('view-home').classList.add('show');location.hash='';return}
+ if(name==='home'){document.getElementById('view-home').classList.add('show');if(history.replaceState)history.replaceState(null,'',location.pathname+location.search);return}
  if(name==='reference'){document.getElementById('view-reference').classList.add('show');location.hash='reference';renderReference();window.scrollTo(0,0);return}
  if(name==='drama'){document.getElementById('view-drama').classList.add('show');location.hash='drama';renderDrama();window.scrollTo(0,0);return}
  if(name==='pro10'){document.getElementById('view-pro10').classList.add('show');location.hash='pro10';renderPro10();window.scrollTo(0,0);return}
@@ -260,6 +260,8 @@ function speakDrama(mode){
 }
 
 if('speechSynthesis' in window){loadVoices(); speechSynthesis.onvoiceschanged=loadVoices;}
-const h=(location.hash||'').replace('#','');
-if(['violetta','gleb','reference','drama','pro10'].includes(h)) showView(h); else showView('home');
+// Initial load always starts on the main (home) screen:
+// ignore/remove any hash (e.g. #pro10) left from a previous visit instead of restoring that view.
+if(history.replaceState)history.replaceState(null,'',location.pathname+location.search);
+showView('home');
 </script></body></html>
