@@ -62,7 +62,8 @@ button.tts{background:#eef2ff}
     <button type="button" id="voice-male" onclick="selectVoice('male')">남성<small id="voice-name-male">목소리 확인 중…</small></button>
     <button type="button" id="voice-female" onclick="selectVoice('female')">여성<small id="voice-name-female">목소리 확인 중…</small></button>
   </div>
-  <span class="voiceHint">샤샤가 가장 크게 들립니다 (볼륨 1.0, 다른 목소리 0.85). 실제 목소리는 기기·브라우저가 제공하는 러시아어 음성이라 기기마다 다를 수 있어요. 녹음 듣기는 원래대로 재생됩니다.</span>
+  <span class="voiceHint" id="voiceHint">기기에 러시아어 음성이 1개만 있으면 목소리 차이가 작을 수 있어요. 그래서 피치·속도를 크게 벌려 두었습니다 (샤샤 pitch 1.4·속도 1.0 / 남성 0.5·0.75 / 여성 1.85·1.25). 샤샤가 가장 크게 들립니다 (볼륨 1.0, 나머지 0.85).</span>
+  <div class="voiceHint" id="voiceDebug" style="width:100%">실제 배정: 목소리 확인 중…</div>
 </div>
 <audio id="player" controls preload="metadata" style="width:100%;margin-top:10px">
 <source src="audio.m4a" type="audio/mp4">
@@ -972,84 +973,120 @@ function setRate(r,btn){ player.playbackRate=r; document.querySelectorAll('[data
 player.addEventListener('pause',()=>{ /* segment control handles highlight */ });
 
 // ---- jw1 TTS voices: 샤샤 / 남성 / 여성 (Web Speech API, additional mode; recorded audio stays default) ----
-// NOTE: '샤샤' is a label for the preferred/first Russian voice on this device, not a guaranteed named voice.
-// Shasha is boosted: volume 1.0 (max) vs 0.85 for the others.
+// FIX (2026-10-18): previously pitch 1.2/0.8/1.1 + rate ~1.0 all reused ruVoices[0] when a device
+// exposes only ONE Russian voice, and some engines ignore small pitch deltas -> all sounded like 샤샤.
+// Now: (a) distinct real voice objects are assigned first when available, (b) pitch+rate are far apart
+// (rate is honoured even by engines that ignore pitch), (c) 샤샤 stays loudest (volume 1.0).
 const VOICE_PROFILES={
-  shasha:{label:'샤샤',pitch:1.2,rate:0.95,volume:1.0},
-  male:{label:'남성',pitch:0.8,rate:1.0,volume:0.85},
-  female:{label:'여성',pitch:1.1,rate:1.0,volume:0.85}
+  shasha:{label:'샤샤',pitch:1.4,rate:1.0,volume:1.0},
+  male:{label:'남성',pitch:0.5,rate:0.75,volume:0.85},
+  female:{label:'여성',pitch:1.85,rate:1.25,volume:0.85}
 };
+const VOICE_KEYS=['shasha','male','female'];
 let selectedVoiceKey='shasha';
 try{ const saved=localStorage.getItem('jw1-voice'); if(saved&&VOICE_PROFILES[saved]) selectedVoiceKey=saved; }catch(e){}
 let ruVoices=[];
-function stripStress(s){ return s.replace(/́/g,''); }
+let assignedVoices={shasha:null,male:null,female:null};
+function stripStress(s){ return (s||'').replace(/\u0301/g,''); }
 function pickVoices(){
-  if(!('speechSynthesis' in window)) return;
+  if(!('speechSynthesis' in window)) return assignedVoices;
   const all=window.speechSynthesis.getVoices()||[];
-  ruVoices=all.filter(v=>/^ru/i.test(v.lang||''));
+  const ru=all.filter(v=>/^ru/i.test(v.lang||''));
+  if(ru.length) ruVoices=ru;
   const lower=v=>(v.name||'').toLowerCase();
-  const femaleKeys=['female','woman','svetlana','ekaterina','irina','anna','elena','жен'];
-  const maleKeys=['male','man','dmitri','dmitry','yuri','pavel','муж'];
-  const firstFemale=ruVoices.find(v=>femaleKeys.some(k=>lower(v).includes(k)));
-  const firstMale=ruVoices.find(v=>maleKeys.some(k=>lower(v).includes(k)));
-  const assigned={
-    shasha: firstFemale||ruVoices[0]||null,
-    male: firstMale||ruVoices[1]||ruVoices[0]||null,
-    female: null
-  };
-  assigned.female=ruVoices.find(v=>v!==assigned.shasha&&v!==assigned.male)||firstFemale||ruVoices[1]||ruVoices[0]||null;
-  window.__jw1Assigned=assigned;
-  ['shasha','male','female'].forEach(k=>{
+  const femaleKeys=['female','woman','svetlana','ekaterina','irina','anna','elena','alena','milena'];
+  const maleKeys=['male','man','dmitri','dmitry','yuri','yuriy','pavel','nikolai'];
+  const pool=ruVoices.slice();
+  function take(pred){
+    if(!pool.length) return null;
+    let idx=pred?pool.findIndex(pred):0;
+    if(idx<0) idx=0;
+    return pool.splice(idx,1)[0];
+  }
+  let shasha=take(v=>femaleKeys.some(k=>lower(v).includes(k))) || take(null);
+  let male=take(v=>maleKeys.some(k=>lower(v).includes(k))) || take(null);
+  let female=take(v=>femaleKeys.some(k=>lower(v).includes(k))) || take(null);
+  if(!shasha) shasha=ruVoices[0]||null;
+  if(!male) male=ruVoices.find(v=>v!==shasha)||ruVoices[0]||null;
+  if(!female) female=ruVoices.find(v=>v!==shasha&&v!==male)||ruVoices.find(v=>v!==shasha)||ruVoices[0]||null;
+  assignedVoices={shasha:shasha,male:male,female:female};
+  window.__jw1Assigned=assignedVoices;
+  VOICE_KEYS.forEach(k=>{
     const nameEl=document.getElementById('voice-name-'+k);
     const btn=document.getElementById('voice-'+k);
     if(!btn) return;
-    if(!ruVoices.length){ btn.disabled=true; if(nameEl) nameEl.textContent='러시아어 음성 없음'; return; }
+    if(!ruVoices.length){ btn.disabled=true; if(nameEl) nameEl.textContent='러시아어 음성 확인 중…'; return; }
     btn.disabled=false;
-    const v=assigned[k];
-    if(nameEl) nameEl.textContent=v? v.name+' · 볼륨 '+VOICE_PROFILES[k].volume : '기본 음성';
+    const v=assignedVoices[k]; const p=VOICE_PROFILES[k];
+    if(nameEl) nameEl.textContent=(v?v.name:'기본 음성')+' · pitch '+p.pitch+' · 속도 '+p.rate+' · 볼륨 '+p.volume;
   });
+  const dbg=document.getElementById('voiceDebug');
+  if(dbg){
+    const fmt=k=>{const v=assignedVoices[k];return VOICE_PROFILES[k].label+'='+(v?(v.name+' ('+(v.lang||'')+')'):'기본 음성');};
+    dbg.textContent='실제 배정: '+fmt('shasha')+' / '+fmt('male')+' / '+fmt('female')+' · 기기 러시아어 음성 '+ruVoices.length+'개'+(ruVoices.length===1?' (1개라 피치·속도로 구분)':'');
+  }
+  const hint=document.getElementById('voiceHint');
+  if(hint){
+    hint.textContent = ruVoices.length===1
+      ? '기기에 러시아어 음성이 1개만 있으면 목소리 차이가 작을 수 있어요. 그래서 피치·속도를 크게 벌려 두었습니다 (샤샤 pitch 1.4·속도 1.0 / 남성 0.5·0.75 / 여성 1.85·1.25). 그래도 같게 들리면 기기에 러시아어 음성을 더 설치해야 해요. 샤샤가 가장 크게 들립니다 (볼륨 1.0, 나머지 0.85).'
+      : '샤샤가 가장 크게 들립니다 (볼륨 1.0, 나머지 0.85). 실제 목소리는 기기·브라우저가 제공하는 러시아어 음성이라 기기마다 다를 수 있어요. 녹음 듣기는 원래대로 재생됩니다.';
+  }
+  try{ console.log('[jw1 voices] ruVoices=',ruVoices.map(v=>v.name+'|'+v.lang+'|'+v.voiceURI),' assigned=',{shasha:shasha&&shasha.name,male:male&&male.name,female:female&&female.name},' profiles=',VOICE_PROFILES); }catch(e){}
   updateVoiceButtons();
+  return assignedVoices;
 }
 function updateVoiceButtons(){
-  ['shasha','male','female'].forEach(k=>{
+  VOICE_KEYS.forEach(k=>{
     const btn=document.getElementById('voice-'+k);
     if(btn) btn.classList.toggle('on', k===selectedVoiceKey);
   });
+}
+function speakWithProfile(key,text,statusIndex){
+  if(!('speechSynthesis' in window)){ if(typeof statusIndex==='number') setStatus(statusIndex,'이 기기에서는 목소리 재생을 지원하지 않습니다.'); return null; }
+  pickVoices();
+  const prof=VOICE_PROFILES[key]||VOICE_PROFILES.shasha;
+  const u=new SpeechSynthesisUtterance(stripStress(text));
+  u.lang='ru-RU';
+  u.pitch=prof.pitch; u.rate=prof.rate; u.volume=prof.volume;
+  const v=assignedVoices[key];
+  if(v){ u.voice=v; try{u.lang=v.lang||'ru-RU';}catch(e){} }
+  try{ console.log('[jw1 speak]',key,prof,'voice=',v&&v.name,'text=',text); }catch(e){}
+  window.speechSynthesis.cancel();
+  if(window.speechSynthesis.resume) window.speechSynthesis.resume();
+  setTimeout(()=>{ try{ window.speechSynthesis.speak(u); }catch(e){} },60);
+  return u;
 }
 function selectVoice(k){
   if(!VOICE_PROFILES[k]) return;
   selectedVoiceKey=k;
   try{ localStorage.setItem('jw1-voice',k); }catch(e){}
   updateVoiceButtons();
+  speakWithProfile(k,'Привет');
 }
 function speakLine(i){
   if(!('speechSynthesis' in window)){ setStatus(i,'이 기기에서는 목소리 재생을 지원하지 않습니다.'); return; }
   stopPlay();
-  window.speechSynthesis.cancel();
-  pickVoices();
+  const key=selectedVoiceKey;
   const seg=SEGMENTS[i]; if(!seg) return;
-  const u=new SpeechSynthesisUtterance(stripStress(seg.text));
-  u.lang='ru-RU';
-  const prof=VOICE_PROFILES[selectedVoiceKey]||VOICE_PROFILES.shasha;
-  u.pitch=prof.pitch; u.rate=prof.rate; u.volume=prof.volume; // 샤샤 volume=1.0 (max, boosted)
-  const assigned=window.__jw1Assigned||{};
-  if(assigned[selectedVoiceKey]) u.voice=assigned[selectedVoiceKey];
-  highlight(i,'playing'); setStatus(i,'🗣 '+prof.label+' 목소리로 재생 중… (볼륨 '+prof.volume+')');
-  u.onend=()=>{ setStatus(i,'완료'); highlight(-1); };
-  u.onerror=()=>{ setStatus(i,'목소리 재생에 실패했습니다. 녹음 듣기를 이용해 주세요.'); };
-  window.speechSynthesis.speak(u);
+  const prof=VOICE_PROFILES[key]||VOICE_PROFILES.shasha;
+  highlight(i,'playing'); setStatus(i,'🗣 '+prof.label+' 목소리로 재생 중… (pitch '+prof.pitch+' · 속도 '+prof.rate+' · 볼륨 '+prof.volume+')');
+  const u=speakWithProfile(key,seg.text,i);
+  if(u){
+    u.onend=()=>{ setStatus(i,'완료'); highlight(-1); };
+    u.onerror=()=>{ setStatus(i,'목소리 재생에 실패했습니다. 녹음 듣기를 이용해 주세요.'); };
+  }
 }
 if('speechSynthesis' in window){
   pickVoices();
+  if(window.speechSynthesis.addEventListener) window.speechSynthesis.addEventListener('voiceschanged',pickVoices);
   window.speechSynthesis.onvoiceschanged=pickVoices;
-  // voices may load async
-  setTimeout(pickVoices,300); setTimeout(pickVoices,1200);
+  [300,800,1500,3000].forEach(ms=>setTimeout(pickVoices,ms));
 } else {
-  ['shasha','male','female'].forEach(k=>{
+  VOICE_KEYS.forEach(k=>{
     const btn=document.getElementById('voice-'+k);
     if(btn){ btn.disabled=true; const n=document.getElementById('voice-name-'+k); if(n) n.textContent='지원 안 함'; }
   });
-  const hint=document.querySelector('.voiceHint');
+  const hint=document.getElementById('voiceHint');
   if(hint) hint.textContent='이 브라우저에서는 목소리 재생(speechSynthesis)을 지원하지 않아 목소리 버튼을 사용할 수 없습니다. 녹음 듣기는 그대로 사용할 수 있습니다.';
 }
 updateVoiceButtons();
