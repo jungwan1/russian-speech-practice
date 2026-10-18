@@ -9,7 +9,7 @@ h1{font-size:20px;margin:0 0 6px} .sub{font-size:14px;color:#555;line-height:1.5
 .controls{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;align-items:center}
 button{font-size:16px;padding:10px 14px;border:1px solid #b9c2cc;border-radius:10px;background:#fff;cursor:pointer}
 button.active,button:active{background:#dceaff;border-color:#5b8def}
-button.practice{background:#fff4d6} button.primary{background:#17202a;color:#fff;border-color:#17202a}
+button.primary{background:#17202a;color:#fff;border-color:#17202a}
 main{max-width:900px;margin:0 auto;padding:14px}
 .card{background:#fff;border:1px solid #dde2e8;border-radius:14px;padding:18px 16px;margin:12px 0}
 .meta{display:flex;gap:10px;align-items:center;color:#667;font-size:13px;flex-wrap:wrap}
@@ -23,22 +23,28 @@ main{max-width:900px;margin:0 auto;padding:14px}
 .status{min-height:22px;margin-top:8px;color:#8a5a00;font-weight:600}
 .note{font-size:13px;color:#666;line-height:1.6;background:#fff;border:1px dashed #bbb;border-radius:10px;padding:10px 12px}
 .progress{height:8px;background:#e5e7eb;border-radius:99px;overflow:hidden;margin-top:10px}.bar{height:100%;background:#5b8def;transition:width .3s}
-.dots{display:flex;gap:6px;justify-content:center;margin:10px 0}.dot{width:12px;height:12px;border-radius:50%;background:#cbd5e1;border:none;padding:0;cursor:pointer}.dot.on{background:#17202a}
-.hiddenRu{filter:blur(6px);user-select:none}
+.topnav{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.topnav button{font-size:17px;font-weight:700;padding:10px 16px}
+.topnav button.on{background:#2456a6;color:#fff;border-color:#2456a6}
 @media(max-width:600px){.ru{font-size:21px} button{flex:1 1 auto} .ko{font-size:17px}}
 </style></head><body>
 <header>
 <h1>🇷🇺 파수대 러시아어 하나씩 연습</h1>
 <div class="sub"><b>«Вы можете одержать победу в духовной битве!»</b> — 악한 영의 세력들과 싸워 이기십시오!<br>연구용 파수대 2026년 8월호 · 10월 12–18일 · 6항·10항·12항 + 복습 3개 (총 6카드)<br>
-사용법: 한국어(질문)를 먼저 보고 스스로 러시아어로 말해본 뒤, <b>러시아어 보기</b>를 눌러 확인하세요. 러시아어 문장을 누르면 그 문장만 읽어줍니다.</div>
+사용법: 위의 <b>항 버튼</b>을 눌러 하나씩 골라 연습하세요. 러시아어 문장을 누르면 그 문장만 읽어줍니다.</div>
+<nav class="topnav" id="topNav" aria-label="항 선택">
+<button data-nav="0" onclick="go(0)">6항</button>
+<button data-nav="1" onclick="go(1)">10항</button>
+<button data-nav="2" onclick="go(2)">12항</button>
+<button data-nav="3" onclick="go(3)">복습 1</button>
+<button data-nav="4" onclick="go(4)">복습 2</button>
+<button data-nav="5" onclick="go(5)">복습 3</button>
+</nav>
 <div class="controls">
 <button id="prevBtn" onclick="move(-1)">◀ 이전</button>
 <span id="progressText">1 / 6</span>
 <button id="nextBtn" onclick="move(1)">다음 ▶</button>
-<button onclick="toggleRu()" id="ruBtn">러시아어 보기</button>
 <button onclick="toggleStress()" id="stressBtn" class="active">강세 표시</button>
-<button onclick="speakAll()">▶ 전체 듣기</button>
-<button class="practice" onclick="practice()">🎤 듣고 따라하기</button>
 <button onclick="stopSpeak()">⏹ 정지</button>
 <span>속도:</span>
 <button data-rate="0.75" onclick="setRate(0.75,this)">0.75x</button>
@@ -47,8 +53,7 @@ main{max-width:900px;margin:0 auto;padding:14px}
 <div class="progress"><div class="bar" id="bar" style="width:16.6%"></div></div>
 </header>
 <main>
-<div class="note">⌨️ 키보드: ←/→ 카드 이동 · R 러시아어 보기/숨기기 · Space 전체 듣기 (입력칸 없을 때)<br>🔊 음성은 브라우저 러시아어 TTS(ru-RU)를 사용합니다. 기기에 러시아어 음성이 없으면 기본 음성으로 읽을 수 있습니다.</div>
-<div class="dots" id="dots"></div>
+<div class="note">⌨️ 키보드: ←/→ 카드 이동<br>🔊 음성은 브라우저 러시아어 TTS(ru-RU)를 사용합니다. 기기에 러시아어 음성이 없으면 기본 음성으로 읽을 수 있습니다.</div>
 <section class="card" id="card"></section>
 <div class="status" id="status" style="max-width:900px;margin:0 auto"></div>
 </main>
@@ -61,33 +66,28 @@ const CARDS=[
 {tag:"복습 2",q:"사탄은 어떻게 전파 활동에 대한 우리의 열의를 꺾으려고 합니까?",ko:"주변 사람들의 반대와 박해를 일으키고, 불공정한 일을 바로잡고 싶은 마음에 사로잡히게 해서, 가장 중요한 일인 전파 활동이 뒤로 밀려나게 만들려고 합니다.",ru:["Сатана́ испо́льзует пресле́дования, что́бы запуга́ть нас и́ли отвле́чь от зада́ния, кото́рое нам поручи́л Иего́ва.","Столкну́вшись с несправедли́востью, мы мо́жем сосредото́читься на том, что́бы доби́ться справедли́вости, и у нас не оста́нется сил и вре́мени для пропове́ди о Ца́рстве."]},
 {tag:"복습 3",q:"악한 영의 세력들을 상대로 승리할 수 있다고 당신이 확신하는 이유는 무엇입니까?",ko:"여호와와 예수에 대한 강한 믿음을 유지하고, 형제자매들과 연합을 유지하면 여호와와 예수의 지원을 받아 승리할 수 있기 때문입니다.",ru:["Би́блия заверя́ет нас, что мы мо́жем одержа́ть побе́ду в борьбе́ со злы́ми ду́хами.","Для э́того нам нужна́ си́льная ве́ра в Иего́ву и Иису́са.","Иего́ва и Иису́с обеща́ют помо́чь нам, а бра́тья и сёстры подде́рживают нас в борьбе́ с гла́вным враго́м — Сатано́й."]}
 ];
-let idx=0, showRu=false, showStress=true, rate=1;
+let idx=0, showStress=true, rate=1;
 const clean=s=>s.replace(/\u0301/g,'');
 function disp(s){return showStress?s:clean(s)}
 function render(){
  const c=CARDS[idx];
  document.getElementById('progressText').textContent=(idx+1)+' / '+CARDS.length;
  document.getElementById('bar').style.width=((idx+1)/CARDS.length*100)+'%';
- document.getElementById('ruBtn').textContent=showRu?'러시아어 숨기기':'러시아어 보기';
- document.getElementById('dots').innerHTML=CARDS.map((_,i)=>`<button class="dot ${i===idx?'on':''}" onclick="go(${i})" aria-label="${i+1}"></button>`).join('');
+ document.querySelectorAll('#topNav button').forEach((b,i)=>b.classList.toggle('on',i===idx));
  document.getElementById('card').innerHTML=`
   <div class="meta"><span class="num">${idx+1}</span><span class="tag">${c.tag}</span><span>${idx+1} / ${CARDS.length} 카드</span></div>
   ${c.q?`<div class="q">❓ ${c.q}</div>`:''}
   <p class="ko">${c.ko}</p>
-  <div id="ruBox" style="${showRu?'':'display:none'}">${c.ru.map((s,i)=>`<p class="ru" onclick="speakSentence(${i},this)" title="눌러서 듣기">${disp(s)}</p>`).join('')}</div>
+  <div id="ruBox">${c.ru.map((s,i)=>`<p class="ru" onclick="speakSentence(${i},this)" title="눌러서 듣기">${disp(s)}</p>`).join('')}</div>
   <div class="btns">
-    <button class="primary" onclick="toggleRu()">${showRu?'🙈 러시아어 숨기기':'👀 러시아어 보기'}</button>
-    <button onclick="speakAll()">▶ 전체 듣기</button>
     <button onclick="speakAll(3)">🔁 반복 3회</button>
-    <button class="practice" onclick="practice()">🎤 듣고 따라하기</button>
     <button onclick="move(-1)">◀ 이전</button><button onclick="move(1)">다음 ▶</button>
   </div>`;
  setStatus('');
 }
 function setStatus(t){document.getElementById('status').textContent=t}
-function go(i){idx=i;showRu=false;stopSpeak();render()}
-function move(d){idx=(idx+d+CARDS.length)%CARDS.length;showRu=false;stopSpeak();render()}
-function toggleRu(){showRu=!showRu;render();if(showRu)setStatus('러시아어를 보고, 문장을 눌러 들으며 따라 말해보세요.')}
+function go(i){idx=i;stopSpeak();render()}
+function move(d){idx=(idx+d+CARDS.length)%CARDS.length;stopSpeak();render()}
 function toggleStress(){showStress=!showStress;document.getElementById('stressBtn').classList.toggle('active',showStress);render()}
 function setRate(r,el){rate=r;document.querySelectorAll('[data-rate]').forEach(b=>b.classList.toggle('active',+b.dataset.rate===r))}
 function speakText(text,el){
@@ -103,15 +103,9 @@ function speakAll(times=1){
  let n=0; const play=()=>{ if(n>=times)return; n++; const u=speakText(text); u.onend=()=>setTimeout(play,400); }; play();
  setStatus('▶ 듣는 중... ('+times+'회)');
 }
-function practice(){
- const text=CARDS[idx].ru.join(' '); const u=speakText(text);
- u.onend=()=>{ const secs=Math.max(5,Math.round(clean(text).length/8/rate)+2); setStatus('🎤 지금 따라 말해보세요! ('+secs+'초)'); setTimeout(()=>setStatus('✅ 잘했어요. 다음 카드로 넘어가거나 다시 들어보세요.'),secs*1000)};
- setStatus('▶ 먼저 잘 들어보세요...');
-}
 function stopSpeak(){speechSynthesis.cancel();setStatus('⏹ 정지')}
 document.addEventListener('keydown',e=>{
  if(e.key==='ArrowRight')move(1); else if(e.key==='ArrowLeft')move(-1);
- else if(e.key.toLowerCase()==='r')toggleRu(); else if(e.code==='Space'&&e.target===document.body){e.preventDefault();speakAll()}
 });
 if('speechSynthesis' in window) speechSynthesis.getVoices();
 render();
