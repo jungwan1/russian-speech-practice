@@ -53,7 +53,7 @@ main{max-width:900px;margin:0 auto;padding:14px}
 .dailyPanel .dDate{font-weight:800;color:#2456a6}
 .dailyPanel .dVerse{font-family:'PT Serif',serif;font-size:18px;font-weight:700;line-height:1.5;margin:8px 0}
 .dailyPanel .dBody{font-family:'PT Serif',serif;font-size:16px;line-height:1.65}
-.dailyPanel .dSrc{font-size:12px;color:#667;margin-top:10px}
+.dailyPanel .dSrc{font-size:12px;color:#667;margin-top:10px} #dailyBody{font-size:17px} #dailyBody .sentLine{margin:0 0 8px} #dailyBody .grammarOne{font-family:system-ui,-apple-system,'Noto Sans KR',sans-serif}
 .role{display:inline-block;font-weight:800;font-size:13px;border-radius:999px;padding:3px 10px;margin-bottom:4px}
 .role.gleb{background:#dbeafe;color:#1e40af}.role.vio{background:#ede9fe;color:#5b21b6}
 .dramaLine{margin:0 0 12px}
@@ -67,8 +67,8 @@ main{max-width:900px;margin:0 auto;padding:14px}
   <div class="dailyPanel" id="dailyPanel">
     <div class="dDate">일용할 성구 · Воскресенье, 18 октября (2026년 10월 18일 일요일)</div>
     <div class="dVerse">«Наш небесный Отец, пусть святится твоё имя» (Матф. 6:9).</div>
-    <div class="dBody">Мы любим Иегову, и эта любовь побуждает нас освящать его имя. Мы хотим очищать имя Бога от позора, который навлёк на него Сатана своей гнусной ложью (Быт. 3:1—5; Иов 2:4; Иоан. 8:44). Мы вступаемся за нашего Бога, рассказывая о нём правду всем, кто готов нас слушать. Нам хочется, чтобы люди узнали то же, что и мы. Его величайшее качество — любовь. Его правление праведное и справедливое. Его Царство скоро положит конец всем страданиям и принесёт человеческой семье мир и счастье (Пс. 37:10, 11, 29; 1 Иоан. 4:8). Защищая репутацию Иеговы, мы освящаем его имя. Также нам приятно осознавать, что мы сами живём в согласии с именем, которое носим. <i>w24.05</i> 18, абз. 12</div>
-    <div class="dSrc">출처: JW 온라인 라이브러리 «Исследуем Писание каждый день 2026» 2026-10-18 러시아어 일용할 성구 (wol.jw.org에서 가져옴) · <a href="https://wol.jw.org/ru/wol/h/r2/lp-u/2026/10/18" target="_blank" rel="noopener">러시아어 원문 페이지 열기</a></div>
+    <div class="dBody" id="dailyBody"></div>
+    <div class="dSrc">(강세는 러시안그램을 통해서 확인했습니다) 문장을 누르면 남자 목소리로 읽어줘요.</div>    <div class="dSrc">출처: JW 온라인 라이브러리 «Исследуем Писание каждый день 2026» 2026-10-18 러시아어 일용할 성구 (wol.jw.org에서 가져옴) · <a href="https://wol.jw.org/ru/wol/h/r2/lp-u/2026/10/18" target="_blank" rel="noopener">러시아어 원문 페이지 열기</a></div>
   </div>
   <h1 style="font-size:34px;letter-spacing:0;line-height:1.25">서울 러시아 회중 Попробуйте~</h1>
   <div class="sectionTitle">파수대 해설준비</div>
@@ -151,7 +151,8 @@ function renderVoices(){
  const femaleSub=has1?ruVoices[0].name:'기본 음성';
  box.innerHTML=`<button class="${selectedGender==='male'?'on':''}" onclick="selectVoiceGender('male')">남자<small>${maleSub}</small></button><button class="${selectedGender==='female'?'on':''}" onclick="selectVoiceGender('female')">여자<small>${femaleSub}</small></button>`;
 }
-function applyVoice(u){if(selectedGender==='male'&&ruVoices.length<2){u.pitch=0.7;if(ruVoices[0])u.voice=ruVoices[0];}else{u.pitch=1;const v=selectedGender==='male'?ruVoices[1]:ruVoices[0];if(v)u.voice=v;else if(ruVoices[0])u.voice=ruVoices[0];}}
+function applyVoiceWithGender(u,g){if(g==='male'&&ruVoices.length<2){u.pitch=0.7;if(ruVoices[0])u.voice=ruVoices[0];}else{u.pitch=1;const v=g==='male'?ruVoices[1]:ruVoices[0];if(v)u.voice=v;else if(ruVoices[0])u.voice=ruVoices[0];}}
+function applyVoice(u){applyVoiceWithGender(u,selectedGender)}
 function selectVoiceGender(g){selectedGender=g;localStorage.setItem('wtVoiceGender',g);renderAll()}
 function selectVoice(i){selectVoiceGender(i===1?'male':'female')}
 function ruFlowHtml(c){
@@ -178,6 +179,16 @@ function stopSpeak(){playToken++; if('speechSynthesis' in window)speechSynthesis
 function stopSpeakQuiet(){playToken++; if('speechSynthesis' in window)speechSynthesis.cancel();}
 function toggleGrammar(i,ev){if(ev)ev.stopPropagation(); const el=document.getElementById('grammar-'+i); if(!el)return; const open=el.style.display!=='none'; el.style.display=open?'none':'block'; if(ev&&ev.currentTarget)ev.currentTarget.textContent=open?'문법해설 ▾':'문법해설 ▴';}
 function toggleKorean(ev){const el=document.getElementById('koreanBox'); if(!el)return; const open=el.style.display!=='none'; el.style.display=open?'none':'block'; if(ev&&ev.currentTarget)ev.currentTarget.textContent=open?'한국어 해설 보기':'한국어 해설 숨기기';}
+
+
+const DAILY_RU=["«Наш небе́сный Оте́ц, пусть святи́тся твоё и́мя» (Матф. 6:9).", "Мы лю́бим Иего́ву, и э́та любо́вь побужда́ет нас освяща́ть его́ и́мя.", "Мы хоти́м очища́ть и́мя Бо́га от позо́ра, кото́рый навлёк на него́ Сатана́ свое́й гну́сной ло́жью (Быт. 3:1—5; И́ов 2:4; Иоан. 8:44).", "Мы вступа́емся за на́шего Бо́га, расска́зывая о нём пра́вду всем, кто гото́в нас слу́шать.", "Нам хо́чется, что́бы лю́ди узна́ли то же, что и мы.", "Его́ велича́йшее ка́чество — любо́вь.", "Его́ правле́ние пра́ведное и справедли́вое.", "Его́ Ца́рство ско́ро поло́жит коне́ц всем страда́ниям и принесёт челове́ческой семье́ мир и сча́стье (Пс. 37:10, 11, 29; 1 Иоан. 4:8).", "Защища́я репута́цию Иего́вы, мы освяща́ем его́ и́мя.", "Та́кже нам прия́тно осознава́ть, что мы са́ми живём в согла́сии с и́менем, кото́рое но́сим."];
+const DAILY_GRAMMAR=[["Наш небе́сный Оте́ц: 부르는 말(호칭)이라 주격 형태 그대로 써요. небе́сный는 Оте́ц(남성)과 일치해요.", "пусть святи́тся: пусть + 3인칭 동사 = '~하게 하소서'라는 기원 표현이에요. святи́тся는 재귀동사예요.", "твоё и́мя: и́мя(중성)에 맞춰 소유대명사가 중성형 твоё가 됐어요.", "<b>원형·대체 가능 단어:</b> 원형 святи́ться(거룩하게 되다)·и́мя(이름) · 대체: пусть святи́тся → да святи́тся(거룩하게 되기를)"], ["лю́бим Иего́ву: люби́ть(사랑하다)는 대격을 취해요. Иего́ву가 그 대격이에요.", "э́та любо́вь: любо́вь(여성)에 맞춰 지시형용사가 여성형 э́та예요.", "побужда́ет нас освяща́ть: побужда́ть + 대격(нас) + 부정법 = '~가 …하도록 북돋우다'예요.", "<b>원형·대체 가능 단어:</b> 원형 люби́ть·побужда́ть(북돋우다) · 대체: побужда́ет → дви́жет(움직이게 하다), любо́вь → си́льное чу́вство(강한 감정)"], ["хоти́м очища́ть: хоте́ть + 부정법 = '~하고 싶다'예요.", "и́мя Бо́га: 뒤 생격 Бо́га가 '~의' 소유를 나타내요.", "от позо́ра: от + 생격 = '~로부터'. кото́рый는 позо́р(남성)를 받는 관계대명사예요.", "свое́й гну́сной ло́жью: ло́жью는 ложь의 조격으로 '거짓으로(수단)'예요.", "<b>원형·대체 가능 단어:</b> 원형 очища́ть(깨끗하게 하다)·навле́чь(초래하다, 과거 навлёк) · 대체: навлёк → принёс(가져왔다), гну́сной → ме́рзкой(역겨운)"], ["вступа́емся за на́шего Бо́га: вступа́ться за + 대격 = '~를 위해 나서다/옹호하다'예요.", "расска́зывая: 불완료체 부동사로 '~하면서'예요. 주어는 주절의 мы와 같아요.", "о нём: о + 전치격. всем은 слу́шать의 듣는 대상이 아니라 '모든 사람에게(여격)'예요.", "кто гото́в нас слу́шать: гото́в(짧은 형용사) + 부정법 = '~할 준비가 되다'예요.", "<b>원형·대체 가능 단어:</b> 원형 вступа́ться(옹호하다)·расска́зывать(말하다) · 대체: вступа́емся → защища́ем(지킨다), гото́в → согла́сен(동의하다)"], ["Нам хо́чется: 무인칭 표현이에요. 경험자 нам은 여격이에요.", "что́бы лю́ди узна́ли: что́бы 뒤 узна́ли는 과거형 모양이지만 뜻은 가정·바람이에요. '~가 알게 되기를'예요.", "то же, что и мы: '우리와 같은 것'이라는 비교 표현이에요.", "<b>원형·대체 가능 단어:</b> 원형 хоте́ться(…하고 싶어지다)·узна́ть(알게 되다, 완료체) · 대체: узна́ли → поня́ли(이해했다), хо́чется → хоте́лось бы(…하면 좋겠다)"], ["велича́йшее ка́чество: велича́йшее는 최상급으로 ка́чество(중성)와 일치해요.", "— любо́вь: 대시(—)로 잇는 명사문이에요. 현재형 '이다'는 러시아어에서 쓰지 않아요.", "<b>원형·대체 가능 단어:</b> 원형 ка́чество(품질·특성)·любо́вь(사랑) · 대체: велича́йшее → гла́вное(가장 중요한), ка́чество → сво́йство(속성)"], ["правле́ние: 주격 주어예요. '~의 통치'를 뜻해요.", "пра́ведное и справедли́вое: 둘 다 правле́ние(중성)에 맞춘 중성형 술어예요.", "<b>원형·대체 가능 단어:</b> 원형 правле́ние(통치)·пра́ведный(의로운) · 대체: пра́ведное → справедли́вое(공정한), правле́ние → руково́дство(인도)"], ["поло́жит коне́ц всем страда́ниям: положи́ть коне́ц + 여격 = '~에 끝을 내다'예요. страда́ниям이 여격 복수예요.", "принесёт челове́ческой семье́ мир и сча́стье: 받는 사람 семье́는 여격, 가져오는 것 мир·сча́стье는 대격이에요.", "<b>원형·대체 가능 단어:</b> 원형 положи́ть(놓다, 완료체)·принести́(가져오다, 완료체) · 대체: поло́жит коне́ц → прекрати́т(중단시킬 것이다), ско́ро → вско́ре(곧)"], ["Защища́я: 불완료체 부동사로 주절과 동시에 일어나는 동작 '~하면서'예요.", "репута́цию Иего́вы: репута́цию는 대격, Иего́вы는 생격 소유예요.", "освяща́ем: 불완료체 현재로 계속되는 태도를 나타내요.", "<b>원형·대체 가능 단어:</b> 원형 защища́ть(지키다)·освяща́ть(거룩하게 하다) · 대체: защища́я → оберега́я(보호하면서), репута́цию → до́брое и́мя(좋은 이름)"], ["нам прия́тно осознава́ть: прия́тно는 무인칭 술어로 경험자 нам(여격) + 부정법이 와요.", "мы са́ми: са́ми는 '우리 자신'이라는 강조대명사예요.", "в согла́сии с и́менем: с + 조격이에요. и́менем은 и́мя(중성 -мя 명사)의 조격이에요.", "кото́рое но́сим: кото́рое(중성)가 и́мя를 받고 절 안에서는 대격 목적어예요.", "<b>원형·대체 가능 단어:</b> 원형 осознава́ть(깨닫다)·носи́ть(지니다) · 대체: в согла́сии с → в соо́тветствии с(…에 맞게), прия́тно → ра́достно(기쁘다)"]];
+function renderDaily(){
+ const box=document.getElementById('dailyBody'); if(!box)return;
+ box.innerHTML=DAILY_RU.map((sent,i)=>`<div class="sentLine"><span class="ruSent" onclick="speakDailySentence(${i},this)">${sent}</span> <button class="gbtn inline" onclick="toggleDailyGrammar(${i},event)">문법해설 ▾</button><div class="grammarOne" id="daily-grammar-${i}" style="display:none"><ul>${DAILY_GRAMMAR[i].map(b=>`<li>${b}</li>`).join('')}</ul></div></div>`).join('');
+}
+function toggleDailyGrammar(i,ev){if(ev)ev.stopPropagation();const el=document.getElementById('daily-grammar-'+i);if(!el)return;const open=el.style.display!=='none';el.style.display=open?'none':'block';if(ev&&ev.currentTarget)ev.currentTarget.textContent=open?'문법해설 ▾':'문법해설 ▴';}
+function speakDailySentence(i,el){playToken++;if('speechSynthesis' in window)speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(clean(DAILY_RU[i]));u.lang='ru-RU';u.rate=rate;applyVoiceWithGender(u,'male');if(el){el.classList.add('playing');u.onend=u.onerror=()=>el.classList.remove('playing')}speechSynthesis.speak(u);}
 
 const DRAMA_TITLE="6. Начинайте разговор (2 мин.) ПРОПОВЕДЬ ПО ДОМАМ. Дверь открыл грустный человек (lmd урок 2, пункт 4)";
 const DRAMA=[
@@ -263,5 +274,6 @@ if('speechSynthesis' in window){loadVoices(); speechSynthesis.onvoiceschanged=lo
 // Initial load always starts on the main (home) screen:
 // ignore/remove any hash (e.g. #pro10) left from a previous visit instead of restoring that view.
 if(history.replaceState)history.replaceState(null,'',location.pathname+location.search);
+renderDaily();
 showView('home');
 </script></body></html>
