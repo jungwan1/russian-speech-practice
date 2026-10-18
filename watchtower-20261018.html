@@ -66,7 +66,10 @@ details.grammar summary{cursor:pointer;font-size:15px;font-weight:800;color:#245
 <div class="voiceBox"><span class="voiceTitle">러시아어 목소리 선택</span><div class="voiceNav" id="voiceNav"></div></div>
 <div class="controls">
 <span id="progressText">1 / 6</span>
-<button onclick="speakAll(1)">▶ 전체 듣기</button>
+<button data-repeat="1" class="active" onclick="setRepeat(1)">1번</button>
+<button data-repeat="3" onclick="setRepeat(3)">3번</button>
+<button data-repeat="5" onclick="setRepeat(5)">5번</button>
+<button onclick="speakAll()">▶ 전체 듣기</button>
 <button onclick="stopSpeak()">⏹ 멈춤</button>
 <span>속도:</span>
 <button data-rate="0.5" onclick="setRate(0.5,this)">0.5x</button>
@@ -128,27 +131,43 @@ function render(){
   ${c.q?`<div class="q">❓ ${c.q}</div>`:''}
   <div id="ruBox">${c.ru.map((_,i)=>sentHtml(c,i)).join('')}</div>
   <div class="btns">
-    <button onclick="speakAll(1)">▶ 전체 듣기</button>
+    <button data-repeat="1" onclick="setRepeat(1)">1번</button>
+    <button data-repeat="3" onclick="setRepeat(3)">3번</button>
+    <button data-repeat="5" onclick="setRepeat(5)">5번</button>
+    <button onclick="speakAll()">▶ 전체 듣기</button>
     <button onclick="stopSpeak()">⏹ 멈춤</button>
   </div>`;
- setStatus('');
+ syncRepeat(); setStatus('');
 }
 function setStatus(t){document.getElementById('status').textContent=t}
 function go(i){idx=i;stopSpeak();render()}
 function move(d){idx=(idx+d+CARDS.length)%CARDS.length;stopSpeak();render()}
 function setRate(r,el){rate=r;document.querySelectorAll('[data-rate]').forEach(b=>b.classList.toggle('active',+b.dataset.rate===r))}
 function speakText(text,el){
- speechSynthesis.cancel();
+ playToken++; speechSynthesis.cancel();
  const u=new SpeechSynthesisUtterance(clean(text)); u.lang='ru-RU'; u.rate=rate;
  const v=ruVoices[selectedVoice]||ruVoices[0]; if(v)u.voice=v;
  if(el){el.classList.add('playing'); u.onend=u.onerror=()=>el.classList.remove('playing')}
  speechSynthesis.speak(u); return u;
 }
 function speakSentence(i,el){speakText(CARDS[idx].ru[i],el)}
-function speakAll(times=1){
- const text=CARDS[idx].ru.join(' ');
- let n=0; const play=()=>{ if(n>=times)return; n++; const u=speakText(text); u.onend=()=>setTimeout(play,400); }; play();
- setStatus('▶ 듣는 중... ('+times+'회)');
+let repeatCount=1, playToken=0;
+function setRepeat(n){repeatCount=n; syncRepeat();}
+function syncRepeat(){document.querySelectorAll('[data-repeat]').forEach(b=>b.classList.toggle('active',+b.dataset.repeat===repeatCount));}
+function speakAll(){
+ const token=++playToken;
+ speechSynthesis.cancel();
+ const sentences=CARDS[idx].ru;
+ let queued=0;
+ for(let r=0;r<repeatCount;r++){
+  for(const sent of sentences){
+   if(token!==playToken) return;
+   const u=new SpeechSynthesisUtterance(clean(sent)); u.lang='ru-RU'; u.rate=rate;
+   const v=ruVoices[selectedVoice]||ruVoices[0]; if(v)u.voice=v;
+   speechSynthesis.speak(u); queued++;
+  }
+ }
+ setStatus('▶ 듣는 중... ('+repeatCount+'번 연속, 현재 항만)');
 }
 function toggleGrammar(i,ev){
  if(ev) ev.stopPropagation();
@@ -157,7 +176,7 @@ function toggleGrammar(i,ev){
  el.style.display=open?'none':'block';
  if(ev&&ev.currentTarget) ev.currentTarget.textContent=open?'문법해설 ▾':'문법해설 ▴';
 }
-function stopSpeak(){speechSynthesis.cancel();setStatus('⏹ 정지')}
+function stopSpeak(){playToken++; speechSynthesis.cancel(); setStatus('⏹ 멈춤');}
 document.addEventListener('keydown',e=>{
  if(e.key==='ArrowRight')move(1); else if(e.key==='ArrowLeft')move(-1);
 });
