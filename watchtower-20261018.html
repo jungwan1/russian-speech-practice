@@ -105,17 +105,19 @@ function loadVoices(){
  ruVoices=all.filter(v=>v.lang&&v.lang.toLowerCase().replace('_','-').startsWith('ru')).slice(0,2);
  const saved=localStorage.getItem('wtRuVoiceURI');
  selectedVoice=ruVoices.findIndex(v=>v.voiceURI===saved);
- if(selectedVoice<0) selectedVoice=ruVoices.length?0:-1;
+ if(selectedVoice<0) selectedVoice=ruVoices.length>=2?1:(ruVoices.length?0:-1);
  renderVoices();
 }
+function voiceLabel(actualIdx){return actualIdx===1?'남자':'여자';}
 function renderVoices(){
  const box=document.getElementById('voiceNav'); if(!box)return;
- box.innerHTML=ruVoices.map((v,i)=>`<button class="${i===selectedVoice?'on':''}" onclick="selectVoice(${i})">${i===0?'남자':'여자'}<small>${v.name}</small></button>`).join('');
+ const order=ruVoices.length>=2?[1,0]:(ruVoices.length?[0]:[]);
+ box.innerHTML=order.map(vi=>`<button class="${vi===selectedVoice?'on':''}" onclick="selectVoice(${vi})">${voiceLabel(vi)}<small>${ruVoices[vi].name}</small></button>`).join('');
 }
 function selectVoice(i){
  selectedVoice=i;
  if(ruVoices[i]) localStorage.setItem('wtRuVoiceURI',ruVoices[i].voiceURI);
- renderVoices(); setStatus('🔊 '+(i===0?'남자':'여자')+' 목소리 선택');
+ renderVoices(); setStatus('🔊 '+voiceLabel(i)+' 목소리 선택');
 }
 const clean=s=>s.replace(/\u0301/g,'');
 function disp(s){return s}
