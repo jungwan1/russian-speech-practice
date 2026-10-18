@@ -26,7 +26,10 @@ main{max-width:900px;margin:0 auto;padding:14px}
 .status{min-height:22px;margin-top:8px;color:#8a5a00;font-weight:600}
 .note{font-size:13px;color:#666;line-height:1.6;background:#fff;border:1px dashed #bbb;border-radius:10px;padding:10px 12px}
 .progress{height:8px;background:#e5e7eb;border-radius:99px;overflow:hidden;margin-top:10px}.bar{height:100%;background:#5b8def;transition:width .3s}
-.topnav{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.headRow{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.headLabel{font-size:20px;font-weight:800;white-space:nowrap;color:#17202a}
+.topnav{display:flex;flex-wrap:nowrap;gap:8px;overflow-x:auto;padding-bottom:2px;flex:1}
+.topnav button{flex:0 0 auto}
 .topnav button{font-size:17px;font-weight:700;padding:10px 16px}
 .topnav button.on{background:#2456a6;color:#fff;border-color:#2456a6}
 .voiceBox{margin-top:12px;background:#eef5ff;border:1px solid #c7d7f5;border-radius:12px;padding:10px 12px}
@@ -46,13 +49,7 @@ details.grammar summary{cursor:pointer;font-size:16px;font-weight:800;color:#245
 @media(max-width:600px){.ru{font-size:24px;line-height:1.8} button{flex:1 1 auto} .ko{font-size:17px}}
 </style></head><body>
 <header>
-<h1>🇷🇺 파수대 러시아어 하나씩 연습</h1>
-<div class="sub"><b>«Вы можете одержать победу в духовной битве!»</b> — 악한 영의 세력들과 싸워 이기십시오!</div>
-<div class="voiceBox">
-<div class="voiceTitle">🔊 러시아어 목소리 선택 (5가지)</div>
-<div class="voiceNote">기기에서 제공되는 러시아어 목소리가 표시됩니다. 이 기기에 러시아어 음성이 5개보다 적으면, 없는 목소리는 '제공되지 않음'으로 표시됩니다.</div>
-<div class="voiceNav" id="voiceNav"></div>
-</div>
+<div class="headRow"><span class="headLabel">준비된 해설</span>
 <nav class="topnav" id="topNav" aria-label="항 선택">
 <button data-nav="0" onclick="go(0)">6항</button>
 <button data-nav="1" onclick="go(1)">10항</button>
@@ -60,7 +57,12 @@ details.grammar summary{cursor:pointer;font-size:16px;font-weight:800;color:#245
 <button data-nav="3" onclick="go(3)">복습 1</button>
 <button data-nav="4" onclick="go(4)">복습 2</button>
 <button data-nav="5" onclick="go(5)">복습 3</button>
-</nav>
+</nav></div>
+<div class="voiceBox">
+<div class="voiceTitle">🔊 러시아어 목소리 선택 (5가지)</div>
+<div class="voiceNote">기기에서 제공되는 러시아어 목소리가 표시됩니다. 이 기기에 러시아어 음성이 5개보다 적으면, 없는 목소리는 '제공되지 않음'으로 표시됩니다.</div>
+<div class="voiceNav" id="voiceNav"></div>
+</div>
 <div class="controls">
 <button id="prevBtn" onclick="move(-1)">◀ 이전</button>
 <span id="progressText">1 / 6</span>
