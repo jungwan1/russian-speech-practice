@@ -91,7 +91,7 @@ main{max-width:900px;margin:0 auto;padding:14px}
         <button class="pro" onclick="showView('pro10')">10분프로 준비</button>
     <button class="drama" onclick="showView('nov9')">11월 9–15일 영적 보물 찾기 (예레미야 51–52) 사회</button>
     <button class="drama" onclick="showView('nov16')">11월 16–22일 마치는 기도</button>
-    <button class="drama" onclick="showView('drama')">지난 연설 보기</button>
+    <button class="drama" onclick="showView('archive')">지난 연설 보기</button>
   </div>
   <p class="hint">버튼을 누르면 각 준비 내용을 볼 수 있어요</p><p class="hint" style="margin-top:4px;font-size:11px">버전 2026-10-18 · 포함 기능 v2</p>
  </div>
@@ -101,6 +101,7 @@ main{max-width:900px;margin:0 auto;padding:14px}
 <div id="view-gleb" class="view"></div>
 <div id="view-drama" class="view"></div>
 <div id="view-pro10" class="view"></div>
+<div id="view-archive" class="view"></div>
 <div id="view-nov9" class="view"></div>
 <div id="view-nov16" class="view"></div>
 
@@ -140,7 +141,19 @@ function buildCards(who){
 function goPersonFromRefRemoved(){}function renderReference(){
  const el=document.getElementById('view-reference'); if(!el)return;
  el.innerHTML=`<header><div class="headRow"><button class="homeBtn" onclick="showView('home')">홈으로</button><div class="headLabel">참고해설</div></div></header><main><div class="note">「악한 영의 세력들과 싸워 이기십시오!」 기사 전체 해설입니다. <b>1항부터 17항, 복습 1-3까지 총 20개</b>가 아래에 쭉 이어져 있으니 스크롤하면 끝까지 볼 수 있어요.</div><div class="controls" style="margin:10px 0"><button onclick="window.open('https://wol.jw.org/ko/wol/d/r8/lp-ko/2026521','_blank')">📖 파수대 원문 보기 (한국어)</button><button onclick="window.open('https://wol.jw.org/ru/wol/d/r2/lp-u/2026521','_blank')">📖 파수대 원문 보기 (러시아어)</button></div><div class="controls" style="margin:10px 0">${REF_DATA.map((c,j)=>`<button onclick="document.getElementById('ref-${j}').scrollIntoView({behavior:'smooth',block:'start'})">${c.tag}</button>`).join('')}</div>${REF_DATA.map((c,j)=>`<section class="card refCard" id="ref-${j}"><div class="meta"><span class="tag">${c.tag}</span></div><div style="font-size:15px;color:#2456a6;font-weight:700;margin-top:10px"><span class="qLabel">질문</span>${c.q}</div><div class="refGoBtns"><button class="${loadIncluded().gleb.includes(c.tag)||isBaseCard('gleb',c.tag)?'incOn':''}" onclick="toggleInclude('gleb','${c.tag}',event)">${includeLabel('gleb',c.tag)}</button></div><p style="font-size:15px;line-height:1.7;color:#333">${c.a}</p></section>`).join('')}</main>`;
-}function showView(name){
+}// 지난 연설 목록: 새 항목은 여기에 한 줄만 추가 (view = 이미 있는 화면 이름)
+const ARCHIVE=[
+ {label:'실연 — 대화 시작하기 (집호 방문 전파)', view:'drama'},
+];
+function renderArchive(){const el=document.getElementById('view-archive');el.innerHTML=`<header><div class="headRow"><button class="homeBtn" onclick="showView('home')">홈으로</button><div class="headLabel">지난 연설 목록</div></div></header><main><section class="card"><div class="controls">${ARCHIVE.map(a=>`<button onclick="openArchived('${a.view}')">${a.label}</button>`).join('')}</div></section></main>`;}
+let fromArchive=false;
+function openArchived(v){fromArchive=true;showView(v);fromArchive=false;}
+function addArchiveBack(name){if(!ARCHIVE.some(a=>a.view===name))return;const hb=document.querySelector('#view-'+name+' .homeBtn');if(hb&&!hb.parentNode.querySelector('.archBack')){const b=document.createElement('button');b.className='homeBtn archBack';b.textContent='지난 연설 목록';b.onclick=()=>showView('archive');hb.after(b);}}
+function showView(name){
+ if(name==='archive'){document.querySelectorAll('.view').forEach(v=>v.classList.remove('show'));stopSpeakQuiet();document.getElementById('view-archive').classList.add('show');location.hash='archive';renderArchive();window.scrollTo(0,0);return}
+ _showView(name);addArchiveBack(name);
+}
+function _showView(name){
  document.querySelectorAll('.view').forEach(v=>v.classList.remove('show'));
  stopSpeakQuiet();
  if(name==='home'){document.getElementById('view-home').classList.add('show');if(history.replaceState)history.replaceState(null,'',location.pathname+location.search);return}
@@ -341,4 +354,6 @@ if('speechSynthesis' in window){loadVoices(); speechSynthesis.onvoiceschanged=lo
 if(history.replaceState)history.replaceState(null,'',location.pathname+location.search);
 renderDaily();
 showView('home');
+
+(function(){const o=renderDrama;renderDrama=function(){o.apply(this,arguments);addArchiveBack('drama');};})();
 </script></body></html>
