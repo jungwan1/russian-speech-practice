@@ -86,7 +86,7 @@ main{max-width:900px;margin:0 auto;padding:14px}
   <div class="mainBtns">
     <button class="gleb" onclick="showView('gleb')">글렙</button>
     <button class="vio" onclick="showView('violetta')">비올레따</button>
-    <button class="ref" onclick="showView('reference')">참고해설</button>
+    <button class="ref" onclick="showView('reference')">이번주파수대모든해설</button>
   </div>
   <div class="sectionTitle">실연연습</div>
   <div class="smallBtns">
@@ -159,7 +159,7 @@ function buildCards(who){
 }
 function goPersonFromRefRemoved(){}function renderReference(){
  const el=document.getElementById('view-reference'); if(!el)return;
- el.innerHTML=`<header><div class="headRow"><button class="homeBtn" onclick="showView('home')">홈으로</button><div><div class="headLabel">참고해설</div><div style="font-size:11px;color:#7a8699">(강세는 러시안그램을 통해서 확인했습니다)</div></div></div></header><main><div class="note">「‘두려움 없이 신성한 봉사를 드리는 특권’을 소중히 여기십시오」(2026년 10월 26일–11월 1일, 11월 1일 일요일 연구) 기사 전체 해설입니다. <b>1항부터 16항(10-11항 묶음), 복습 질문 3개까지 총 18개</b>가 이어져 있고, 각 항마다 직접해설·부가해설·성구해설이 있어요.</div><div class="controls" style="margin:10px 0"><button onclick="window.open('https://wol.jw.org/ko/wol/d/r8/lp-ko/2026523','_blank')">📖 파수대 원문 보기 (한국어)</button><button onclick="window.open('https://wol.jw.org/ru/wol/d/r2/lp-u/2026523','_blank')">📖 파수대 원문 보기 (러시아어)</button></div><div class="controls" style="margin:10px 0">${REF_DATA.map((c,j)=>`<button onclick="document.getElementById('ref-${j}').scrollIntoView({behavior:'smooth',block:'start'})">${c.tag}</button>`).join('')}</div>${REF_DATA.map((c,j)=>`<section class="card refCard" id="ref-${j}"><div class="meta"><span class="tag">${c.tag}</span></div><div style="font-size:15px;color:#2456a6;font-weight:700;margin-top:10px"><span class="qLabel">질문</span>${c.q}</div>${REF_KINDS.map(([k,l])=>refSubHtml(j,k,l)).join('')}</section>`).join('')}</main>`;
+ el.innerHTML=`<header><div class="headRow"><button class="homeBtn" onclick="showView('home')">홈으로</button><div><div class="headLabel">이번주파수대모든해설</div><div style="font-size:11px;color:#7a8699">(강세는 러시안그램을 통해서 확인했습니다)</div></div></div></header><main><div class="note">「‘두려움 없이 신성한 봉사를 드리는 특권’을 소중히 여기십시오」(2026년 10월 26일–11월 1일, 11월 1일 일요일 연구) 기사 전체 해설입니다. <b>1항부터 16항(10-11항 묶음), 복습 질문 3개까지 총 18개</b>가 이어져 있고, 각 항마다 직접해설·부가해설·성구해설이 있어요.</div><div class="controls" style="margin:10px 0"><button onclick="window.open('https://wol.jw.org/ko/wol/d/r8/lp-ko/2026523','_blank')">📖 파수대 원문 보기 (한국어)</button><button onclick="window.open('https://wol.jw.org/ru/wol/d/r2/lp-u/2026523','_blank')">📖 파수대 원문 보기 (러시아어)</button></div><div class="controls" style="margin:10px 0">${REF_DATA.map((c,j)=>`<button onclick="document.getElementById('ref-${j}').scrollIntoView({behavior:'smooth',block:'start'})">${c.tag}</button>`).join('')}</div>${REF_DATA.map((c,j)=>`<section class="card refCard" id="ref-${j}"><div class="meta"><span class="tag">${c.tag}</span></div><div style="font-size:15px;color:#2456a6;font-weight:700;margin-top:10px"><span class="qLabel">질문</span>${c.q}</div>${REF_KINDS.map(([k,l])=>refSubHtml(j,k,l)).join('')}</section>`).join('')}</main>`;
 }// 지난 연설 목록: 새 항목은 여기에 한 줄만 추가 (view = 이미 있는 화면 이름)
 const ARCHIVE=[
  {label:'실연 — 대화 시작하기 (집호 방문 전파)', view:'drama'},
