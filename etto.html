@@ -49,12 +49,11 @@ main{max-width:640px;margin:0 auto;padding:16px 14px calc(210px + env(safe-area-
 </header>
 <main>
  <p class="note" id="dateNote">날짜는 파일 생성일 기준입니다.</p>
- <div class="yearNav" role="group" aria-label="연도">
-  <button type="button" class="yearBtn" id="year-2025" aria-pressed="false">2025년</button>
+ <div class="yearNav" role="group" aria-label="목록">
   <button type="button" class="yearBtn" id="year-2026" aria-pressed="true">2026년</button>
+  <button type="button" class="yearBtn" id="nav-previous" aria-pressed="false">이전</button>
  </div>
  <div id="monthNav" class="monthNav" role="group" aria-label="월"></div>
- <p class="note" id="emptyNote" hidden>등록된 해설이 없습니다</p>
  <div id="dateHead" class="dateHead" hidden>
   <button type="button" class="monthBack" id="backToMonths">월 목록</button>
   <p id="monthCrumb" class="monthCrumb"></p>
@@ -155,6 +154,12 @@ main{max-width:640px;margin:0 auto;padding:16px 14px calc(210px + env(safe-area-
     <p class="ettoDur">길이 36.93초</p>
   </section>
  </div>
+ <div class="ettoList" id="previousList" hidden>
+  <section class="ettoItem" id="previousItem">
+    <button type="button" class="ettoDate" id="firstCommentary" data-file="first-commentary.m4a" aria-describedby="firstCommentaryDate">첫해설</button>
+    <p class="ettoDur" id="firstCommentaryDate">2024년 8월 18일 (일) 16:51</p>
+  </section>
+ </div>
 </main>
 <section id="player" class="player" aria-label="재생 컨트롤">
  <div class="playerInner">
@@ -170,13 +175,14 @@ main{max-width:640px;margin:0 auto;padding:16px 14px calc(210px + env(safe-area-
 <script>
 (function(){
   var list=document.getElementById('ettoList');
+  var previousList=document.getElementById('previousList');
   var audio=document.getElementById('playerAudio');
   var label=document.getElementById('playerLabel');
   var monthNav=document.getElementById('monthNav');
-  var emptyNote=document.getElementById('emptyNote');
   var dateHead=document.getElementById('dateHead');
   var crumb=document.getElementById('monthCrumb');
-  var year='2026';
+  var dateNote=document.getElementById('dateNote');
+  var view='2026';
   var month='';
   var gestureOnPlayer=false;
   function items(){ return Array.prototype.slice.call(list.querySelectorAll('.ettoItem')); }
@@ -193,31 +199,38 @@ main{max-width:640px;margin:0 auto;padding:16px 14px calc(210px + env(safe-area-
     delete audio.dataset.file;
     audio.setAttribute('aria-label','선택된 해설 없음');
     label.textContent='날짜를 누르면 여기서 재생됩니다.';
-    list.querySelectorAll('.ettoDate.is-current').forEach(function(b){ b.classList.remove('is-current'); });
+    document.querySelectorAll('.ettoDate.is-current').forEach(function(b){ b.classList.remove('is-current'); });
   }
   function render(){
-    document.getElementById('year-2025').setAttribute('aria-pressed', year==='2025'?'true':'false');
-    document.getElementById('year-2026').setAttribute('aria-pressed', year==='2026'?'true':'false');
-    var months=monthsFor(year);
-    var empty=!months.length;
-    emptyNote.hidden=!empty;
-    monthNav.hidden=empty || !!month;
-    dateHead.hidden=empty || !month;
+    var onYear=view==='2026';
+    document.getElementById('year-2026').setAttribute('aria-pressed', onYear?'true':'false');
+    document.getElementById('nav-previous').setAttribute('aria-pressed', onYear?'false':'true');
+    dateNote.hidden=!onYear;
+    previousList.hidden=onYear;
+    if(!onYear){
+      monthNav.hidden=true;
+      dateHead.hidden=true;
+      items().forEach(function(el){ el.setAttribute('hidden',''); });
+      return;
+    }
+    var months=monthsFor('2026');
+    monthNav.hidden=!!month;
+    dateHead.hidden=!month;
     if(!month){
       monthNav.innerHTML=months.map(function(m){
         return '<button type="button" class="monthBtn" data-month="'+m+'">'+Number(m)+'월</button>';
       }).join('');
     }
-    if(month) crumb.textContent=year+'년 '+Number(month)+'월';
+    if(month) crumb.textContent='2026년 '+Number(month)+'월';
     items().forEach(function(el){
-      var show=el.getAttribute('data-year')===year && month && el.getAttribute('data-month')===month;
+      var show=month && el.getAttribute('data-month')===month;
       if(show) el.removeAttribute('hidden');
       else el.setAttribute('hidden','');
     });
   }
-  function selectYear(next){
+  function selectView(next){
     clearPlayback();
-    year=next;
+    view=next;
     month='';
     render();
   }
@@ -226,8 +239,8 @@ main{max-width:640px;margin:0 auto;padding:16px 14px calc(210px + env(safe-area-
     month=next;
     render();
   }
-  document.getElementById('year-2025').addEventListener('click', function(e){ e.preventDefault(); selectYear('2025'); });
-  document.getElementById('year-2026').addEventListener('click', function(e){ e.preventDefault(); selectYear('2026'); });
+  document.getElementById('year-2026').addEventListener('click', function(e){ e.preventDefault(); selectView('2026'); });
+  document.getElementById('nav-previous').addEventListener('click', function(e){ e.preventDefault(); selectView('previous'); });
   monthNav.addEventListener('click', function(e){
     var btn=e.target.closest('button[data-month]');
     if(!btn) return;
@@ -238,11 +251,12 @@ main{max-width:640px;margin:0 auto;padding:16px 14px calc(210px + env(safe-area-
   document.getElementById('backToMonths').addEventListener('click', function(e){
     e.preventDefault();
     clearPlayback();
+    view='2026';
     month='';
     render();
   });
   function arm(file, text){
-    list.querySelectorAll('.ettoDate').forEach(function(b){ b.classList.toggle('is-current', b.getAttribute('data-file')===file); });
+    document.querySelectorAll('.ettoDate').forEach(function(b){ b.classList.toggle('is-current', b.getAttribute('data-file')===file); });
     if(audio.dataset.file!==file){
       audio.pause();
       while(audio.firstChild) audio.removeChild(audio.firstChild);
@@ -256,17 +270,20 @@ main{max-width:640px;margin:0 auto;padding:16px 14px calc(210px + env(safe-area-
     }
     label.textContent=text;
   }
-  list.addEventListener('click', function(e){
+  function onDateClick(e){
     if(gestureOnPlayer){ gestureOnPlayer=false; e.preventDefault(); e.stopPropagation(); return; }
     var btn=e.target.closest('button.ettoDate');
-    if(!btn || !list.contains(btn)) return;
+    if(!btn) return;
     var item=btn.closest('.ettoItem');
     if(!item || item.hasAttribute('hidden')) return;
+    if(item.parentElement && item.parentElement.hasAttribute && item.parentElement.hasAttribute('hidden')) return;
     e.preventDefault();
     arm(btn.getAttribute('data-file'), btn.textContent.trim());
     var p=audio.play();
     if(p && p.catch) p.catch(function(){});
-  });
+  }
+  list.addEventListener('click', onDateClick);
+  previousList.addEventListener('click', onDateClick);
   function transport(fn){
     return function(e){ e.preventDefault(); e.stopPropagation(); fn(); };
   }

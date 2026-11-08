@@ -18,15 +18,19 @@ buttons = re.findall(
 )
 assert len(buttons) == 23, len(buttons)
 files = list(AUDIO.glob("*.m4a"))
-assert len(files) == 23, len(files)
-assert {p.name for p in files} == {b[2] for b in buttons}
+assert len(files) == 24, len(files)
+assert {p.name for p in files} == {b[2] for b in buttons} | {"first-commentary.m4a"}
 sections = re.findall(r'data-year="(\d{4})" data-month="(\d+)"', HTML)
 assert len(sections) == 23
 month_counts = Counter(m for y, m in sections)
 assert month_counts == {"11": 2, "10": 5, "9": 4, "8": 3, "6": 3, "5": 6}, month_counts
 assert {y for y, m in sections} == {"2026"}
-assert ">2025년<" in HTML and ">2026년<" in HTML
-assert "등록된 해설이 없습니다" in HTML
+assert ">2025년<" not in HTML
+assert HTML.find(">2026년<") < HTML.find(">이전<")
+assert ">첫해설<" in HTML
+assert 'data-file="first-commentary.m4a"' in HTML
+assert "2024년 8월 18일 (일) 16:51" in HTML
+assert "20240818" not in HTML and "165103" not in HTML
 assert HTML.count("<audio ") == 1 and 'id="playerAudio"' in HTML
 assert "position:fixed" in HTML and 'id="pauseBtn"' in HTML and 'id="stopBtn"' in HTML
 assert "source.src='audio/etto/'" in HTML and "source.type='audio/mp4'" in HTML
@@ -102,6 +106,17 @@ for date, time, filename, label in buttons:
         sdt = datetime.datetime.strptime(stream_raw, "%Y-%m-%dT%H:%M:%S.000000Z").replace(tzinfo=datetime.timezone.utc)
         assert int((dt - sdt).total_seconds()) == 67
         assert time == "17:17:39"
+
+first = json.loads(subprocess.check_output(
+    ["ffprobe", "-v", "error", "-show_format", "-show_streams", "-print_format", "json", str(AUDIO / "first-commentary.m4a")],
+    text=True,
+))
+assert len(first["streams"]) == 1
+fs = first["streams"][0]
+assert fs["codec_name"] == "aac" and fs.get("profile") == "LC"
+assert abs(float(first["format"]["duration"]) - 15.533) < 0.01
+assert "creation_time" not in (first["format"].get("tags") or {})
+assert "creation_time" not in (fs.get("tags") or {})
 
 raw_bytes = b"".join(p.read_bytes() for p in files)
 for needle in (b"com.samsung", b"com.android", b"MYBOX", b"resourceKey"):

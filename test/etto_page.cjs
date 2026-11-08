@@ -145,7 +145,7 @@ async function homeFacts(page) {
   await page.click('#view-home a.etto');
   await page.waitForSelector('#dateNote', { timeout: 8000 });
   assert(page.url().endsWith('/etto.html'), page.url());
-  const mobileList = await shot(page, 'screenshot_mobile_months_player_v2.png');
+  const mobileList = await shot(page, 'screenshot_mobile_months_player_v3.png');
 
   const list = await page.evaluate(() => {
     const buttons = [...document.querySelectorAll('#ettoList button.ettoDate')];
@@ -162,7 +162,7 @@ async function homeFacts(page) {
       visibleDates: visibleDates.length,
       months: [...document.querySelectorAll('#monthNav button')].map(b => b.textContent.trim()),
       year2026: document.getElementById('year-2026').getAttribute('aria-pressed'),
-      year2025: document.getElementById('year-2025').textContent.trim(),
+      previous: document.getElementById('nav-previous').textContent.trim(),
       audio: {
         controls: audio.controls,
         autoplay: audio.autoplay,
@@ -178,7 +178,9 @@ async function homeFacts(page) {
   assert(list.buttons.length === 23, String(list.buttons.length));
   assert(list.visibleDates === 0, 'dates shown before a month');
   assert(JSON.stringify(list.months) === JSON.stringify(['11월', '10월', '9월', '8월', '6월', '5월']), JSON.stringify(list.months));
-  assert(list.year2026 === 'true' && list.year2025 === '2025년');
+  assert(list.year2026 === 'true' && list.previous === '이전');
+  const no2025 = await page.evaluate(() => !document.body.innerText.includes('2025년'));
+  assert(no2025, '2025년 still shown');
   assert(list.audio.controls === true && list.audio.autoplay === false && list.audio.preload === 'none' && list.audio.paused === true);
   assert(list.back === '뒤로' && list.home === 'jw1.html' && list.homeText === '홈으로');
   list.buttons.forEach((b, i) => {
@@ -226,7 +228,7 @@ async function homeFacts(page) {
   await page.waitForFunction(() => document.getElementById('playerAudio').dataset.file === 'etto_04.m4a' && !document.getElementById('playerAudio').paused, { timeout: 8000 });
   const one = await page.evaluate(() => [...document.querySelectorAll('audio')].filter(a => !a.paused).map(a => a.id));
   assert(JSON.stringify(one) === JSON.stringify(['playerAudio']), 'more than one active ' + JSON.stringify(one));
-  const playingShot = await shot(page, 'screenshot_mobile_fixed_player_playing_v2.png');
+  const playingShot = await shot(page, 'screenshot_mobile_fixed_player_playing_v3.png');
 
   step('home link');
   await page.click('a.homeBtn');
@@ -244,7 +246,7 @@ async function homeFacts(page) {
   const desktopHome = await shot(page, 'screenshot_desktop_home_unchanged.png');
   await page.click('a.etto');
   await page.waitForSelector('#dateNote', { timeout: 8000 });
-  const desktopList = await shot(page, 'screenshot_desktop_months_player_v2.png');
+  const desktopList = await shot(page, 'screenshot_desktop_months_player_v3.png');
   const still = await page.evaluate(() => document.querySelectorAll('#ettoList button.ettoDate').length);
   assert(still === 23, String(still));
 

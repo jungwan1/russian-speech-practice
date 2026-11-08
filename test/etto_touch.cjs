@@ -27,20 +27,23 @@ async function state(page) {
   return page.evaluate(() => {
     const audio = document.getElementById('playerAudio');
     const player = document.getElementById('player').getBoundingClientRect();
-    const visible = [...document.querySelectorAll('.ettoDate')].filter(b => !b.closest('.ettoItem').hasAttribute('hidden'));
+    const visible = [...document.querySelectorAll('.ettoDate')].filter(b => !b.closest('[hidden]'));
     return {
       file: audio.dataset.file || '',
       paused: audio.paused,
       t: audio.currentTime,
       label: document.getElementById('playerLabel').textContent,
       visible: visible.map(b => b.dataset.file),
+      visibleText: visible.map(b => b.textContent.trim()),
       months: [...document.querySelectorAll('#monthNav button')].map(b => b.textContent.trim()),
       monthDisplay: getComputedStyle(document.getElementById('monthNav')).display,
       dateHeadDisplay: getComputedStyle(document.getElementById('dateHead')).display,
-      emptyHidden: document.getElementById('emptyNote').hidden,
-      emptyText: document.getElementById('emptyNote').textContent.trim(),
-      y2025: document.getElementById('year-2025').getAttribute('aria-pressed'),
+      previousPressed: document.getElementById('nav-previous').getAttribute('aria-pressed'),
+      previousText: document.getElementById('nav-previous').textContent.trim(),
       y2026: document.getElementById('year-2026').getAttribute('aria-pressed'),
+      firstLabel: document.getElementById('firstCommentary').textContent.trim(),
+      firstDate: document.getElementById('firstCommentaryDate').textContent.trim(),
+      audioCount: document.querySelectorAll('audio').length,
       playerH: player.height,
       playerBottom: player.bottom,
       vh: window.innerHeight,
@@ -72,7 +75,7 @@ async function state(page) {
   await openAt({ width: 390, height: 844 });
   const grouped = await page.evaluate(() => {
     const map = {};
-    document.querySelectorAll('.ettoItem').forEach(el => {
+    document.querySelectorAll('#ettoList .ettoItem').forEach(el => {
       const m = el.dataset.month;
       map[m] = map[m] || [];
       map[m].push(el.querySelector('.ettoDate').dataset.file);
@@ -83,20 +86,25 @@ async function state(page) {
   assert(JSON.stringify(counts) === JSON.stringify({ 11: 2, 10: 5, 9: 4, 8: 3, 6: 3, 5: 6 }), JSON.stringify(counts));
   assert(Object.values(grouped).flat().length === 23);
   let s = await state(page);
-  assert(s.y2026 === 'true' && s.y2025 === 'false', 'default year');
+  assert(s.y2026 === 'true' && s.previousPressed === 'false' && s.previousText === '이전', 'default year');
+  assert(s.audioCount === 1, 'multiple players');
   assert(JSON.stringify(s.months) === JSON.stringify(['11월', '10월', '9월', '8월', '6월', '5월']), JSON.stringify(s.months));
   assert(s.visible.length === 0 && s.paused && !s.file, 'autoplay or dates visible');
   assert(s.monthDisplay === 'flex' && s.dateHeadDisplay === 'none', 'month list chrome ' + s.monthDisplay + ' ' + s.dateHeadDisplay);
   assert(Math.abs(s.playerBottom - s.vh) < 1, 'player not pinned ' + s.playerBottom);
   const playerH = s.playerH;
-  shots.push(await shot(page, 'screenshot_mobile_year_months_v2.png'));
+  shots.push(await shot(page, 'screenshot_mobile_2026_months_v3.png'));
 
-  await page.click('#year-2025');
+  await page.click('#nav-previous');
   s = await state(page);
-  assert(s.y2025 === 'true' && s.emptyText === '등록된 해설이 없습니다' && s.emptyHidden === false, JSON.stringify(s));
-  assert(s.visible.length === 0 && s.monthDisplay === 'none' && s.dateHeadDisplay === 'none' && s.paused && !s.file, JSON.stringify(s));
-  assert(Math.abs(s.playerH - playerH) < 1, 'player jumped on 2025');
-  shots.push(await shot(page, 'screenshot_mobile_2025_empty_v2.png'));
+  assert(s.previousPressed === 'true' && s.y2026 === 'false', JSON.stringify(s));
+  assert(JSON.stringify(s.visibleText) === JSON.stringify(['첫해설']), JSON.stringify(s.visibleText));
+  assert(s.firstLabel === '첫해설' && s.firstDate === '2024년 8월 18일 (일) 16:51', s.firstDate);
+  assert(s.monthDisplay === 'none' && s.dateHeadDisplay === 'none' && s.paused && !s.file, JSON.stringify(s));
+  assert(Math.abs(s.playerH - playerH) < 1, 'player jumped on 이전');
+  const no2025 = await page.evaluate(() => !document.body.innerText.includes('2025년'));
+  assert(no2025, '2025년 still shown');
+  shots.push(await shot(page, 'screenshot_mobile_previous_first_v3.png'));
 
   await page.click('#year-2026');
   s = await state(page);
@@ -176,13 +184,34 @@ async function state(page) {
   const beforeYear = await state(page);
   await page.click('button[data-file="etto_11.m4a"]');
   await page.waitForFunction(() => !document.getElementById('playerAudio').paused);
-  await page.click('#year-2025');
+  await page.click('#nav-previous');
   s = await state(page);
-  assert(s.paused && !s.file && s.emptyText === '등록된 해설이 없습니다', 'year switch left audio ' + JSON.stringify(s));
+  assert(s.paused && !s.file && s.visibleText[0] === '첫해설', 'switch to 이전 left audio ' + JSON.stringify(s));
   assert(Math.abs(s.playerH - beforeYear.playerH) < 1);
+  await page.click('#firstCommentary');
+  await page.waitForFunction(() => {
+    const a = document.getElementById('playerAudio');
+    return a.dataset.file === 'first-commentary.m4a' && !a.paused;
+  }, { timeout: 8000 });
+  await page.evaluate(() => { document.getElementById('playerAudio').currentTime = 2; });
+  await page.waitForFunction(() => document.getElementById('playerAudio').currentTime >= 1.5, { timeout: 4000 });
+  await edgeTap('#pauseBtn', 4);
+  s = await state(page);
+  assert(s.file === 'first-commentary.m4a' && s.paused && s.label === '첫해설', JSON.stringify(s));
+  await edgeTap('#playBtn', 2);
+  s = await state(page);
+  assert(s.file === 'first-commentary.m4a' && !s.paused, 'play resumed another file ' + JSON.stringify(s));
+  await edgeTap('#stopBtn', 4);
+  s = await state(page);
+  assert(s.file === 'first-commentary.m4a' && s.paused && s.t < 0.3, 'stop changed track ' + JSON.stringify(s));
+  assert(s.audioCount === 1);
+  shots.push(await shot(page, 'screenshot_mobile_first_commentary_player_v3.png'));
+  await page.click('#year-2026');
+  s = await state(page);
+  assert(s.paused && !s.file && s.y2026 === 'true' && s.visible.length === 0, 'return to 2026 left audio ' + JSON.stringify(s));
   await page.click('#playBtn');
   s = await state(page);
-  assert(s.paused && !s.file, 'play on empty year started audio');
+  assert(s.paused && !s.file, 'play with nothing loaded started audio');
 
   await openAt({ width: 320, height: 640 });
   shots.push(await shot(page, 'screenshot_mobile_narrow_months_v2.png'));
