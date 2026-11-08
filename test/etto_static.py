@@ -4,6 +4,7 @@ import datetime
 import json
 import re
 import subprocess
+from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -12,13 +13,23 @@ JW1 = (ROOT / "jw1.html").read_text(encoding="utf-8")
 AUDIO = ROOT / "audio" / "etto"
 
 buttons = re.findall(
-    r'<button type="button" class="ettoDate" data-audio="([^"]+)" data-date="([^"]+)" data-time="([^"]+)" data-file="([^"]+)">([^<]+)</button>',
+    r'<button type="button" class="ettoDate" data-date="([^"]+)" data-time="([^"]+)" data-file="([^"]+)">([^<]+)</button>',
     HTML,
 )
 assert len(buttons) == 23, len(buttons)
 files = list(AUDIO.glob("*.m4a"))
 assert len(files) == 23, len(files)
-assert {p.name for p in files} == {b[3] for b in buttons}
+assert {p.name for p in files} == {b[2] for b in buttons}
+sections = re.findall(r'data-year="(\d{4})" data-month="(\d+)"', HTML)
+assert len(sections) == 23
+month_counts = Counter(m for y, m in sections)
+assert month_counts == {"11": 2, "10": 5, "9": 4, "8": 3, "6": 3, "5": 6}, month_counts
+assert {y for y, m in sections} == {"2026"}
+assert ">2025년<" in HTML and ">2026년<" in HTML
+assert "등록된 해설이 없습니다" in HTML
+assert HTML.count("<audio ") == 1 and 'id="playerAudio"' in HTML
+assert "position:fixed" in HTML and 'id="pauseBtn"' in HTML and 'id="stopBtn"' in HTML
+assert "source.src='audio/etto/'" in HTML and "source.type='audio/mp4'" in HTML
 
 home = JW1.split('<div id="view-home"', 1)[1].split('<div id="view-reference"', 1)[0]
 for banned in ("파수대 해설준비", ">글렙<", ">비올레따<", ">이번주 파수대<"):
@@ -41,22 +52,17 @@ for kept in (
     assert kept in JW1, kept
 
 assert HTML.count("날짜는 파일 생성일 기준입니다.") == 1
-assert 'type="audio/mp4"' in HTML
-assert HTML.count("<audio ") == 23
 assert "autoplay" not in HTML.lower()
 assert "mybox" not in HTML.lower() and "resourcekey" not in HTML.lower()
 assert "samsung" not in HTML.lower()
-for src in re.findall(r'<source src="([^"]+)"', HTML):
-    assert src.startswith("audio/etto/") and not src.startswith("/"), src
-    assert (ROOT / src).is_file()
+assert not re.search(r'<source src="https?:', HTML)
 
 # Latest-first, and same-date rows differ by time.
 stamps = []
-for audio_id, date, time, filename, label in buttons:
+for date, time, filename, label in buttons:
     y, m, d = date.split("-")
     expect = f"{int(y)}년 {int(m)}월 {int(d)}일 {time}"
     assert label == expect, (label, expect)
-    assert audio_id == "etto-audio-" + filename[5:7]
     stamps.append((date, time, filename))
 assert stamps == sorted(stamps, reverse=True)
 dates = [s[0] for s in stamps]
@@ -72,7 +78,7 @@ assert "원래 해설 시각으로 단정하지 않습니다." in HTML
 assert "원래 시각으로 단정하지 않습니다." in HTML
 
 kst = datetime.timezone(datetime.timedelta(hours=9))
-for audio_id, date, time, filename, label in buttons:
+for date, time, filename, label in buttons:
     path = AUDIO / filename
     probe = json.loads(subprocess.check_output(
         ["ffprobe", "-v", "error", "-show_format", "-show_streams", "-print_format", "json", str(path)],
