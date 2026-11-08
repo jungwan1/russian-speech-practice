@@ -5,6 +5,17 @@ const BASE = process.env.ETTO_BASE || 'http://127.0.0.1:8765';
 const OUT = process.env.ETTO_SHOTS || '/opt/cursor/artifacts';
 const CHROME = process.env.CHROME || '/usr/bin/google-chrome';
 
+function ordinalLabel(date, time, rows) {
+  const ords = ['첫째', '둘째', '셋째', '넷째', '다섯째'];
+  const wds = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
+  const marks = '①②③④⑤⑥⑦⑧⑨⑩';
+  const [y, m, d] = date.split('-').map(Number);
+  const text = `${ords[Math.floor((d - 1) / 7)]} 주 ${wds[new Date(Date.UTC(y, m - 1, d)).getUTCDay()]}`;
+  const siblings = rows.filter(r => r[1] === date).slice().sort((a, b) => a[2].localeCompare(b[2]));
+  if (siblings.length < 2) return text;
+  return text + ' ' + marks[siblings.findIndex(r => r[2] === time)];
+}
+
 const EXPECTED = [
   ['etto_11.m4a', '2026-11-08', '16:08:53', '2026년 11월 8일 16:08:53'],
   ['etto_02.m4a', '2026-11-06', '20:45:34', '2026년 11월 6일 20:45:34'],
@@ -145,7 +156,7 @@ async function homeFacts(page) {
   await page.click('#view-home a.etto');
   await page.waitForSelector('#dateNote', { timeout: 8000 });
   assert(page.url().endsWith('/etto.html'), page.url());
-  const mobileList = await shot(page, 'screenshot_mobile_months_player_v2.png');
+  const mobileList = await shot(page, 'screenshot_mobile_months_player_v3.png');
 
   const list = await page.evaluate(() => {
     const buttons = [...document.querySelectorAll('#ettoList button.ettoDate')];
@@ -162,7 +173,7 @@ async function homeFacts(page) {
       visibleDates: visibleDates.length,
       months: [...document.querySelectorAll('#monthNav button')].map(b => b.textContent.trim()),
       year2026: document.getElementById('year-2026').getAttribute('aria-pressed'),
-      year2025: document.getElementById('year-2025').textContent.trim(),
+      previous: document.getElementById('nav-previous').textContent.trim(),
       audio: {
         controls: audio.controls,
         autoplay: audio.autoplay,
@@ -178,12 +189,16 @@ async function homeFacts(page) {
   assert(list.buttons.length === 23, String(list.buttons.length));
   assert(list.visibleDates === 0, 'dates shown before a month');
   assert(JSON.stringify(list.months) === JSON.stringify(['11월', '10월', '9월', '8월', '6월', '5월']), JSON.stringify(list.months));
-  assert(list.year2026 === 'true' && list.year2025 === '2025년');
+  assert(list.year2026 === 'true' && list.previous === '이전');
+  const no2025 = await page.evaluate(() => !document.body.innerText.includes('2025년'));
+  assert(no2025, '2025년 still shown');
   assert(list.audio.controls === true && list.audio.autoplay === false && list.audio.preload === 'none' && list.audio.paused === true);
   assert(list.back === '뒤로' && list.home === 'jw1.html' && list.homeText === '홈으로');
   list.buttons.forEach((b, i) => {
     const exp = EXPECTED[i];
-    assert(b.file === exp[0] && b.date === exp[1] && b.time === exp[2] && b.text === exp[3], JSON.stringify({ b, exp }));
+    const label = ordinalLabel(exp[1], exp[2], EXPECTED);
+    assert(b.file === exp[0] && b.date === exp[1] && b.time === exp[2] && b.text === label, JSON.stringify({ b, label }));
+    assert(!b.text.includes('년') && !b.text.includes(':'), b.text);
   });
   const caveat = await page.evaluate(() => ({
     n11: document.getElementById('caveat-11').textContent,
@@ -226,7 +241,7 @@ async function homeFacts(page) {
   await page.waitForFunction(() => document.getElementById('playerAudio').dataset.file === 'etto_04.m4a' && !document.getElementById('playerAudio').paused, { timeout: 8000 });
   const one = await page.evaluate(() => [...document.querySelectorAll('audio')].filter(a => !a.paused).map(a => a.id));
   assert(JSON.stringify(one) === JSON.stringify(['playerAudio']), 'more than one active ' + JSON.stringify(one));
-  const playingShot = await shot(page, 'screenshot_mobile_fixed_player_playing_v2.png');
+  const playingShot = await shot(page, 'screenshot_mobile_fixed_player_playing_v3.png');
 
   step('home link');
   await page.click('a.homeBtn');
@@ -244,7 +259,7 @@ async function homeFacts(page) {
   const desktopHome = await shot(page, 'screenshot_desktop_home_unchanged.png');
   await page.click('a.etto');
   await page.waitForSelector('#dateNote', { timeout: 8000 });
-  const desktopList = await shot(page, 'screenshot_desktop_months_player_v2.png');
+  const desktopList = await shot(page, 'screenshot_desktop_months_player_v3.png');
   const still = await page.evaluate(() => document.querySelectorAll('#ettoList button.ettoDate').length);
   assert(still === 23, String(still));
 

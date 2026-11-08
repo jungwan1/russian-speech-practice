@@ -49,110 +49,115 @@ main{max-width:640px;margin:0 auto;padding:16px 14px calc(210px + env(safe-area-
 </header>
 <main>
  <p class="note" id="dateNote">날짜는 파일 생성일 기준입니다.</p>
- <div class="yearNav" role="group" aria-label="연도">
-  <button type="button" class="yearBtn" id="year-2025" aria-pressed="false">2025년</button>
+ <div class="yearNav" role="group" aria-label="목록">
   <button type="button" class="yearBtn" id="year-2026" aria-pressed="true">2026년</button>
+  <button type="button" class="yearBtn" id="nav-previous" aria-pressed="false">이전</button>
  </div>
  <div id="monthNav" class="monthNav" role="group" aria-label="월"></div>
- <p class="note" id="emptyNote" hidden>등록된 해설이 없습니다</p>
  <div id="dateHead" class="dateHead" hidden>
   <button type="button" class="monthBack" id="backToMonths">월 목록</button>
   <p id="monthCrumb" class="monthCrumb"></p>
  </div>
  <div class="ettoList" id="ettoList">
   <section class="ettoItem" data-year="2026" data-month="11" hidden>
-    <button type="button" class="ettoDate" data-date="2026-11-08" data-time="16:08:53" data-file="etto_11.m4a">2026년 11월 8일 16:08:53</button>
+    <button type="button" class="ettoDate" data-date="2026-11-08" data-time="16:08:53" data-file="etto_11.m4a">둘째 주 일요일</button>
     <p class="ettoDur">길이 29.76초</p>
     <p class="ettoCaveat" id="caveat-11">이 표시는 파일 생성 시각입니다. 다시 저장된 파일일 수 있어 원래 해설 시각으로 단정하지 않습니다.</p>
   </section>
   <section class="ettoItem" data-year="2026" data-month="11" hidden>
-    <button type="button" class="ettoDate" data-date="2026-11-06" data-time="20:45:34" data-file="etto_02.m4a">2026년 11월 6일 20:45:34</button>
+    <button type="button" class="ettoDate" data-date="2026-11-06" data-time="20:45:34" data-file="etto_02.m4a">첫째 주 금요일</button>
     <p class="ettoDur">길이 24.9초</p>
   </section>
   <section class="ettoItem" data-year="2026" data-month="10" hidden>
-    <button type="button" class="ettoDate" data-date="2026-10-11" data-time="17:23:57" data-file="etto_04.m4a">2026년 10월 11일 17:23:57</button>
+    <button type="button" class="ettoDate" data-date="2026-10-11" data-time="17:23:57" data-file="etto_04.m4a">둘째 주 일요일 ②</button>
     <p class="ettoDur">길이 39.04초</p>
   </section>
   <section class="ettoItem" data-year="2026" data-month="10" hidden>
-    <button type="button" class="ettoDate" data-date="2026-10-11" data-time="17:08:21" data-file="etto_05.m4a">2026년 10월 11일 17:08:21</button>
+    <button type="button" class="ettoDate" data-date="2026-10-11" data-time="17:08:21" data-file="etto_05.m4a">둘째 주 일요일 ①</button>
     <p class="ettoDur">길이 22.61초</p>
   </section>
   <section class="ettoItem" data-year="2026" data-month="10" hidden>
-    <button type="button" class="ettoDate" data-date="2026-10-09" data-time="20:58:37" data-file="etto_22.m4a">2026년 10월 9일 20:58:37</button>
+    <button type="button" class="ettoDate" data-date="2026-10-09" data-time="20:58:37" data-file="etto_22.m4a">둘째 주 금요일 ②</button>
     <p class="ettoDur">길이 25.94초</p>
   </section>
   <section class="ettoItem" data-year="2026" data-month="10" hidden>
-    <button type="button" class="ettoDate" data-date="2026-10-09" data-time="19:55:39" data-file="etto_19.m4a">2026년 10월 9일 19:55:39</button>
+    <button type="button" class="ettoDate" data-date="2026-10-09" data-time="19:55:39" data-file="etto_19.m4a">둘째 주 금요일 ①</button>
     <p class="ettoDur">길이 30.72초</p>
   </section>
   <section class="ettoItem" data-year="2026" data-month="10" hidden>
-    <button type="button" class="ettoDate" data-date="2026-10-04" data-time="16:39:44" data-file="etto_20.m4a">2026년 10월 4일 16:39:44</button>
+    <button type="button" class="ettoDate" data-date="2026-10-04" data-time="16:39:44" data-file="etto_20.m4a">첫째 주 일요일</button>
     <p class="ettoDur">길이 19.99초</p>
   </section>
   <section class="ettoItem" data-year="2026" data-month="9" hidden>
-    <button type="button" class="ettoDate" data-date="2026-09-27" data-time="16:45:49" data-file="etto_14.m4a">2026년 9월 27일 16:45:49</button>
+    <button type="button" class="ettoDate" data-date="2026-09-27" data-time="16:45:49" data-file="etto_14.m4a">넷째 주 일요일</button>
     <p class="ettoDur">길이 20.16초</p>
   </section>
   <section class="ettoItem" data-year="2026" data-month="9" hidden>
-    <button type="button" class="ettoDate" data-date="2026-09-20" data-time="17:03:26" data-file="etto_23.m4a">2026년 9월 20일 17:03:26</button>
+    <button type="button" class="ettoDate" data-date="2026-09-20" data-time="17:03:26" data-file="etto_23.m4a">셋째 주 일요일</button>
     <p class="ettoDur">길이 18.79초</p>
   </section>
   <section class="ettoItem" data-year="2026" data-month="9" hidden>
-    <button type="button" class="ettoDate" data-date="2026-09-13" data-time="16:49:30" data-file="etto_21.m4a">2026년 9월 13일 16:49:30</button>
+    <button type="button" class="ettoDate" data-date="2026-09-13" data-time="16:49:30" data-file="etto_21.m4a">둘째 주 일요일</button>
     <p class="ettoDur">길이 35.82초</p>
   </section>
   <section class="ettoItem" data-year="2026" data-month="9" hidden>
-    <button type="button" class="ettoDate" data-date="2026-09-04" data-time="19:50:42" data-file="etto_10.m4a">2026년 9월 4일 19:50:42</button>
+    <button type="button" class="ettoDate" data-date="2026-09-04" data-time="19:50:42" data-file="etto_10.m4a">첫째 주 금요일</button>
     <p class="ettoDur">길이 37.1초</p>
   </section>
   <section class="ettoItem" data-year="2026" data-month="8" hidden>
-    <button type="button" class="ettoDate" data-date="2026-08-28" data-time="20:47:01" data-file="etto_06.m4a">2026년 8월 28일 20:47:01</button>
+    <button type="button" class="ettoDate" data-date="2026-08-28" data-time="20:47:01" data-file="etto_06.m4a">넷째 주 금요일</button>
     <p class="ettoDur">길이 36.37초</p>
   </section>
   <section class="ettoItem" data-year="2026" data-month="8" hidden>
-    <button type="button" class="ettoDate" data-date="2026-08-23" data-time="17:17:39" data-file="etto_07.m4a">2026년 8월 23일 17:17:39</button>
+    <button type="button" class="ettoDate" data-date="2026-08-23" data-time="17:17:39" data-file="etto_07.m4a">넷째 주 일요일</button>
     <p class="ettoDur">길이 37.44초</p>
     <p class="ettoCaveat" id="caveat-07">이 표시는 파일 생성 시각입니다. 컨테이너와 트랙 생성 시각이 약 67초 달라 원래 시각으로 단정하지 않습니다.</p>
   </section>
   <section class="ettoItem" data-year="2026" data-month="8" hidden>
-    <button type="button" class="ettoDate" data-date="2026-08-21" data-time="19:54:39" data-file="etto_12.m4a">2026년 8월 21일 19:54:39</button>
+    <button type="button" class="ettoDate" data-date="2026-08-21" data-time="19:54:39" data-file="etto_12.m4a">셋째 주 금요일</button>
     <p class="ettoDur">길이 35.24초</p>
   </section>
   <section class="ettoItem" data-year="2026" data-month="6" hidden>
-    <button type="button" class="ettoDate" data-date="2026-06-07" data-time="17:27:48" data-file="etto_01.m4a">2026년 6월 7일 17:27:48</button>
+    <button type="button" class="ettoDate" data-date="2026-06-07" data-time="17:27:48" data-file="etto_01.m4a">첫째 주 일요일 ②</button>
     <p class="ettoDur">길이 23.36초</p>
   </section>
   <section class="ettoItem" data-year="2026" data-month="6" hidden>
-    <button type="button" class="ettoDate" data-date="2026-06-07" data-time="17:25:11" data-file="etto_15.m4a">2026년 6월 7일 17:25:11</button>
+    <button type="button" class="ettoDate" data-date="2026-06-07" data-time="17:25:11" data-file="etto_15.m4a">첫째 주 일요일 ①</button>
     <p class="ettoDur">길이 16.19초</p>
   </section>
   <section class="ettoItem" data-year="2026" data-month="6" hidden>
-    <button type="button" class="ettoDate" data-date="2026-06-05" data-time="19:50:51" data-file="etto_13.m4a">2026년 6월 5일 19:50:51</button>
+    <button type="button" class="ettoDate" data-date="2026-06-05" data-time="19:50:51" data-file="etto_13.m4a">첫째 주 금요일</button>
     <p class="ettoDur">길이 38.42초</p>
   </section>
   <section class="ettoItem" data-year="2026" data-month="5" hidden>
-    <button type="button" class="ettoDate" data-date="2026-05-31" data-time="17:30:58" data-file="etto_17.m4a">2026년 5월 31일 17:30:58</button>
+    <button type="button" class="ettoDate" data-date="2026-05-31" data-time="17:30:58" data-file="etto_17.m4a">다섯째 주 일요일</button>
     <p class="ettoDur">길이 40.94초</p>
   </section>
   <section class="ettoItem" data-year="2026" data-month="5" hidden>
-    <button type="button" class="ettoDate" data-date="2026-05-29" data-time="20:45:47" data-file="etto_03.m4a">2026년 5월 29일 20:45:47</button>
+    <button type="button" class="ettoDate" data-date="2026-05-29" data-time="20:45:47" data-file="etto_03.m4a">다섯째 주 금요일</button>
     <p class="ettoDur">길이 35.9초</p>
   </section>
   <section class="ettoItem" data-year="2026" data-month="5" hidden>
-    <button type="button" class="ettoDate" data-date="2026-05-10" data-time="17:26:02" data-file="etto_16.m4a">2026년 5월 10일 17:26:02</button>
+    <button type="button" class="ettoDate" data-date="2026-05-10" data-time="17:26:02" data-file="etto_16.m4a">둘째 주 일요일</button>
     <p class="ettoDur">길이 47.91초</p>
   </section>
   <section class="ettoItem" data-year="2026" data-month="5" hidden>
-    <button type="button" class="ettoDate" data-date="2026-05-08" data-time="20:53:31" data-file="etto_18.m4a">2026년 5월 8일 20:53:31</button>
+    <button type="button" class="ettoDate" data-date="2026-05-08" data-time="20:53:31" data-file="etto_18.m4a">둘째 주 금요일</button>
     <p class="ettoDur">길이 74.67초</p>
   </section>
   <section class="ettoItem" data-year="2026" data-month="5" hidden>
-    <button type="button" class="ettoDate" data-date="2026-05-03" data-time="17:25:44" data-file="etto_09.m4a">2026년 5월 3일 17:25:44</button>
+    <button type="button" class="ettoDate" data-date="2026-05-03" data-time="17:25:44" data-file="etto_09.m4a">첫째 주 일요일</button>
     <p class="ettoDur">길이 60.35초</p>
   </section>
   <section class="ettoItem" data-year="2026" data-month="5" hidden>
-    <button type="button" class="ettoDate" data-date="2026-05-01" data-time="20:42:44" data-file="etto_08.m4a">2026년 5월 1일 20:42:44</button>
+    <button type="button" class="ettoDate" data-date="2026-05-01" data-time="20:42:44" data-file="etto_08.m4a">첫째 주 금요일</button>
     <p class="ettoDur">길이 36.93초</p>
+  </section>
+ </div>
+ <div class="ettoList" id="previousList" hidden>
+  <section class="ettoItem" id="previousItem">
+    <button type="button" class="ettoDate" id="firstCommentary" data-file="first-commentary.m4a" aria-describedby="firstCommentaryDate">첫해설</button>
+    <p class="ettoDur" id="firstCommentaryDate">2024년 8월 18일 (일) 16:51</p>
   </section>
  </div>
 </main>
@@ -170,13 +175,14 @@ main{max-width:640px;margin:0 auto;padding:16px 14px calc(210px + env(safe-area-
 <script>
 (function(){
   var list=document.getElementById('ettoList');
+  var previousList=document.getElementById('previousList');
   var audio=document.getElementById('playerAudio');
   var label=document.getElementById('playerLabel');
   var monthNav=document.getElementById('monthNav');
-  var emptyNote=document.getElementById('emptyNote');
   var dateHead=document.getElementById('dateHead');
   var crumb=document.getElementById('monthCrumb');
-  var year='2026';
+  var dateNote=document.getElementById('dateNote');
+  var view='2026';
   var month='';
   var gestureOnPlayer=false;
   function items(){ return Array.prototype.slice.call(list.querySelectorAll('.ettoItem')); }
@@ -193,31 +199,66 @@ main{max-width:640px;margin:0 auto;padding:16px 14px calc(210px + env(safe-area-
     delete audio.dataset.file;
     audio.setAttribute('aria-label','선택된 해설 없음');
     label.textContent='날짜를 누르면 여기서 재생됩니다.';
-    list.querySelectorAll('.ettoDate.is-current').forEach(function(b){ b.classList.remove('is-current'); });
+    document.querySelectorAll('.ettoDate.is-current').forEach(function(b){ b.classList.remove('is-current'); });
+  }
+  var ORDS=['첫째','둘째','셋째','넷째','다섯째'];
+  var WDS=['일요일','월요일','화요일','수요일','목요일','금요일','토요일'];
+  var MARKS='①②③④⑤⑥⑦⑧⑨⑩';
+  function weekLabel(dateStr){
+    var p=dateStr.split('-');
+    var day=Number(p[2]);
+    var utc=new Date(Date.UTC(Number(p[0]), Number(p[1])-1, day));
+    return ORDS[Math.floor((day-1)/7)]+' 주 '+WDS[utc.getUTCDay()];
+  }
+  function applyLabels(){
+    var buttons=list.querySelectorAll('.ettoDate');
+    var byDate={};
+    Array.prototype.forEach.call(buttons, function(b){
+      var d=b.getAttribute('data-date');
+      if(!d) return;
+      (byDate[d]=byDate[d]||[]).push(b);
+    });
+    Object.keys(byDate).forEach(function(d){
+      var group=byDate[d].slice().sort(function(a,b){
+        return a.getAttribute('data-time').localeCompare(b.getAttribute('data-time'));
+      });
+      var base=weekLabel(d);
+      group.forEach(function(b,i){
+        b.textContent=group.length>1 ? base+' '+MARKS.charAt(i) : base;
+      });
+    });
   }
   function render(){
-    document.getElementById('year-2025').setAttribute('aria-pressed', year==='2025'?'true':'false');
-    document.getElementById('year-2026').setAttribute('aria-pressed', year==='2026'?'true':'false');
-    var months=monthsFor(year);
-    var empty=!months.length;
-    emptyNote.hidden=!empty;
-    monthNav.hidden=empty || !!month;
-    dateHead.hidden=empty || !month;
+    applyLabels();
+    var onYear=view==='2026';
+    document.getElementById('year-2026').setAttribute('aria-pressed', onYear?'true':'false');
+    document.getElementById('nav-previous').setAttribute('aria-pressed', onYear?'false':'true');
+    dateNote.hidden=!onYear;
+    previousList.hidden=onYear;
+    if(!onYear){
+      monthNav.hidden=true;
+      dateHead.hidden=true;
+      items().forEach(function(el){ el.setAttribute('hidden',''); });
+      return;
+    }
+    var months=monthsFor('2026');
+    monthNav.hidden=!!month;
+    dateHead.hidden=!month;
     if(!month){
       monthNav.innerHTML=months.map(function(m){
         return '<button type="button" class="monthBtn" data-month="'+m+'">'+Number(m)+'월</button>';
       }).join('');
     }
-    if(month) crumb.textContent=year+'년 '+Number(month)+'월';
+    if(month) crumb.textContent='2026년 '+Number(month)+'월';
     items().forEach(function(el){
-      var show=el.getAttribute('data-year')===year && month && el.getAttribute('data-month')===month;
+      var show=month && el.getAttribute('data-month')===month;
       if(show) el.removeAttribute('hidden');
       else el.setAttribute('hidden','');
     });
   }
-  function selectYear(next){
+  function selectView(next){
     clearPlayback();
-    year=next;
+    view=next;
     month='';
     render();
   }
@@ -226,8 +267,8 @@ main{max-width:640px;margin:0 auto;padding:16px 14px calc(210px + env(safe-area-
     month=next;
     render();
   }
-  document.getElementById('year-2025').addEventListener('click', function(e){ e.preventDefault(); selectYear('2025'); });
-  document.getElementById('year-2026').addEventListener('click', function(e){ e.preventDefault(); selectYear('2026'); });
+  document.getElementById('year-2026').addEventListener('click', function(e){ e.preventDefault(); selectView('2026'); });
+  document.getElementById('nav-previous').addEventListener('click', function(e){ e.preventDefault(); selectView('previous'); });
   monthNav.addEventListener('click', function(e){
     var btn=e.target.closest('button[data-month]');
     if(!btn) return;
@@ -238,11 +279,12 @@ main{max-width:640px;margin:0 auto;padding:16px 14px calc(210px + env(safe-area-
   document.getElementById('backToMonths').addEventListener('click', function(e){
     e.preventDefault();
     clearPlayback();
+    view='2026';
     month='';
     render();
   });
   function arm(file, text){
-    list.querySelectorAll('.ettoDate').forEach(function(b){ b.classList.toggle('is-current', b.getAttribute('data-file')===file); });
+    document.querySelectorAll('.ettoDate').forEach(function(b){ b.classList.toggle('is-current', b.getAttribute('data-file')===file); });
     if(audio.dataset.file!==file){
       audio.pause();
       while(audio.firstChild) audio.removeChild(audio.firstChild);
@@ -256,17 +298,20 @@ main{max-width:640px;margin:0 auto;padding:16px 14px calc(210px + env(safe-area-
     }
     label.textContent=text;
   }
-  list.addEventListener('click', function(e){
+  function onDateClick(e){
     if(gestureOnPlayer){ gestureOnPlayer=false; e.preventDefault(); e.stopPropagation(); return; }
     var btn=e.target.closest('button.ettoDate');
-    if(!btn || !list.contains(btn)) return;
+    if(!btn) return;
     var item=btn.closest('.ettoItem');
     if(!item || item.hasAttribute('hidden')) return;
+    if(item.parentElement && item.parentElement.hasAttribute && item.parentElement.hasAttribute('hidden')) return;
     e.preventDefault();
     arm(btn.getAttribute('data-file'), btn.textContent.trim());
     var p=audio.play();
     if(p && p.catch) p.catch(function(){});
-  });
+  }
+  list.addEventListener('click', onDateClick);
+  previousList.addEventListener('click', onDateClick);
   function transport(fn){
     return function(e){ e.preventDefault(); e.stopPropagation(); fn(); };
   }

@@ -18,15 +18,19 @@ buttons = re.findall(
 )
 assert len(buttons) == 23, len(buttons)
 files = list(AUDIO.glob("*.m4a"))
-assert len(files) == 23, len(files)
-assert {p.name for p in files} == {b[2] for b in buttons}
+assert len(files) == 24, len(files)
+assert {p.name for p in files} == {b[2] for b in buttons} | {"first-commentary.m4a"}
 sections = re.findall(r'data-year="(\d{4})" data-month="(\d+)"', HTML)
 assert len(sections) == 23
 month_counts = Counter(m for y, m in sections)
 assert month_counts == {"11": 2, "10": 5, "9": 4, "8": 3, "6": 3, "5": 6}, month_counts
 assert {y for y, m in sections} == {"2026"}
-assert ">2025년<" in HTML and ">2026년<" in HTML
-assert "등록된 해설이 없습니다" in HTML
+assert ">2025년<" not in HTML
+assert HTML.find(">2026년<") < HTML.find(">이전<")
+assert ">첫해설<" in HTML
+assert 'data-file="first-commentary.m4a"' in HTML
+assert "2024년 8월 18일 (일) 16:51" in HTML
+assert "20240818" not in HTML and "165103" not in HTML
 assert HTML.count("<audio ") == 1 and 'id="playerAudio"' in HTML
 assert "position:fixed" in HTML and 'id="pauseBtn"' in HTML and 'id="stopBtn"' in HTML
 assert "source.src='audio/etto/'" in HTML and "source.type='audio/mp4'" in HTML
@@ -58,12 +62,36 @@ assert "samsung" not in HTML.lower()
 assert not re.search(r'<source src="https?:', HTML)
 
 # Latest-first, and same-date rows differ by time.
+ORDINALS = ["첫째", "둘째", "셋째", "넷째", "다섯째"]
+WEEKDAYS = ["월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"]
+MARKS = "①②③④⑤⑥⑦⑧⑨⑩"
+same_day = {}
+for date, time, filename, _label in buttons:
+    same_day.setdefault(date, []).append((time, filename))
+for date in same_day:
+    same_day[date].sort()
+
+def ordinal_label(date, time, filename):
+    y, m, d = (int(x) for x in date.split("-"))
+    weekday = WEEKDAYS[datetime.date(y, m, d).weekday()]
+    text = f"{ORDINALS[(d - 1) // 7]} 주 {weekday}"
+    siblings = same_day[date]
+    if len(siblings) > 1:
+        text += " " + MARKS[siblings.index((time, filename))]
+    return text
+
 stamps = []
 for date, time, filename, label in buttons:
-    y, m, d = date.split("-")
-    expect = f"{int(y)}년 {int(m)}월 {int(d)}일 {time}"
-    assert label == expect, (label, expect)
+    expect = ordinal_label(date, time, filename)
+    assert label == expect, (filename, label, expect)
+    assert "년" not in label and ":" not in label
     stamps.append((date, time, filename))
+assert ordinal_label("2026-05-31", "17:30:58", "etto_17.m4a") == "다섯째 주 일요일"
+assert ordinal_label("2026-05-29", "20:45:47", "etto_03.m4a") == "다섯째 주 금요일"
+assert ordinal_label("2026-11-06", "20:45:34", "etto_02.m4a") == "첫째 주 금요일"
+assert ordinal_label("2026-10-11", "17:08:21", "etto_05.m4a") == "둘째 주 일요일 ①"
+assert ordinal_label("2026-10-11", "17:23:57", "etto_04.m4a") == "둘째 주 일요일 ②"
+assert ">첫해설<" in HTML
 assert stamps == sorted(stamps, reverse=True)
 dates = [s[0] for s in stamps]
 assert len(set(dates)) == 20
@@ -102,6 +130,17 @@ for date, time, filename, label in buttons:
         sdt = datetime.datetime.strptime(stream_raw, "%Y-%m-%dT%H:%M:%S.000000Z").replace(tzinfo=datetime.timezone.utc)
         assert int((dt - sdt).total_seconds()) == 67
         assert time == "17:17:39"
+
+first = json.loads(subprocess.check_output(
+    ["ffprobe", "-v", "error", "-show_format", "-show_streams", "-print_format", "json", str(AUDIO / "first-commentary.m4a")],
+    text=True,
+))
+assert len(first["streams"]) == 1
+fs = first["streams"][0]
+assert fs["codec_name"] == "aac" and fs.get("profile") == "LC"
+assert abs(float(first["format"]["duration"]) - 15.533) < 0.01
+assert "creation_time" not in (first["format"].get("tags") or {})
+assert "creation_time" not in (fs.get("tags") or {})
 
 raw_bytes = b"".join(p.read_bytes() for p in files)
 for needle in (b"com.samsung", b"com.android", b"MYBOX", b"resourceKey"):
