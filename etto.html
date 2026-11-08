@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
+<title>에떠해설</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,'Noto Sans KR','Noto Sans',sans-serif;background:linear-gradient(180deg,#eef2ff,#f6f7f9);color:#17202a;min-height:100svh}
+header{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid #ddd;padding:12px 14px}
+.headRow{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.headLabel{font-size:18px;font-weight:800}
+.homeBtn{font-size:15px;font-weight:800;background:#17202a;color:#fff;border:1px solid #17202a;border-radius:9px;padding:7px 14px;min-height:36px;white-space:nowrap;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+main{max-width:640px;margin:0 auto;padding:16px 14px 32px}
+.note{font-size:13px;color:#666;line-height:1.6;background:#fff;border:1px dashed #bbb;border-radius:10px;padding:10px 12px;margin:0 0 14px}
+.ettoList{display:flex;flex-direction:column;gap:12px}
+.ettoItem{background:#fff;border:1px solid #dde2e8;border-radius:14px;padding:12px}
+.ettoDate{font-size:18px;font-weight:800;padding:14px 12px;min-height:56px;border-radius:12px;width:100%;background:#2456a6;color:#fff;border:1px solid #2456a6;cursor:pointer}
+.ettoDate:active{background:#dceaff;color:#17202a;border-color:#5b8def}
+.ettoDate:focus-visible,.homeBtn:focus-visible{outline:3px solid #5b8def;outline-offset:3px}
+.ettoDur{margin:8px 0 0;font-size:13px;color:#667;font-weight:700}
+.ettoCaveat{margin:6px 0 0;font-size:12.5px;line-height:1.5;color:#8a5a00}
+audio{width:100%;margin-top:8px;display:block}
+@media(min-width:700px){.ettoDate{font-size:20px}}
+</style></head><body>
+<header>
+ <div class="headRow">
+  <button class="homeBtn" type="button" id="backBtn">뒤로</button>
+  <a class="homeBtn" href="jw1.html">홈으로</a>
+  <div class="headLabel">에떠해설</div>
+ </div>
+</header>
+<main>
+ <p class="note" id="dateNote">날짜는 파일 생성일 기준입니다.</p>
+ <div class="ettoList" id="ettoList">
+  <section class="ettoItem">
+    <button type="button" class="ettoDate" data-audio="etto-audio-11" data-date="2026-11-08" data-time="16:08:53" data-file="etto_11.m4a">2026년 11월 8일 16:08:53</button>
+    <p class="ettoDur">길이 29.76초</p>
+    <p class="ettoCaveat" id="caveat-11">이 표시는 파일 생성 시각입니다. 다시 저장된 파일일 수 있어 원래 해설 시각으로 단정하지 않습니다.</p>
+    <audio id="etto-audio-11" controls preload="none" playsinline aria-label="2026년 11월 8일 16:08:53" aria-describedby="caveat-11">
+      <source src="audio/etto/etto_11.m4a" type="audio/mp4">
+    </audio>
+  </section>
+  <section class="ettoItem">
+    <button type="button" class="ettoDate" data-audio="etto-audio-02" data-date="2026-11-06" data-time="20:45:34" data-file="etto_02.m4a">2026년 11월 6일 20:45:34</button>
+    <p class="ettoDur">길이 24.9초</p>
+    <audio id="etto-audio-02" controls preload="none" playsinline aria-label="2026년 11월 6일 20:45:34">
+      <source src="audio/etto/etto_02.m4a" type="audio/mp4">
+    </audio>
+  </section>
+  <section class="ettoItem">
+    <button type="button" class="ettoDate" data-audio="etto-audio-04" data-date="2026-10-11" data-time="17:23:57" data-file="etto_04.m4a">2026년 10월 11일 17:23:57</button>
+    <p class="ettoDur">길이 39.04초</p>
+    <audio id="etto-audio-04" controls preload="none" playsinline aria-label="2026년 10월 11일 17:23:57">
+      <source src="audio/etto/etto_04.m4a" type="audio/mp4">
+    </audio>
+  </section>
+  <section class="ettoItem">
+    <button type="button" class="ettoDate" data-audio="etto-audio-05" data-date="2026-10-11" data-time="17:08:21" data-file="etto_05.m4a">2026년 10월 11일 17:08:21</button>
+    <p class="ettoDur">길이 22.61초</p>
+    <audio id="etto-audio-05" controls preload="none" playsinline aria-label="2026년 10월 11일 17:08:21">
+      <source src="audio/etto/etto_05.m4a" type="audio/mp4">
+    </audio>
+  </section>
+  <section class="ettoItem">
+    <button type="button" class="ettoDate" data-audio="etto-audio-22" data-date="2026-10-09" data-time="20:58:37" data-file="etto_22.m4a">2026년 10월 9일 20:58:37</button>
+    <p class="ettoDur">길이 25.94초</p>
+    <audio id="etto-audio-22" controls preload="none" playsinline aria-label="2026년 10월 9일 20:58:37">
+      <source src="audio/etto/etto_22.m4a" type="audio/mp4">
+    </audio>
+  </section>
+  <section class="ettoItem">
+    <button type="button" class="ettoDate" data-audio="etto-audio-19" data-date="2026-10-09" data-time="19:55:39" data-file="etto_19.m4a">2026년 10월 9일 19:55:39</button>
+    <p class="ettoDur">길이 30.72초</p>
+    <audio id="etto-audio-19" controls preload="none" playsinline aria-label="2026년 10월 9일 19:55:39">
+      <source src="audio/etto/etto_19.m4a" type="audio/mp4">
+    </audio>
+  </section>
+  <section class="ettoItem">
+    <button type="button" class="ettoDate" data-audio="etto-audio-20" data-date="2026-10-04" data-time="16:39:44" data-file="etto_20.m4a">2026년 10월 4일 16:39:44</button>
+    <p class="ettoDur">길이 19.99초</p>
+    <audio id="etto-audio-20" controls preload="none" playsinline aria-label="2026년 10월 4일 16:39:44">
+      <source src="audio/etto/etto_20.m4a" type="audio/mp4">
+    </audio>
+  </section>
+  <section class="ettoItem">
+    <button type="button" class="ettoDate" data-audio="etto-audio-14" data-date="2026-09-27" data-time="16:45:49" data-file="etto_14.m4a">2026년 9월 27일 16:45:49</button>
+    <p class="ettoDur">길이 20.16초</p>
+    <audio id="etto-audio-14" controls preload="none" playsinline aria-label="2026년 9월 27일 16:45:49">
+      <source src="audio/etto/etto_14.m4a" type="audio/mp4">
+    </audio>
+  </section>
+  <section class="ettoItem">
+    <button type="button" class="ettoDate" data-audio="etto-audio-23" data-date="2026-09-20" data-time="17:03:26" data-file="etto_23.m4a">2026년 9월 20일 17:03:26</button>
+    <p class="ettoDur">길이 18.79초</p>
+    <audio id="etto-audio-23" controls preload="none" playsinline aria-label="2026년 9월 20일 17:03:26">
+      <source src="audio/etto/etto_23.m4a" type="audio/mp4">
+    </audio>
+  </section>
+  <section class="ettoItem">
+    <button type="button" class="ettoDate" data-audio="etto-audio-21" data-date="2026-09-13" data-time="16:49:30" data-file="etto_21.m4a">2026년 9월 13일 16:49:30</button>
+    <p class="ettoDur">길이 35.82초</p>
+    <audio id="etto-audio-21" controls preload="none" playsinline aria-label="2026년 9월 13일 16:49:30">
+      <source src="audio/etto/etto_21.m4a" type="audio/mp4">
+    </audio>
+  </section>
+  <section class="ettoItem">
+    <button type="button" class="ettoDate" data-audio="etto-audio-10" data-date="2026-09-04" data-time="19:50:42" data-file="etto_10.m4a">2026년 9월 4일 19:50:42</button>
+    <p class="ettoDur">길이 37.1초</p>
+    <audio id="etto-audio-10" controls preload="none" playsinline aria-label="2026년 9월 4일 19:50:42">
+      <source src="audio/etto/etto_10.m4a" type="audio/mp4">
+    </audio>
+  </section>
+  <section class="ettoItem">
+    <button type="button" class="ettoDate" data-audio="etto-audio-06" data-date="2026-08-28" data-time="20:47:01" data-file="etto_06.m4a">2026년 8월 28일 20:47:01</button>
+    <p class="ettoDur">길이 36.37초</p>
+    <audio id="etto-audio-06" controls preload="none" playsinline aria-label="2026년 8월 28일 20:47:01">
+      <source src="audio/etto/etto_06.m4a" type="audio/mp4">
+    </audio>
+  </section>
+  <section class="ettoItem">
+    <button type="button" class="ettoDate" data-audio="etto-audio-07" data-date="2026-08-23" data-time="17:17:39" data-file="etto_07.m4a">2026년 8월 23일 17:17:39</button>
+    <p class="ettoDur">길이 37.44초</p>
+    <p class="ettoCaveat" id="caveat-07">이 표시는 파일 생성 시각입니다. 컨테이너와 트랙 생성 시각이 약 67초 달라 원래 시각으로 단정하지 않습니다.</p>
+    <audio id="etto-audio-07" controls preload="none" playsinline aria-label="2026년 8월 23일 17:17:39" aria-describedby="caveat-07">
+      <source src="audio/etto/etto_07.m4a" type="audio/mp4">
+    </audio>
+  </section>
+  <section class="ettoItem">
+    <button type="button" class="ettoDate" data-audio="etto-audio-12" data-date="2026-08-21" data-time="19:54:39" data-file="etto_12.m4a">2026년 8월 21일 19:54:39</button>
+    <p class="ettoDur">길이 35.24초</p>
+    <audio id="etto-audio-12" controls preload="none" playsinline aria-label="2026년 8월 21일 19:54:39">
+      <source src="audio/etto/etto_12.m4a" type="audio/mp4">
+    </audio>
+  </section>
+  <section class="ettoItem">
+    <button type="button" class="ettoDate" data-audio="etto-audio-01" data-date="2026-06-07" data-time="17:27:48" data-file="etto_01.m4a">2026년 6월 7일 17:27:48</button>
+    <p class="ettoDur">길이 23.36초</p>
+    <audio id="etto-audio-01" controls preload="none" playsinline aria-label="2026년 6월 7일 17:27:48">
+      <source src="audio/etto/etto_01.m4a" type="audio/mp4">
+    </audio>
+  </section>
+  <section class="ettoItem">
+    <button type="button" class="ettoDate" data-audio="etto-audio-15" data-date="2026-06-07" data-time="17:25:11" data-file="etto_15.m4a">2026년 6월 7일 17:25:11</button>
+    <p class="ettoDur">길이 16.19초</p>
+    <audio id="etto-audio-15" controls preload="none" playsinline aria-label="2026년 6월 7일 17:25:11">
+      <source src="audio/etto/etto_15.m4a" type="audio/mp4">
+    </audio>
+  </section>
+  <section class="ettoItem">
+    <button type="button" class="ettoDate" data-audio="etto-audio-13" data-date="2026-06-05" data-time="19:50:51" data-file="etto_13.m4a">2026년 6월 5일 19:50:51</button>
+    <p class="ettoDur">길이 38.42초</p>
+    <audio id="etto-audio-13" controls preload="none" playsinline aria-label="2026년 6월 5일 19:50:51">
+      <source src="audio/etto/etto_13.m4a" type="audio/mp4">
+    </audio>
+  </section>
+  <section class="ettoItem">
+    <button type="button" class="ettoDate" data-audio="etto-audio-17" data-date="2026-05-31" data-time="17:30:58" data-file="etto_17.m4a">2026년 5월 31일 17:30:58</button>
+    <p class="ettoDur">길이 40.94초</p>
+    <audio id="etto-audio-17" controls preload="none" playsinline aria-label="2026년 5월 31일 17:30:58">
+      <source src="audio/etto/etto_17.m4a" type="audio/mp4">
+    </audio>
+  </section>
+  <section class="ettoItem">
+    <button type="button" class="ettoDate" data-audio="etto-audio-03" data-date="2026-05-29" data-time="20:45:47" data-file="etto_03.m4a">2026년 5월 29일 20:45:47</button>
+    <p class="ettoDur">길이 35.9초</p>
+    <audio id="etto-audio-03" controls preload="none" playsinline aria-label="2026년 5월 29일 20:45:47">
+      <source src="audio/etto/etto_03.m4a" type="audio/mp4">
+    </audio>
+  </section>
+  <section class="ettoItem">
+    <button type="button" class="ettoDate" data-audio="etto-audio-16" data-date="2026-05-10" data-time="17:26:02" data-file="etto_16.m4a">2026년 5월 10일 17:26:02</button>
+    <p class="ettoDur">길이 47.91초</p>
+    <audio id="etto-audio-16" controls preload="none" playsinline aria-label="2026년 5월 10일 17:26:02">
+      <source src="audio/etto/etto_16.m4a" type="audio/mp4">
+    </audio>
+  </section>
+  <section class="ettoItem">
+    <button type="button" class="ettoDate" data-audio="etto-audio-18" data-date="2026-05-08" data-time="20:53:31" data-file="etto_18.m4a">2026년 5월 8일 20:53:31</button>
+    <p class="ettoDur">길이 74.67초</p>
+    <audio id="etto-audio-18" controls preload="none" playsinline aria-label="2026년 5월 8일 20:53:31">
+      <source src="audio/etto/etto_18.m4a" type="audio/mp4">
+    </audio>
+  </section>
+  <section class="ettoItem">
+    <button type="button" class="ettoDate" data-audio="etto-audio-09" data-date="2026-05-03" data-time="17:25:44" data-file="etto_09.m4a">2026년 5월 3일 17:25:44</button>
+    <p class="ettoDur">길이 60.35초</p>
+    <audio id="etto-audio-09" controls preload="none" playsinline aria-label="2026년 5월 3일 17:25:44">
+      <source src="audio/etto/etto_09.m4a" type="audio/mp4">
+    </audio>
+  </section>
+  <section class="ettoItem">
+    <button type="button" class="ettoDate" data-audio="etto-audio-08" data-date="2026-05-01" data-time="20:42:44" data-file="etto_08.m4a">2026년 5월 1일 20:42:44</button>
+    <p class="ettoDur">길이 36.93초</p>
+    <audio id="etto-audio-08" controls preload="none" playsinline aria-label="2026년 5월 1일 20:42:44">
+      <source src="audio/etto/etto_08.m4a" type="audio/mp4">
+    </audio>
+  </section>
+ </div>
+</main>
+<script>
+(function(){
+  var list=document.getElementById('ettoList');
+  var audios=Array.prototype.slice.call(list.querySelectorAll('audio'));
+  function stopOthers(current){
+    audios.forEach(function(a){ if(a!==current) a.pause(); });
+  }
+  list.addEventListener('play', function(e){
+    if(e.target && e.target.tagName==='AUDIO') stopOthers(e.target);
+  }, true);
+  list.addEventListener('click', function(e){
+    var btn=e.target.closest('button[data-audio]');
+    if(!btn || !list.contains(btn)) return;
+    var audio=document.getElementById(btn.getAttribute('data-audio'));
+    if(!audio) return;
+    stopOthers(audio);
+    var p=audio.play();
+    if(p && p.catch) p.catch(function(){});
+  });
+  window.addEventListener('pagehide', function(){ audios.forEach(function(a){ a.pause(); }); });
+  document.getElementById('backBtn').addEventListener('click', function(){
+    var ref=document.referrer||'';
+    if(ref && history.length>1) history.back();
+    else location.href='jw1.html';
+  });
+})();
+</script>
+</body></html>
