@@ -5,6 +5,17 @@ const BASE = process.env.ETTO_BASE || 'http://127.0.0.1:8765';
 const OUT = process.env.ETTO_SHOTS || '/opt/cursor/artifacts';
 const CHROME = process.env.CHROME || '/usr/bin/google-chrome';
 
+function ordinalLabel(date, time, rows) {
+  const ords = ['첫째', '둘째', '셋째', '넷째', '다섯째'];
+  const wds = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
+  const marks = '①②③④⑤⑥⑦⑧⑨⑩';
+  const [y, m, d] = date.split('-').map(Number);
+  const text = `${ords[Math.floor((d - 1) / 7)]} 주 ${wds[new Date(Date.UTC(y, m - 1, d)).getUTCDay()]}`;
+  const siblings = rows.filter(r => r[1] === date).slice().sort((a, b) => a[2].localeCompare(b[2]));
+  if (siblings.length < 2) return text;
+  return text + ' ' + marks[siblings.findIndex(r => r[2] === time)];
+}
+
 const EXPECTED = [
   ['etto_11.m4a', '2026-11-08', '16:08:53', '2026년 11월 8일 16:08:53'],
   ['etto_02.m4a', '2026-11-06', '20:45:34', '2026년 11월 6일 20:45:34'],
@@ -185,7 +196,9 @@ async function homeFacts(page) {
   assert(list.back === '뒤로' && list.home === 'jw1.html' && list.homeText === '홈으로');
   list.buttons.forEach((b, i) => {
     const exp = EXPECTED[i];
-    assert(b.file === exp[0] && b.date === exp[1] && b.time === exp[2] && b.text === exp[3], JSON.stringify({ b, exp }));
+    const label = ordinalLabel(exp[1], exp[2], EXPECTED);
+    assert(b.file === exp[0] && b.date === exp[1] && b.time === exp[2] && b.text === label, JSON.stringify({ b, label }));
+    assert(!b.text.includes('년') && !b.text.includes(':'), b.text);
   });
   const caveat = await page.evaluate(() => ({
     n11: document.getElementById('caveat-11').textContent,

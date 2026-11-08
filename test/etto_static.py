@@ -62,12 +62,36 @@ assert "samsung" not in HTML.lower()
 assert not re.search(r'<source src="https?:', HTML)
 
 # Latest-first, and same-date rows differ by time.
+ORDINALS = ["첫째", "둘째", "셋째", "넷째", "다섯째"]
+WEEKDAYS = ["월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"]
+MARKS = "①②③④⑤⑥⑦⑧⑨⑩"
+same_day = {}
+for date, time, filename, _label in buttons:
+    same_day.setdefault(date, []).append((time, filename))
+for date in same_day:
+    same_day[date].sort()
+
+def ordinal_label(date, time, filename):
+    y, m, d = (int(x) for x in date.split("-"))
+    weekday = WEEKDAYS[datetime.date(y, m, d).weekday()]
+    text = f"{ORDINALS[(d - 1) // 7]} 주 {weekday}"
+    siblings = same_day[date]
+    if len(siblings) > 1:
+        text += " " + MARKS[siblings.index((time, filename))]
+    return text
+
 stamps = []
 for date, time, filename, label in buttons:
-    y, m, d = date.split("-")
-    expect = f"{int(y)}년 {int(m)}월 {int(d)}일 {time}"
-    assert label == expect, (label, expect)
+    expect = ordinal_label(date, time, filename)
+    assert label == expect, (filename, label, expect)
+    assert "년" not in label and ":" not in label
     stamps.append((date, time, filename))
+assert ordinal_label("2026-05-31", "17:30:58", "etto_17.m4a") == "다섯째 주 일요일"
+assert ordinal_label("2026-05-29", "20:45:47", "etto_03.m4a") == "다섯째 주 금요일"
+assert ordinal_label("2026-11-06", "20:45:34", "etto_02.m4a") == "첫째 주 금요일"
+assert ordinal_label("2026-10-11", "17:08:21", "etto_05.m4a") == "둘째 주 일요일 ①"
+assert ordinal_label("2026-10-11", "17:23:57", "etto_04.m4a") == "둘째 주 일요일 ②"
+assert ">첫해설<" in HTML
 assert stamps == sorted(stamps, reverse=True)
 dates = [s[0] for s in stamps]
 assert len(set(dates)) == 20

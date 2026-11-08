@@ -115,6 +115,16 @@ async function state(page) {
     s = await state(page);
     assert(JSON.stringify(s.visible) === JSON.stringify(grouped[month]), month + ' ' + JSON.stringify(s.visible));
     assert(s.paused && !s.file, 'month select started audio ' + month);
+    s.visibleText.forEach(t => assert(!t.includes('년') && !t.includes(':'), 'date still in button ' + t));
+    if (month === '10') {
+      assert(s.visibleText.includes('둘째 주 일요일 ②') && s.visibleText.includes('둘째 주 일요일 ①'), s.visibleText.join('|'));
+      assert(s.visibleText.indexOf('둘째 주 일요일 ②') < s.visibleText.indexOf('둘째 주 일요일 ①'));
+      shots.push(await shot(page, 'screenshot_mobile_october_ordinal_v4.png'));
+    }
+    if (month === '5') {
+      assert(s.visibleText.includes('다섯째 주 금요일') && s.visibleText.includes('다섯째 주 일요일'), s.visibleText.join('|'));
+      shots.push(await shot(page, 'screenshot_mobile_may_fifth_week_v4.png'));
+    }
     assert(s.monthDisplay === 'none' && s.dateHeadDisplay === 'flex', 'month chrome ' + month + ' ' + s.monthDisplay);
     assert(Math.abs(s.playerH - playerH) < 1, 'player jumped on month ' + month);
     if (month !== '5') await page.click('#backToMonths');
@@ -126,7 +136,8 @@ async function state(page) {
   await page.waitForFunction(() => document.getElementById('playerAudio').dataset.file === 'etto_11.m4a' && !document.getElementById('playerAudio').paused);
   s = await state(page);
   assert(Math.abs(s.playerH - playerH) < 1, 'player jumped when playback started');
-  shots.push(await shot(page, 'screenshot_mobile_dates_player_v2.png'));
+  assert(s.label === '둘째 주 일요일' && !s.label.includes(':'), s.label);
+  shots.push(await shot(page, 'screenshot_mobile_november_ordinal_v4.png'));
 
   async function edgeTap(sel, times) {
     for (let i = 0; i < times; i++) {
@@ -236,7 +247,7 @@ async function state(page) {
   await page.waitForSelector('button[data-month="8"]', { timeout: 3000 });
   await page.click('button[data-month="8"]');
   const aug = await page.evaluate(() => [...document.querySelectorAll('.ettoDate')].filter(b => !b.closest('.ettoItem').hasAttribute('hidden')).map(b => b.textContent.trim()));
-  assert(aug[1].includes('8월 23일 17:17:39'), aug.join('|'));
+  assert(aug[1] === '넷째 주 일요일', aug.join('|'));
   assert((await page.$eval('#caveat-07', el => el.textContent)).includes('약 67초'));
 
   assert(errors.length === 0, errors.join('\n'));
