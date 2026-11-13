@@ -41,6 +41,7 @@ async function state(page) {
       previousPressed: document.getElementById('nav-previous').getAttribute('aria-pressed'),
       previousText: document.getElementById('nav-previous').textContent.trim(),
       y2026: document.getElementById('year-2026').getAttribute('aria-pressed'),
+      crumb: document.getElementById('monthCrumb').textContent.trim(),
       firstLabel: document.getElementById('firstCommentary').textContent.trim(),
       firstDate: document.getElementById('firstCommentaryDate').textContent.trim(),
       audioCount: document.querySelectorAll('audio').length,
@@ -69,10 +70,13 @@ async function state(page) {
   async function openAt(vp) {
     await page.setViewport({ ...vp, isMobile: true, hasTouch: true, deviceScaleFactor: 2 });
     await page.goto(`${BASE}/etto.html`, { waitUntil: 'domcontentloaded', timeout: 20000 });
-    await page.waitForSelector('#monthNav button');
+    await page.waitForFunction(() => {
+      const c = document.getElementById('monthCrumb');
+      return c && c.textContent.trim().length > 0;
+    });
   }
 
-  await openAt({ width: 390, height: 844 });
+  await openAt({ width: 412, height: 900 });
   const grouped = await page.evaluate(() => {
     const map = {};
     document.querySelectorAll('#ettoList .ettoItem').forEach(el => {
@@ -88,12 +92,26 @@ async function state(page) {
   let s = await state(page);
   assert(s.y2026 === 'true' && s.previousPressed === 'false' && s.previousText === '이전', 'default year');
   assert(s.audioCount === 1, 'multiple players');
-  assert(JSON.stringify(s.months) === JSON.stringify(['11월', '10월', '9월', '8월', '6월', '5월']), JSON.stringify(s.months));
-  assert(s.visible.length === 0 && s.paused && !s.file, 'autoplay or dates visible');
-  assert(s.monthDisplay === 'flex' && s.dateHeadDisplay === 'none', 'month list chrome ' + s.monthDisplay + ' ' + s.dateHeadDisplay);
+  const openMonth = await page.evaluate(() => {
+    const months = [...new Set([...document.querySelectorAll('#ettoList .ettoItem')].map(el => el.dataset.month))].sort((a, b) => Number(b) - Number(a));
+    const now = new Date();
+    const key = String(now.getMonth() + 1);
+    return (String(now.getFullYear()) === '2026' && months.includes(key)) ? key : months[0];
+  });
+  assert(JSON.stringify(s.visible) === JSON.stringify(grouped[openMonth]), 'opened ' + openMonth + ' ' + JSON.stringify(s.visible));
+  assert(s.crumb === '2026년 ' + Number(openMonth) + '월', s.crumb);
+  assert(s.paused && !s.file, 'autoplay on load');
+  assert(s.monthDisplay === 'none' && s.dateHeadDisplay === 'flex', 'month list chrome ' + s.monthDisplay + ' ' + s.dateHeadDisplay);
   assert(Math.abs(s.playerBottom - s.vh) < 1, 'player not pinned ' + s.playerBottom);
   const playerH = s.playerH;
-  shots.push(await shot(page, 'screenshot_mobile_2026_months_v3.png'));
+  shots.push(await shot(page, 'screenshot_phone_412x900_month_on_load.png'));
+  await page.click('#backToMonths');
+  s = await state(page);
+  assert(JSON.stringify(s.months) === JSON.stringify(['11월', '10월', '9월', '8월', '6월', '5월']), JSON.stringify(s.months));
+  assert(s.visible.length === 0 && s.paused && !s.file, 'month list started audio');
+  await page.click('button[data-month="11"]');
+  s = await state(page);
+  assert(JSON.stringify(s.visible) === JSON.stringify(grouped['11']) && s.paused && !s.file, '11월 button ' + JSON.stringify(s.visible));
 
   await page.click('#nav-previous');
   s = await state(page);
@@ -225,6 +243,7 @@ async function state(page) {
   assert(s.paused && !s.file, 'play with nothing loaded started audio');
 
   await openAt({ width: 320, height: 640 });
+  await page.click('#backToMonths');
   shots.push(await shot(page, 'screenshot_mobile_narrow_months_v2.png'));
   await page.click('button[data-month="10"]');
   s = await state(page);
@@ -249,6 +268,36 @@ async function state(page) {
   const aug = await page.evaluate(() => [...document.querySelectorAll('.ettoDate')].filter(b => !b.closest('.ettoItem').hasAttribute('hidden')).map(b => b.textContent.trim()));
   assert(aug[1] === '넷째 주 일요일', aug.join('|'));
   assert((await page.$eval('#caveat-07', el => el.textContent)).includes('약 67초'));
+
+  async function openedMonth(iso) {
+    const p = await browser.newPage();
+    await p.setViewport({ width: 412, height: 900, isMobile: true, hasTouch: true });
+    await p.evaluateOnNewDocument((stamp) => {
+      const Orig = Date;
+      function Patched(...args) {
+        if (args.length === 0) return new Orig(stamp);
+        return new Orig(...args);
+      }
+      Patched.prototype = Orig.prototype;
+      Patched.now = () => new Orig(stamp).getTime();
+      Patched.parse = Orig.parse;
+      Patched.UTC = Orig.UTC;
+      window.Date = Patched;
+    }, iso);
+    await p.goto(`${BASE}/etto.html`, { waitUntil: 'domcontentloaded', timeout: 20000 });
+    const info = await p.evaluate(() => ({
+      crumb: document.getElementById('monthCrumb').textContent.trim(),
+      files: [...document.querySelectorAll('#ettoList .ettoDate')].filter(b => !b.closest('[hidden]')).map(b => b.dataset.file),
+      paused: document.getElementById('playerAudio').paused,
+      file: document.getElementById('playerAudio').dataset.file || '',
+    }));
+    await p.close();
+    return info;
+  }
+  const july = await openedMonth('2026-07-15T12:00:00+09:00');
+  assert(july.crumb === '2026년 11월' && july.files[0] === 'etto_24.m4a' && july.paused && !july.file, JSON.stringify(july));
+  const october = await openedMonth('2026-10-04T12:00:00+09:00');
+  assert(october.crumb === '2026년 10월' && october.files[0] === 'etto_04.m4a' && october.paused && !october.file, JSON.stringify(october));
 
   assert(errors.length === 0, errors.join('\n'));
   console.log(JSON.stringify({ ok: true, counts, shots }, null, 2));

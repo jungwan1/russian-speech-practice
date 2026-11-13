@@ -195,6 +195,14 @@ main{max-width:640px;margin:0 auto;padding:16px 14px calc(210px + env(safe-area-
     items().forEach(function(el){ if(el.getAttribute('data-year')===y) seen[el.getAttribute('data-month')]=true; });
     return Object.keys(seen).sort(function(a,b){ return Number(b)-Number(a); });
   }
+  function initialMonth(){
+    var months=monthsFor('2026');
+    if(!months.length) return '';
+    var now=new Date();
+    var key=String(now.getMonth()+1);
+    if(String(now.getFullYear())==='2026' && months.indexOf(key)>=0) return key;
+    return months[0];
+  }
   function clearPlayback(){
     audio.pause();
     audio.removeAttribute('src');
@@ -341,6 +349,7 @@ main{max-width:640px;margin:0 auto;padding:16px 14px calc(210px + env(safe-area-
     if(ref && history.length>1) history.back();
     else location.href='jw1.html';
   });
+  month=initialMonth();
   render();
 })();
 </script>

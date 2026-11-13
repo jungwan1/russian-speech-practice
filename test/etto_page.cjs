@@ -188,8 +188,20 @@ async function homeFacts(page) {
   });
   assert(list.note === '날짜는 파일 생성일 기준입니다.', list.note);
   assert(list.buttons.length === 24, String(list.buttons.length));
-  assert(list.visibleDates === 0, 'dates shown before a month');
-  assert(JSON.stringify(list.months) === JSON.stringify(['11월', '10월', '9월', '8월', '6월', '5월']), JSON.stringify(list.months));
+  const opened = await page.evaluate(() => {
+    const months = [...new Set([...document.querySelectorAll('#ettoList .ettoItem')].map(el => el.dataset.month))].sort((a, b) => Number(b) - Number(a));
+    const now = new Date();
+    const key = String(now.getMonth() + 1);
+    const chosen = (String(now.getFullYear()) === '2026' && months.includes(key)) ? key : months[0];
+    const visible = [...document.querySelectorAll('#ettoList .ettoDate')].filter(b => !b.closest('[hidden]')).map(b => b.dataset.file);
+    return { chosen, visible, crumb: document.getElementById('monthCrumb').textContent.trim(), paused: document.getElementById('playerAudio').paused, file: document.getElementById('playerAudio').dataset.file || '' };
+  });
+  assert(opened.paused && !opened.file, 'autoplay on load');
+  assert(opened.crumb === '2026년 ' + Number(opened.chosen) + '월', opened.crumb);
+  assert(opened.visible.length > 0, 'current month list not open');
+  await page.click('#backToMonths');
+  const monthNames = await page.evaluate(() => [...document.querySelectorAll('#monthNav button')].map(b => b.textContent.trim()));
+  assert(JSON.stringify(monthNames) === JSON.stringify(['11월', '10월', '9월', '8월', '6월', '5월']), JSON.stringify(monthNames));
   assert(list.year2026 === 'true' && list.previous === '이전');
   const no2025 = await page.evaluate(() => !document.body.innerText.includes('2025년'));
   assert(no2025, '2025년 still shown');
