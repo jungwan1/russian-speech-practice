@@ -83,8 +83,8 @@ async function state(page) {
     return map;
   });
   const counts = Object.fromEntries(Object.entries(grouped).map(([m, files]) => [m, files.length]));
-  assert(JSON.stringify(counts) === JSON.stringify({ 11: 2, 10: 5, 9: 4, 8: 3, 6: 3, 5: 6 }), JSON.stringify(counts));
-  assert(Object.values(grouped).flat().length === 23);
+  assert(JSON.stringify(counts) === JSON.stringify({ 11: 3, 10: 5, 9: 4, 8: 3, 6: 3, 5: 6 }), JSON.stringify(counts));
+  assert(Object.values(grouped).flat().length === 24);
   let s = await state(page);
   assert(s.y2026 === 'true' && s.previousPressed === 'false' && s.previousText === '이전', 'default year');
   assert(s.audioCount === 1, 'multiple players');
