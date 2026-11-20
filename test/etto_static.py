@@ -83,13 +83,13 @@ def ordinal_label(date, time, filename):
 stamps = []
 for date, time, filename, label in buttons:
     expect = ordinal_label(date, time, filename)
-    if filename == "etto_25.m4a":
-        expect = "셋째 주 금요일 (비올레따)"
     assert label == expect, (filename, label, expect)
     assert "년" not in label and ":" not in label
     stamps.append((date, time, filename))
 assert ordinal_label("2026-05-31", "17:30:58", "etto_17.m4a") == "다섯째 주 일요일"
 assert ordinal_label("2026-05-29", "20:45:47", "etto_03.m4a") == "다섯째 주 금요일"
+assert ordinal_label("2026-11-20", "19:48:24", "etto_25.m4a") == "셋째 주 금요일"
+assert "비올레따" not in HTML
 assert ordinal_label("2026-11-06", "20:45:34", "etto_02.m4a") == "첫째 주 금요일"
 assert ordinal_label("2026-10-11", "17:08:21", "etto_05.m4a") == "둘째 주 일요일 ①"
 assert ordinal_label("2026-10-11", "17:23:57", "etto_04.m4a") == "둘째 주 일요일 ②"

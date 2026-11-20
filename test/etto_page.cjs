@@ -198,7 +198,7 @@ async function homeFacts(page) {
   assert(list.back === '뒤로' && list.home === 'jw1.html' && list.homeText === '홈으로');
   list.buttons.forEach((b, i) => {
     const exp = EXPECTED[i];
-    const label = exp[0] === 'etto_25.m4a' ? '셋째 주 금요일 (비올레따)' : ordinalLabel(exp[1], exp[2], EXPECTED);
+    const label = ordinalLabel(exp[1], exp[2], EXPECTED);
     assert(b.file === exp[0] && b.date === exp[1] && b.time === exp[2] && b.text === label, JSON.stringify({ b, label }));
     assert(!b.text.includes('년') && !b.text.includes(':'), b.text);
   });

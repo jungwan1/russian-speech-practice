@@ -60,7 +60,7 @@ main{max-width:640px;margin:0 auto;padding:16px 14px calc(210px + env(safe-area-
  </div>
  <div class="ettoList" id="ettoList">
   <section class="ettoItem" data-year="2026" data-month="11" hidden>
-    <button type="button" class="ettoDate" data-date="2026-11-20" data-time="19:48:24" data-file="etto_25.m4a">셋째 주 금요일 (비올레따)</button>
+    <button type="button" class="ettoDate" data-date="2026-11-20" data-time="19:48:24" data-file="etto_25.m4a">셋째 주 금요일</button>
     <p class="ettoDur">길이 26.41초</p>
   </section>
   <section class="ettoItem" data-year="2026" data-month="11" hidden>
@@ -232,7 +232,6 @@ main{max-width:640px;margin:0 auto;padding:16px 14px calc(210px + env(safe-area-
       });
       var base=weekLabel(d);
       group.forEach(function(b,i){
-        if(b.getAttribute('data-file')==='etto_25.m4a') return;
         b.textContent=group.length>1 ? base+' '+MARKS.charAt(i) : base;
       });
     });
