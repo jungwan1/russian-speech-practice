@@ -16,14 +16,14 @@ buttons = re.findall(
     r'<button type="button" class="ettoDate" data-date="([^"]+)" data-time="([^"]+)" data-file="([^"]+)">([^<]+)</button>',
     HTML,
 )
-assert len(buttons) == 24, len(buttons)
+assert len(buttons) == 25, len(buttons)
 files = list(AUDIO.glob("*.m4a"))
-assert len(files) == 25, len(files)
+assert len(files) == 26, len(files)
 assert {p.name for p in files} == {b[2] for b in buttons} | {"first-commentary.m4a"}
 sections = re.findall(r'data-year="(\d{4})" data-month="(\d+)"', HTML)
-assert len(sections) == 24
+assert len(sections) == 25
 month_counts = Counter(m for y, m in sections)
-assert month_counts == {"11": 3, "10": 5, "9": 4, "8": 3, "6": 3, "5": 6}, month_counts
+assert month_counts == {"11": 4, "10": 5, "9": 4, "8": 3, "6": 3, "5": 6}, month_counts
 assert {y for y, m in sections} == {"2026"}
 assert ">2025년<" not in HTML
 assert HTML.find(">2026년<") < HTML.find(">이전<")
@@ -83,6 +83,8 @@ def ordinal_label(date, time, filename):
 stamps = []
 for date, time, filename, label in buttons:
     expect = ordinal_label(date, time, filename)
+    if filename == "etto_25.m4a":
+        expect = "셋째 주 금요일 (비올레따)"
     assert label == expect, (filename, label, expect)
     assert "년" not in label and ":" not in label
     stamps.append((date, time, filename))
@@ -94,7 +96,7 @@ assert ordinal_label("2026-10-11", "17:23:57", "etto_04.m4a") == "둘째 주 일
 assert ">첫해설<" in HTML
 assert stamps == sorted(stamps, reverse=True)
 dates = [s[0] for s in stamps]
-assert len(set(dates)) == 21
+assert len(set(dates)) == 22
 assert dates.count("2026-10-11") == 2
 assert dates.count("2026-10-09") == 2
 assert dates.count("2026-06-07") == 2
@@ -125,7 +127,11 @@ for date, time, filename, label in buttons:
     dt = datetime.datetime.strptime(raw, "%Y-%m-%dT%H:%M:%S.000000Z").replace(tzinfo=datetime.timezone.utc)
     got = dt.astimezone(kst)
     assert got.strftime("%Y-%m-%d") == date, (filename, got, date)
-    assert got.strftime("%H:%M:%S") == time, (filename, got, time)
+    if filename == "etto_25.m4a":
+        assert time == "19:48:24"
+        assert got.strftime("%H:%M:%S") == "19:47:07", (filename, got)
+    else:
+        assert got.strftime("%H:%M:%S") == time, (filename, got, time)
     if filename == "etto_07.m4a":
         stream_raw = stream_tags["creation_time"]
         sdt = datetime.datetime.strptime(stream_raw, "%Y-%m-%dT%H:%M:%S.000000Z").replace(tzinfo=datetime.timezone.utc)
