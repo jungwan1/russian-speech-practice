@@ -83,8 +83,8 @@ async function state(page) {
     return map;
   });
   const counts = Object.fromEntries(Object.entries(grouped).map(([m, files]) => [m, files.length]));
-  assert(JSON.stringify(counts) === JSON.stringify({ 11: 4, 10: 5, 9: 4, 8: 3, 6: 3, 5: 6 }), JSON.stringify(counts));
-  assert(Object.values(grouped).flat().length === 25);
+  assert(JSON.stringify(counts) === JSON.stringify({ 11: 5, 10: 5, 9: 4, 8: 3, 6: 3, 5: 6 }), JSON.stringify(counts));
+  assert(Object.values(grouped).flat().length === 26);
   let s = await state(page);
   assert(s.y2026 === 'true' && s.previousPressed === 'false' && s.previousText === '이전', 'default year');
   assert(s.audioCount === 1, 'multiple players');
@@ -132,6 +132,7 @@ async function state(page) {
 
   await page.click('#backToMonths');
   await page.click('button[data-month="11"]');
+  await page.$eval('button[data-file="etto_11.m4a"]', el => el.scrollIntoView({ block: 'center' }));
   await page.click('button[data-file="etto_11.m4a"]');
   await page.waitForFunction(() => document.getElementById('playerAudio').dataset.file === 'etto_11.m4a' && !document.getElementById('playerAudio').paused);
   s = await state(page);
@@ -193,6 +194,7 @@ async function state(page) {
   assert(s.file === 'etto_11.m4a', 'retargeted click started next ' + s.file);
 
   const beforeYear = await state(page);
+  await page.$eval('button[data-file="etto_11.m4a"]', el => el.scrollIntoView({ block: 'center' }));
   await page.click('button[data-file="etto_11.m4a"]');
   await page.waitForFunction(() => !document.getElementById('playerAudio').paused);
   await page.$eval('#nav-previous', el => el.scrollIntoView({ block: 'center' }));

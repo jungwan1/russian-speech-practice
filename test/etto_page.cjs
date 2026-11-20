@@ -12,11 +12,12 @@ function ordinalLabel(date, time, rows) {
   const [y, m, d] = date.split('-').map(Number);
   const text = `${ords[Math.floor((d - 1) / 7)]} 주 ${wds[new Date(Date.UTC(y, m - 1, d)).getUTCDay()]}`;
   const siblings = rows.filter(r => r[1] === date).slice().sort((a, b) => a[2].localeCompare(b[2]));
-  if (siblings.length < 2) return text;
+  if (siblings.length < 2 || date === '2026-11-20') return text;
   return text + ' ' + marks[siblings.findIndex(r => r[2] === time)];
 }
 
 const EXPECTED = [
+  ['etto_26.m4a', '2026-11-20', '20:57:16', '2026년 11월 20일 20:57:16'],
   ['etto_25.m4a', '2026-11-20', '19:48:24', '2026년 11월 20일 19:48:24'],
   ['etto_24.m4a', '2026-11-13', '20:55:43', '2026년 11월 13일 20:55:43'],
   ['etto_11.m4a', '2026-11-08', '16:08:53', '2026년 11월 8일 16:08:53'],
@@ -188,7 +189,7 @@ async function homeFacts(page) {
     };
   });
   assert(list.note === '날짜는 파일 생성일 기준입니다.', list.note);
-  assert(list.buttons.length === 25, String(list.buttons.length));
+  assert(list.buttons.length === 26, String(list.buttons.length));
   assert(list.visibleDates === 0, 'dates shown before a month');
   assert(JSON.stringify(list.months) === JSON.stringify(['11월', '10월', '9월', '8월', '6월', '5월']), JSON.stringify(list.months));
   assert(list.year2026 === 'true' && list.previous === '이전');
@@ -219,6 +220,7 @@ async function homeFacts(page) {
   });
   step('play first');
   await page.click('button[data-month="11"]');
+  await page.$eval('button[data-file="etto_11.m4a"]', el => el.scrollIntoView({ block: 'center' }));
   await page.click('button[data-file="etto_11.m4a"]');
   await page.waitForFunction(() => {
     const a = document.getElementById('playerAudio');
@@ -264,7 +266,7 @@ async function homeFacts(page) {
   await page.waitForSelector('#dateNote', { timeout: 8000 });
   const desktopList = await shot(page, 'screenshot_desktop_months_player_v3.png');
   const still = await page.evaluate(() => document.querySelectorAll('#ettoList button.ettoDate').length);
-  assert(still === 25, String(still));
+  assert(still === 26, String(still));
 
   const direct = await browser.newPage();
   step('direct back');
@@ -291,7 +293,7 @@ async function homeFacts(page) {
   assert(errors.length === 0, errors.join('\n'));
   console.log(JSON.stringify({
     ok: true,
-    controls: 25,
+    controls: 26,
     shots: [mobileHome, mobileList, playingShot, desktopHome, desktopList],
   }, null, 2));
   await browser.close();

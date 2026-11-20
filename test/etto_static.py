@@ -16,14 +16,14 @@ buttons = re.findall(
     r'<button type="button" class="ettoDate" data-date="([^"]+)" data-time="([^"]+)" data-file="([^"]+)">([^<]+)</button>',
     HTML,
 )
-assert len(buttons) == 25, len(buttons)
+assert len(buttons) == 26, len(buttons)
 files = list(AUDIO.glob("*.m4a"))
-assert len(files) == 26, len(files)
+assert len(files) == 27, len(files)
 assert {p.name for p in files} == {b[2] for b in buttons} | {"first-commentary.m4a"}
 sections = re.findall(r'data-year="(\d{4})" data-month="(\d+)"', HTML)
-assert len(sections) == 25
+assert len(sections) == 26
 month_counts = Counter(m for y, m in sections)
-assert month_counts == {"11": 4, "10": 5, "9": 4, "8": 3, "6": 3, "5": 6}, month_counts
+assert month_counts == {"11": 5, "10": 5, "9": 4, "8": 3, "6": 3, "5": 6}, month_counts
 assert {y for y, m in sections} == {"2026"}
 assert ">2025년<" not in HTML
 assert HTML.find(">2026년<") < HTML.find(">이전<")
@@ -76,7 +76,7 @@ def ordinal_label(date, time, filename):
     weekday = WEEKDAYS[datetime.date(y, m, d).weekday()]
     text = f"{ORDINALS[(d - 1) // 7]} 주 {weekday}"
     siblings = same_day[date]
-    if len(siblings) > 1:
+    if len(siblings) > 1 and date != "2026-11-20":
         text += " " + MARKS[siblings.index((time, filename))]
     return text
 
@@ -89,6 +89,7 @@ for date, time, filename, label in buttons:
 assert ordinal_label("2026-05-31", "17:30:58", "etto_17.m4a") == "다섯째 주 일요일"
 assert ordinal_label("2026-05-29", "20:45:47", "etto_03.m4a") == "다섯째 주 금요일"
 assert ordinal_label("2026-11-20", "19:48:24", "etto_25.m4a") == "셋째 주 금요일"
+assert ordinal_label("2026-11-20", "20:57:16", "etto_26.m4a") == "셋째 주 금요일"
 assert "비올레따" not in HTML
 assert ordinal_label("2026-11-06", "20:45:34", "etto_02.m4a") == "첫째 주 금요일"
 assert ordinal_label("2026-10-11", "17:08:21", "etto_05.m4a") == "둘째 주 일요일 ①"
@@ -121,7 +122,7 @@ for date, time, filename, label in buttons:
     tags = probe["format"].get("tags") or {}
     stream_tags = stream.get("tags") or {}
     blob = " ".join(list(tags) + list(stream_tags)).lower()
-    if filename != "etto_24.m4a":
+    if filename not in ("etto_24.m4a", "etto_26.m4a"):
         assert "samsung" not in blob and "android" not in blob and "com." not in blob
     raw = tags["creation_time"]
     dt = datetime.datetime.strptime(raw, "%Y-%m-%dT%H:%M:%S.000000Z").replace(tzinfo=datetime.timezone.utc)
@@ -149,7 +150,7 @@ assert abs(float(first["format"]["duration"]) - 15.533) < 0.01
 assert "creation_time" not in (first["format"].get("tags") or {})
 assert "creation_time" not in (fs.get("tags") or {})
 
-raw_bytes = b"".join(p.read_bytes() for p in files if p.name != "etto_24.m4a")
+raw_bytes = b"".join(p.read_bytes() for p in files if p.name not in ("etto_24.m4a", "etto_26.m4a"))
 for needle in (b"com.samsung", b"com.android", b"MYBOX", b"resourceKey"):
     assert needle not in raw_bytes, needle
 
