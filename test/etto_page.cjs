@@ -17,6 +17,7 @@ function ordinalLabel(date, time, rows) {
 }
 
 const EXPECTED = [
+  ['etto_25.m4a', '2026-11-20', '19:48:24', '2026년 11월 20일 19:48:24'],
   ['etto_24.m4a', '2026-11-13', '20:55:43', '2026년 11월 13일 20:55:43'],
   ['etto_11.m4a', '2026-11-08', '16:08:53', '2026년 11월 8일 16:08:53'],
   ['etto_02.m4a', '2026-11-06', '20:45:34', '2026년 11월 6일 20:45:34'],
@@ -187,7 +188,7 @@ async function homeFacts(page) {
     };
   });
   assert(list.note === '날짜는 파일 생성일 기준입니다.', list.note);
-  assert(list.buttons.length === 24, String(list.buttons.length));
+  assert(list.buttons.length === 25, String(list.buttons.length));
   assert(list.visibleDates === 0, 'dates shown before a month');
   assert(JSON.stringify(list.months) === JSON.stringify(['11월', '10월', '9월', '8월', '6월', '5월']), JSON.stringify(list.months));
   assert(list.year2026 === 'true' && list.previous === '이전');
@@ -197,7 +198,7 @@ async function homeFacts(page) {
   assert(list.back === '뒤로' && list.home === 'jw1.html' && list.homeText === '홈으로');
   list.buttons.forEach((b, i) => {
     const exp = EXPECTED[i];
-    const label = ordinalLabel(exp[1], exp[2], EXPECTED);
+    const label = exp[0] === 'etto_25.m4a' ? '셋째 주 금요일 (비올레따)' : ordinalLabel(exp[1], exp[2], EXPECTED);
     assert(b.file === exp[0] && b.date === exp[1] && b.time === exp[2] && b.text === label, JSON.stringify({ b, label }));
     assert(!b.text.includes('년') && !b.text.includes(':'), b.text);
   });
@@ -234,6 +235,7 @@ async function homeFacts(page) {
   const stillFile = await page.evaluate(() => document.getElementById('playerAudio').dataset.file);
   assert(stillFile === 'etto_11.m4a', stillFile);
 
+  await page.$eval('button[data-file="etto_02.m4a"]', el => el.scrollIntoView({ block: 'center' }));
   await page.click('button[data-file="etto_02.m4a"]');
   await page.waitForFunction(() => document.getElementById('playerAudio').dataset.file === 'etto_02.m4a' && !document.getElementById('playerAudio').paused, { timeout: 8000 });
   await page.click('#backToMonths');
@@ -262,7 +264,7 @@ async function homeFacts(page) {
   await page.waitForSelector('#dateNote', { timeout: 8000 });
   const desktopList = await shot(page, 'screenshot_desktop_months_player_v3.png');
   const still = await page.evaluate(() => document.querySelectorAll('#ettoList button.ettoDate').length);
-  assert(still === 24, String(still));
+  assert(still === 25, String(still));
 
   const direct = await browser.newPage();
   step('direct back');
@@ -289,7 +291,7 @@ async function homeFacts(page) {
   assert(errors.length === 0, errors.join('\n'));
   console.log(JSON.stringify({
     ok: true,
-    controls: 24,
+    controls: 25,
     shots: [mobileHome, mobileList, playingShot, desktopHome, desktopList],
   }, null, 2));
   await browser.close();

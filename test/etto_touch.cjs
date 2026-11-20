@@ -83,8 +83,8 @@ async function state(page) {
     return map;
   });
   const counts = Object.fromEntries(Object.entries(grouped).map(([m, files]) => [m, files.length]));
-  assert(JSON.stringify(counts) === JSON.stringify({ 11: 3, 10: 5, 9: 4, 8: 3, 6: 3, 5: 6 }), JSON.stringify(counts));
-  assert(Object.values(grouped).flat().length === 24);
+  assert(JSON.stringify(counts) === JSON.stringify({ 11: 4, 10: 5, 9: 4, 8: 3, 6: 3, 5: 6 }), JSON.stringify(counts));
+  assert(Object.values(grouped).flat().length === 25);
   let s = await state(page);
   assert(s.y2026 === 'true' && s.previousPressed === 'false' && s.previousText === '이전', 'default year');
   assert(s.audioCount === 1, 'multiple players');
@@ -195,6 +195,7 @@ async function state(page) {
   const beforeYear = await state(page);
   await page.click('button[data-file="etto_11.m4a"]');
   await page.waitForFunction(() => !document.getElementById('playerAudio').paused);
+  await page.$eval('#nav-previous', el => el.scrollIntoView({ block: 'center' }));
   await page.click('#nav-previous');
   s = await state(page);
   assert(s.paused && !s.file && s.visibleText[0] === '첫해설', 'switch to 이전 left audio ' + JSON.stringify(s));
