@@ -40,6 +40,11 @@ for banned in ("파수대 해설준비", ">글렙<", ">비올레따<", ">이번�
     assert banned not in home, banned
 assert ">에떠해설</a>" in home
 assert 'href="etto.html"' in home
+home_buttons = re.search(r'<div class="smallBtns">(.*?)</div>', home, re.S).group(1)
+assert "showView('nov8')" not in home_buttons and "showView('nov9')" not in home_buttons
+assert "showView('nov16')" in home_buttons and "showView('archive')" in home_buttons
+archive_block = JW1.split("const ARCHIVE=[", 1)[1].split("];", 1)[0]
+assert archive_block.index("view:'nov9'") < archive_block.index("view:'nov8'") < archive_block.index("view:'pro10'")
 for kept in (
     "📖 일용할 성구",
     "11월 8일(일) 마치는 기도",
