@@ -119,12 +119,10 @@ main{max-width:900px;margin:0 auto;padding:14px}
   </div>
   <div class="sectionTitle">실연연습</div>
   <div class="smallBtns">
-    <button class="drama" onclick="showView('nov8')">11월 8일(일) 마치는 기도</button>
-    <button class="drama" onclick="showView('nov9')">11월 9–15일 영적 보물 찾기 (예레미야 51–52) 사회</button>
     <button class="drama" onclick="showView('nov16')">11월 16–22일 마치는 기도</button>
     <button class="drama" onclick="showView('archive')">지난 연설 보기</button>
   </div>
-  <p class="hint">버튼을 누르면 각 준비 내용을 볼 수 있어요</p><p class="hint" style="margin-top:4px;font-size:11px">버전 2026-10-31 · 포함 기능 v2</p>
+  <p class="hint">버튼을 누르면 각 준비 내용을 볼 수 있어요</p><p class="hint" style="margin-top:4px;font-size:11px">버전 2026-11-21 · 포함 기능 v2</p>
  </div>
 </div>
 
@@ -195,6 +193,8 @@ function goPersonFromRefRemoved(){}function renderReference(){
  el.innerHTML=`<header><div class="headRow"><button class="homeBtn" onclick="showView('home')">홈으로</button><div><div class="headLabel">이번주 파수대</div><div style="font-size:11px;color:#7a8699">(강세는 러시안그램을 통해서 확인했습니다)</div></div></div></header><main><div class="controls" style="margin:10px 0"><button onclick="wtTab(0)">📖 러·한 대역 보기</button><button onclick="wtTab(1)">💬 해설 보기</button></div><div id="wtPane" class="wt"><div class="wtHero"><div class="k">ИЗУЧЕНИЕ «СТОРОЖЕВОЙ БАШНИ» · 파수대 연구</div><div class="d">2026년 11월 2–8일</div><div class="hint">왼쪽 러시아어 카드를 누르면 여자 목소리로 읽어 줘요 · 강세: russiangram.com</div></div>${WT_HTML}</div><div id="refPane" style="display:none"><div class="note">「여호와께서는 틀림없이 우리를 보호해 주실 것입니다」(2026년 11월 2–8일, 11월 8일 일요일 연구) 기사 전체 해설입니다. <b>1항부터 20항(1-2·5-6·8-9·12-13·19-20항 묶음), 복습 질문 3개까지 총 18개</b>가 이어져 있고, 각 항마다 직접해설·부가해설·성구해설이 있어요.</div><div class="controls" style="margin:10px 0"><button onclick="window.open('https://wol.jw.org/ko/wol/d/r8/lp-ko/2026560','_blank')">📖 파수대 원문 보기 (한국어)</button><button onclick="window.open('https://wol.jw.org/ru/wol/d/r2/lp-u/2026560','_blank')">📖 파수대 원문 보기 (러시아어)</button></div><div class="controls" style="margin:10px 0">${REF_DATA.map((c,j)=>`<button onclick="document.getElementById('ref-${j}').scrollIntoView({behavior:'smooth',block:'start'})">${c.tag}</button>`).join('')}</div>${REF_DATA.map((c,j)=>`<section class="card refCard" id="ref-${j}"><div class="meta"><span class="tag">${c.tag}</span></div><div style="font-size:15px;color:#2456a6;font-weight:700;margin-top:10px"><span class="qLabel">질문</span>${c.q}</div>${REF_KINDS.map(([k,l])=>refSubHtml(j,k,l)).join('')}</section>`).join('')}</div></main>`;
 }// 지난 연설 목록: 새 항목은 여기에 한 줄만 추가 (view = 이미 있는 화면 이름)
 const ARCHIVE=[
+ {label:'11월 9–15일 영적 보물 찾기 (예레미야 51–52) 사회', view:'nov9'},
+ {label:'11월 8일(일) 마치는 기도', view:'nov8'},
  {label:'10월 30일 10분 연설 (예레미야 48장)', view:'pro10'},
  {label:'실연 — 대화 시작하기 (집호 방문 전파)', view:'drama'},
 ];
