@@ -123,7 +123,6 @@ async function homeFacts(page) {
   assert(!home.homeText.includes('파수대 해설준비'), 'label in home text');
   assert(home.sectionTitles.includes('실연연습'), 'practice heading missing');
   assert(JSON.stringify(home.practice) === JSON.stringify([
-    '11월 16–22일 마치는 기도',
     '지난 연설 보기',
   ]), JSON.stringify(home.practice));
   assert(home.daily.includes('2026년 11월 8일'), home.daily);
@@ -139,13 +138,23 @@ async function homeFacts(page) {
   const dailyClosed = await page.evaluate(() => document.getElementById('dailyPanel').style.display);
   assert(dailyClosed === 'none', 'daily panel did not close');
 
+  const removed = await page.evaluate(() => ({
+    view: !!document.getElementById('view-nov16'),
+    data: typeof ASG.nov16 !== 'undefined',
+    asgCur,
+    keys: Object.keys(ASG),
+  }));
+  assert(removed.view === false && removed.data === false, JSON.stringify(removed));
+  assert(removed.asgCur === 'nov9' && JSON.stringify(removed.keys) === JSON.stringify(['nov8', 'nov9']), JSON.stringify(removed));
+  await page.evaluate(() => {
+    window.__spoken = [];
+    const orig = speechSynthesis.speak.bind(speechSynthesis);
+    speechSynthesis.speak = (u) => {
+      window.__spoken.push(String(u.text || ''));
+      try { orig(u); } catch (e) {}
+    };
+  });
   await page.click('#view-home .smallBtns button');
-  await page.waitForSelector('#view-nov16.show');
-  const prayer = await page.evaluate(() => document.querySelector('#view-nov16 .headLabel').textContent.trim());
-  assert(prayer === '11월 16–22일 마치는 기도', prayer);
-  await page.click('#view-nov16 .homeBtn');
-  await page.waitForSelector('#view-home.show');
-  await page.click('#view-home .smallBtns button:last-child');
   await page.waitForSelector('#view-archive.show');
   const archive = await page.evaluate(() => [...document.querySelectorAll('#view-archive .controls button')].map(b => b.textContent.trim()));
   assert(JSON.stringify(archive) === JSON.stringify([
@@ -166,6 +175,10 @@ async function homeFacts(page) {
   assert(gems.host.includes('박세영'), gems.host);
   assert(gems.sentences > 1, String(gems.sentences));
   assert(gems.back.includes('지난 연설 목록'), JSON.stringify(gems.back));
+  await page.click('#view-nov9 .ruSent');
+  await page.waitForFunction(() => window.__spoken.length >= 1, { timeout: 4000 });
+  const nov9Spoken = await page.evaluate(() => window.__spoken[0]);
+  assert(nov9Spoken.length > 0, 'nov9 sentence did not play');
   await page.click('#view-nov9 .archBack');
   await page.waitForSelector('#view-archive.show');
   await page.evaluate(() => [...document.querySelectorAll('#view-archive .controls button')][1].click());
@@ -176,6 +189,9 @@ async function homeFacts(page) {
   }));
   assert(closing.title === '11월 8일(일) 마치는 기도', closing.title);
   assert(closing.sentences > 1, String(closing.sentences));
+  const spokenBefore = await page.evaluate(() => window.__spoken.length);
+  await page.click('#view-nov8 .ruSent');
+  await page.waitForFunction((n) => window.__spoken.length > n, { timeout: 4000 }, spokenBefore);
   await page.click('#view-nov8 .homeBtn');
   await page.waitForSelector('#view-home.show');
 
@@ -277,7 +293,7 @@ async function homeFacts(page) {
   await page.waitForSelector('#view-home.show', { timeout: 8000 });
   assert(page.url().endsWith('/jw1.html'), page.url());
   home = await homeFacts(page);
-  assert(home.etto === '에떠해설' && home.practice.length === 2, 'home changed after return');
+  assert(home.etto === '에떠해설' && home.practice.length === 1, 'home changed after return');
 
   step('desktop');
   await page.setViewport({ width: 1280, height: 900, isMobile: false, deviceScaleFactor: 1 });

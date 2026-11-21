@@ -42,14 +42,16 @@ assert ">에떠해설</a>" in home
 assert 'href="etto.html"' in home
 home_buttons = re.search(r'<div class="smallBtns">(.*?)</div>', home, re.S).group(1)
 assert "showView('nov8')" not in home_buttons and "showView('nov9')" not in home_buttons
-assert "showView('nov16')" in home_buttons and "showView('archive')" in home_buttons
+assert "showView('nov16')" not in home_buttons and "showView('archive')" in home_buttons
+assert "nov16" not in JW1 and "11월 16–22일 마치는 기도" not in JW1
+assert 'id="view-nov8"' in JW1 and 'id="view-nov9"' in JW1 and 'id="view-nov16"' not in JW1
 archive_block = JW1.split("const ARCHIVE=[", 1)[1].split("];", 1)[0]
 assert archive_block.index("view:'nov9'") < archive_block.index("view:'nov8'") < archive_block.index("view:'pro10'")
+assert "view:'nov16'" not in archive_block
 for kept in (
     "📖 일용할 성구",
     "11월 8일(일) 마치는 기도",
     "11월 9–15일 영적 보물 찾기 (예레미야 51–52) 사회",
-    "11월 16–22일 마치는 기도",
     "지난 연설 보기",
     "const GLEB_CARDS=",
     "const REF_DATA=",
