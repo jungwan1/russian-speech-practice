@@ -17,6 +17,7 @@ function ordinalLabel(date, time, rows) {
 }
 
 const EXPECTED = [
+  ['etto_27.m4a', '2026-11-22', '16:57:18', '2026년 11월 22일 16:57:18'],
   ['etto_26.m4a', '2026-11-20', '20:57:16', '2026년 11월 20일 20:57:16'],
   ['etto_25.m4a', '2026-11-20', '19:48:24', '2026년 11월 20일 19:48:24'],
   ['etto_24.m4a', '2026-11-13', '20:55:43', '2026년 11월 13일 20:55:43'],
@@ -229,7 +230,7 @@ async function homeFacts(page) {
     };
   });
   assert(list.note === '날짜는 파일 생성일 기준입니다.', list.note);
-  assert(list.buttons.length === 26, String(list.buttons.length));
+  assert(list.buttons.length === 27, String(list.buttons.length));
   assert(list.visibleDates === 0, 'dates shown before a month');
   assert(JSON.stringify(list.months) === JSON.stringify(['11월', '10월', '9월', '8월', '6월', '5월']), JSON.stringify(list.months));
   assert(list.year2026 === 'true' && list.previous === '이전');
@@ -306,7 +307,7 @@ async function homeFacts(page) {
   await page.waitForSelector('#dateNote', { timeout: 8000 });
   const desktopList = await shot(page, 'screenshot_desktop_months_player_v3.png');
   const still = await page.evaluate(() => document.querySelectorAll('#ettoList button.ettoDate').length);
-  assert(still === 26, String(still));
+  assert(still === 27, String(still));
 
   const direct = await browser.newPage();
   step('direct back');
@@ -333,7 +334,7 @@ async function homeFacts(page) {
   assert(errors.length === 0, errors.join('\n'));
   console.log(JSON.stringify({
     ok: true,
-    controls: 26,
+    controls: 27,
     shots: [mobileHome, mobileList, playingShot, desktopHome, desktopList],
   }, null, 2));
   await browser.close();
